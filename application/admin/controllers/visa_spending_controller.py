@@ -26,7 +26,7 @@ class VisaSpendingController:
         records = VisaSpending.query.order_by(VisaSpending.date.desc()).all()
         df = pd.read_sql(VisaSpending.query.statement, VisaSpending.query.session.bind)
         total_amount = df['amount'].sum()
-        return render_template("visa_spending/visa_spending_main.html", records=records, total_amount=total_amount)
+        return render_template("visa_spending/visa_spending_main.html", records=records, total_amount=total_amount,title="Visa spendings")
 
     def add_visa_spending(self):
         form = VisaSpendingForm()
@@ -40,7 +40,7 @@ class VisaSpendingController:
             flash(f"Successfully added {date}, {visa}, {amount}", "success")
             return self.show_visa_spendings()
         form.date.data = datetime.date.today()
-        return render_template("visa_spending/visa_spending_add.html", form=form)
+        return render_template("visa_spending/visa_spending_add.html", form=form,title="Add visa spending")
 
     def edit_visa_spending(self, id):
         record = VisaSpending.query.get(id)
@@ -58,7 +58,7 @@ class VisaSpendingController:
         form.date.data = record.date
         form.visa.data = record.visa
         form.amount.data = record.amount
-        return render_template("visa_spending/visa_spending_edit.html", form=form)
+        return render_template("visa_spending/visa_spending_edit.html", form=form,title="Edit visa spending")
 
     def remove_visa_spending(self, id):
         record = VisaSpending.query.get(id)

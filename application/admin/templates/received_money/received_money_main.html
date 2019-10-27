@@ -1,7 +1,12 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<h2>Total amount in usd : {{ "{:,}".format(total_amount_usd) }}, in jpy : {{ "{:,}".format(total_amount_jpy) }}, average exchange rate : {{ "{:,}".format(average_exchange_rate) }}</h2>
+<h3>{{title}}</h3>
+<ul class="list-group">
+  <li class="list-item">Total amount in usd : {{ "{:,}".format(total_amount_usd) }}</li>
+  <li class="list-item">in jpy : {{ "{:,}".format(total_amount_jpy) }}</li>
+  <li class="list-item">average exchange rate : {{ "{:,}".format(average_exchange_rate) }}</li>
+</ul>
 <table class="table">
   <thead>
     <th scope="col">Date</th>

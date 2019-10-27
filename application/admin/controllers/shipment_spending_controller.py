@@ -23,7 +23,7 @@ class ShipmentSpendingController:
         records = ShipmentSpending.query.order_by(ShipmentSpending.date.desc()).all()
         df = pd.read_sql(ShipmentSpending.query.statement, ShipmentSpending.query.session.bind)
         total_amount = df['amount'].sum()
-        return render_template("shipment_spending/shipment_spending_main.html", records=records, total_amount=total_amount)
+        return render_template("shipment_spending/shipment_spending_main.html", records=records, total_amount=total_amount,title="Shipment spendings")
 
     def add_shipment_spending(self):
         form = ShipmentSpendingForm()
@@ -37,7 +37,7 @@ class ShipmentSpendingController:
             flash(f"Successfully added {date}, {weight}, {amount}", "success")
             return self.show_all_spendings()
         form.date.data = datetime.date.today()
-        return render_template("shipment_spending/shipment_spending_add.html", form=form)
+        return render_template("shipment_spending/shipment_spending_add.html", form=form, title="Add shipment spending")
 
     def edit_shipment_spending(self, id):
         record = ShipmentSpending.query.get(id)
@@ -52,7 +52,7 @@ class ShipmentSpendingController:
             db.session.commit()
             flash(f"Updated to {date},{weight},{amount}", "success")
             return self.show_all_spendings()
-        return render_template("shipment_spending/shipment_spending_edit.html", form=form)
+        return render_template("shipment_spending/shipment_spending_edit.html", form=form, title="Edit shipment spending")
 
     def remove_shipment_spending(self, id):
         record = ShipmentSpending.query.get(id)
