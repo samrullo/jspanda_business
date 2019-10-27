@@ -2,6 +2,7 @@ import datetime
 from application.admin.models.shipment_weight import ShipmentWeight, db
 import logging
 import pandas as pd
+import numpy as np
 from flask import flash
 from flask import render_template
 from flask_wtf import FlaskForm
@@ -25,8 +26,8 @@ class ShipmentWeightController:
     def show_pending_shipment_weights(self):
         records = ShipmentWeight.query.filter(ShipmentWeight.is_paid == False).order_by(ShipmentWeight.date.desc()).all()
         df = pd.read_sql(ShipmentWeight.query.statement, ShipmentWeight.query.session.bind)
-        total_weight = df['weight'].sum()
-        total_amount = df['amount'].sum()
+        total_weight = df.loc[np.logical_not(df.is_paid), 'weight'].sum()
+        total_amount = df.loc[np.logical_not(df.is_paid), 'amount'].sum()
         return render_template("shipment_weight/shipment_weight_main.html", records=records, total_amount=total_amount, total_weight=total_weight, title="Pending Shipment weights")
 
     def show_all_shipment_weights(self):
