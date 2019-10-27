@@ -2,7 +2,9 @@ from flask import Blueprint, render_template
 from flask_login import login_required
 from application.admin.controllers.received_money_controller import ReceivedMoneyController
 from application.admin.controllers.shipment_spending_controller import ShipmentSpendingController
+from application.admin.controllers.shipment_weight_controller import ShipmentWeightController
 from application.admin.controllers.visa_spending_controller import VisaSpendingController
+
 admin_bp = Blueprint('admin_bp', __name__, template_folder='templates', static_folder='static', url_prefix='/admin')
 
 
@@ -44,6 +46,7 @@ def edit_received_money(id):
 def remove_received_money(id):
     contr = ReceivedMoneyController()
     return contr.remove_received_money(id)
+
 
 # routes for shipment spending
 @admin_bp.route("/show_shipment_spending")
@@ -101,3 +104,46 @@ def edit_visa_spending(id):
 def remove_visa_spending(id):
     contr = VisaSpendingController()
     return contr.remove_visa_spending(id)
+
+
+# routes for shipment weights
+@admin_bp.route("/show_shipment_weight")
+@login_required
+def show_shipment_weight():
+    contr = ShipmentWeightController()
+    return contr.show_pending_shipment_weights()
+
+
+@admin_bp.route("/add_shipment_weight", methods=['GET', 'POST'])
+@login_required
+def add_shipment_weight():
+    contr = ShipmentWeightController()
+    return contr.add_shipment_weight()
+
+
+@admin_bp.route("/edit_shipment_weight/<id>", methods=['GET', 'POST'])
+@login_required
+def edit_shipment_weight(id):
+    contr = ShipmentWeightController()
+    return contr.edit_shipment_weight(id)
+
+
+@admin_bp.route("/remove_shipment_weight/<id>", methods=['GET', 'POST'])
+@login_required
+def remove_shipment_weight(id):
+    contr = ShipmentWeightController()
+    return contr.remove_shipment_weight(id)
+
+
+@admin_bp.route("/mark_shipment_weight_as_paid/<id>", methods=['GET', 'POST'])
+@login_required
+def mark_shipment_weight_as_paid(id):
+    contr = ShipmentWeightController()
+    return contr.mark_as_paid(id)
+
+
+@admin_bp.route("/show_all_shipment_weights")
+@login_required
+def show_all_shipment_weights():
+    contr = ShipmentWeightController()
+    return contr.show_all_shipment_weights()

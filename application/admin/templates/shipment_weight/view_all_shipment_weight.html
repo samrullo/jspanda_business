@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h3>{{title}}</h3>
+<p>Total weight : {{total_weight}}, Total amount in jpy : {{ "{:,}".format(total_amount) }}</p>
+<a class="btn btn-lg" href="/admin/add_shipment_weight">Add shipment weight</a>
+<table class="table">
+  <thead>
+    <th scope="col">Date</th>
+    <th scope="col">To whom</th>
+    <th scope="col">Weight(kg)</th>
+    <th scope="col">Amount</th>
+    <th scope="col">Is Paid</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </thead>
+  <tbody>
+    {% for record in records %}
+    <tr>
+      <td>{{record.date}}</td>
+      <td>{{record.to_whom}}</td>
+      <td>{{ "{:,}".format(record.weight) }}</td>
+      <td>{{ "{:,}".format(record.amount) }}</td>
+      <td>{{record.is_paid}}</td>
+      <td><a href="/admin/remove_shipment_weight/{{record.id}}" class="btn btn-lg btn-dark"><i class="far fa-trash-alt"></i></a></td>
+      <td><a href="/admin/edit_shipment_weight/{{record.id}}" class="btn btn-lg btn-dark"><i class="fas fa-edit"></i></a></td>
+      <td><a href="/admin/mark_shipment_weight_as_paid/{{record.id}}" class="btn btn-lg btn-dark">Paid</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

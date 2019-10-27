@@ -5,13 +5,13 @@ import pandas as pd
 from flask import flash
 from flask import render_template
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, HiddenField, IntegerField,DateField
+from wtforms import StringField, SubmitField, HiddenField, IntegerField, DateField, FloatField
 from application.utils.utils import to_yyyymmdd
 
 
 class ShipmentSpendingForm(FlaskForm):
-    date = DateField("Date", render_kw={"class": "form-control"},format='%Y%m%d')
-    weight = IntegerField("Weight", render_kw={"class": "form-control", "pattern": "[0-9]*"})
+    date = DateField("Date", render_kw={"class": "form-control"}, format='%Y%m%d')
+    weight = FloatField("Weight", render_kw={"class": "form-control", "pattern": "[0-9]+([\.,][0-9]+)?", "step": "0.01"})
     submit = SubmitField("Submit", render_kw={"class": "btn bnt-lg btn-dark"})
 
 
@@ -23,7 +23,7 @@ class ShipmentSpendingController:
         records = ShipmentSpending.query.order_by(ShipmentSpending.date.desc()).all()
         df = pd.read_sql(ShipmentSpending.query.statement, ShipmentSpending.query.session.bind)
         total_amount = df['amount'].sum()
-        return render_template("shipment_spending/shipment_spending_main.html", records=records, total_amount=total_amount,title="Shipment spendings")
+        return render_template("shipment_spending/shipment_spending_main.html", records=records, total_amount=total_amount, title="Shipment spendings")
 
     def add_shipment_spending(self):
         form = ShipmentSpendingForm()
