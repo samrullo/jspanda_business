@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<table class="table">
+<thead>
+  <th scope="col">date</th>
+  <th>balance</th>
+  <th>saitama liabilities</th>
+  <th>saitama new balance</th>
+  <th>mitsubishi liabilities</th>
+  <th>mitsubishi new balance</th>
+  <th></th>
+</thead>
+<tbody>
+  {% for i,row in spending_df.iterrows() %}
+    <tr>
+      <td>{{i}}</td>
+      <td>{{"{:,}".format(row['balance'])}}</td>
+      <td>{{"{:,}".format(row['saitama_liabilities'])}}</td>
+      <td>{{"{:,}".format(row['saitama_new_balance'])}}</td>
+      <td>{{"{:,}".format(row['mitsubishi_liabilities'])}}</td>
+      <td>{{"{:,}".format(row['mitsubishi_new_balance'])}}</td>
+      <td><a href="/family_spending_by_month/{{i}}" class="btn btn-lg btn-dark">View</a></td>
+    </tr>
+  {% endfor %}
+</tbody>
+</table>
+
+{% endblock %}

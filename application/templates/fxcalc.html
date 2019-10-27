@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Calculator</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+        <link rel="stylesheet" href="{{url_for('static',filename='css/custom.css')}}">
+        <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+
+        <script>
+            var shipment_fee_per_kg = 1500;
+            var fx = 100;
+            var profit = 0.1;
+            var includeWeight = true;
+            var tax=0;
+            function change_parameters() {
+                shipment_fee_per_kg = $('#shipment_per_kg').val();
+                fx = $('#fx').val();
+                tax=$('#tax').val()/100;
+                profit = $('#profit').val() / 100;
+                if ($('#includeWeightInProfit').val() == 'off') {
+                    includeWeight = true;
+                } else {
+                    includeWeight = false;
+                }
+
+                window.alert("changed parameters");
+            }
+            function px_calculate() {
+                var weight = $('#weight').val();
+                var px_before_tax = $('#px_before_tax').val();
+                var px_with_profit = 0;
+                if (includeWeight) {
+                    px_with_profit = (px_before_tax * (1+tax) + shipment_fee_per_kg * weight / 1000) * (1 + profit) / fx;
+                } else {
+                    px_with_profit = ((px_before_tax * (1+tax)) * (1 + profit) + shipment_fee_per_kg * weight / 1000) / fx;
+                }
+                document.getElementById("px_with_profit").innerHTML = Math.round(px_with_profit);
+            }
+            function func00() {
+                window.alert("hello again to everyone!!");
+            }
+
+        </script>
+    </head>
+
+    <body>
+        <div data-role="page" id="page1">
+            <div data-role="header">
+                <a href="#parameters" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all">Parameters</a>
+                <h1>Calculator</h1>
+                 <a href="#formula" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all">Formula</a>
+            </div>
+            <div data-role="content">
+
+                <label for="weight">Weight (in gramms)</label>
+                <input type="number" data-clear-btn="true" name="weight" id="weight" pattern="[0-9]*" value="" placeholder="Weight in gramms">
+                <label for="px_before_tax">Price (without consumption tax):</label>
+                <input type="number" data-clear-btn="true" name="px_before_tax" id="px_before_tax" pattern="[0-9]*" value="" placeholder="Price before tax in JPY">
+                <label>Price with profit (in USD):</label><div class="price" id="px_with_profit"></div>
+                <button class="ui-btn ui-btn-b ui-corner-all" data-theme="b" onclick="px_calculate()">Calculate</button>
+                <div data-role="panel" id="parameters" data-position="left" data-display="overlay" data-theme="a" class="ui-panel ui-panel-position-left ui-panel-display-reveal ui-body-a ui-panel-animate ui-panel-open">
+                    <div class="ui-panel-inner">
+                        <h3>This is parameters panel!</h3>
+                        <label for="shipment_per_kg">Shipment fee per kg</label>
+                        <input type="number" name="shipment_per_kg" id="shipment_per_kg" data-clear-btn="true" pattern="[0-9]*" value="1500">
+                        <label for="tax">Tax (in %)</label>
+                        <input type="number" name="tax" id="tax" data-clear-btn="true" pattern="[0-9]*" value="0">
+                        <label for="fx">USD/JPY rate</label>
+                        <input type="number" name="fx" id="fx" data-clear-btn="true" pattern="[0-9]*" value="100">
+                        <label for="profit">Profit (in %)</label>
+                        <input type="number" name="profit" id="profit" data-clear-btn="true" pattern="[0-9]*" value="10">
+                        <label for="includeWeightInProfit">Exclude shipment from profit calculation?</label>
+                        <select name="includeWeightInProfit" id="includeWeightInProfit" data-role="slider">
+                            <option value="off">Off</option>
+                            <option value="on">On</option>
+                        </select>
+                        <button onclick="change_parameters()" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a">Apply</button>
+                    </div>
+                </div>
+                <div data-role="panel" id="formula" data-display="overlay" data-position="right">
+
+                    <h3>Formula when shipment is included in profit calculation:</h3>
+                    <p>px_with_profit = (px_before_tax * (1 + tax) + shipment_fee_per_kg * weight / 1000) * (1 + profit) / fx </p>
+                    <h3>Formula when shipment is excluded from profit calculation:</h3>
+                    <p>px_with_profit = ((px_before_tax * (1 + tax)) * (1 + profit) + shipment_fee_per_kg * weight / 1000)/ fx </p>
+                </div>
+            </div>
+
+                
+            <!--
+                                 <table>
+                                     <tr>
+                                         <td><label for="weight">Weight (in gramms):</label></td>
+                                         <td><input name="weight" id="weight" type="number" patter="[0-9]*" placeholder="Weight in (gramms)" data-clear-btn="true" value=""></td>
+                                     </tr>
+                                     <tr>
+                                         <td><label for="px_before_tax">Price (without consumption tax):</label></td>
+                                         <td>
+                                             <input name="px_before_tax" id="px_before_tax" type="number" patter="[0-9]*" placeholder="Price before tax in JPY" data-clear-btn="true" value="">
+                                         </td>
+                                     </tr>
+                                     <tr>
+                                         <td><label for="px_with_profit">Price in USD with profit:</label></td>
+                                         <td><div id="px_with_profit"></div></td>
+                                     </tr>
+                                     <tr>
+                                         <td colspan="2"><button class="ui-shadow ui-btn ui-corner-all" onclick="px_calculate()">Calculate</button></td>
+                                     </tr>
+                                 </table>-->
+            <div data-role="footer"><h3>CopyRight@Subkhon</h3></div>
+        </div><!-- end of page -->
+    </body>
+</html>

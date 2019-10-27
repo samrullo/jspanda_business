@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{{current_user.name}}
+<p>Is it admin? Answer : {{current_user.is_admin}}</p>
+<h1>{{title}}</h1>
+<ul>
+  <li>Add Received money</li>
+  <li>Add shipment spending</li>
+  <li>Add visa spending</li>
+</ul>
+{% endblock %}

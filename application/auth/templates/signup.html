@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1>Sign Up</h1>
+<form method='post'>
+  {{form.hidden_tag()}}
+  <div class="form-group">
+    {{ form.name.label }}
+    {{ form.name(placeholder='John Smith') }}
+    {% if form.name.errors %}
+    <ul class="errors">
+      {% for error in form.email.errors %}<li>{{ error }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+  <div class="form-group">
+    {{form.login.label}}
+    {{form.login()}}
+  </div>
+  <div class="form-group">
+    {{ form.email.label}}
+    {{ form.email(placeholder='youremail@example.com') }}
+    {% if form.email.errors %}
+    <ul class="errors">
+      {% for error in form.email.errors %}<li>{{ error }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+  <div class="form-group">
+    {{ form.password.label }}
+    {{ form.password }}
+    {% if form.password.errors %}
+    <ul class="errors">
+      {% for error in form.password.errors %}<li>{{ error }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+  <div class="form-group">
+    {{ form.confirm.label }}
+    {{ form.confirm }}
+    {% if form.confirm.errors %}
+    <ul class="errors">
+      {% for error in form.confirm.errors %}<li>{{ error }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+  <div class="form-group">
+    {{ form.website.label }}
+    {{ form.website(placeholder='http://example.com') }}
+  </div>
+  <div class="form-group">
+    {{form.submit()}}
+  </div>
+</form>
+<div>
+  <div class="">
+    Already have an account?
+  </div>
+  <a href="{{ url_for('auth_bp.login_page') }}" class="btn btn-lg btn-dark">Log in.</a>
+</div>
+{% endblock %}

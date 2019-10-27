@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2>Total amount in jpy : {{ "{:,}".format(total_amount) }}</h2>
+<table class="table">
+  <thead>
+    <th scope="col">Date</th>
+    <th scope="col">Visa</th>
+    <th scope="col">Amount (JPY)</th>
+    <th></th>
+    <th></th>
+  </thead>
+  <tbody>
+    {% for record in records %}
+    <tr>
+      <td>{{record.date}}</td>
+      <td>{{record.visa}}</td>
+      <td>{{ "{:,}".format(record.amount) }}</td>
+      <td><a href="/admin/remove_visa_spending/{{record.id}}" class="btn btn-lg btn-dark"><i class="far fa-trash-alt"></i></a></td>
+      <td><a href="/admin/edit_visa_spending/{{record.id}}" class="btn btn-lg btn-dark"><i class="fas fa-edit"></i></a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

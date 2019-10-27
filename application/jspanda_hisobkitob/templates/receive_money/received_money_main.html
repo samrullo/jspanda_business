@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2>Total amount in usd : {{ "{:,}".format(total_amount_usd) }}, in jpy : {{ "{:,}".format(total_amount_jpy) }}, average exchange rate : {{ "{:,}".format(average_exchange_rate) }}</h2>
+<table class="table">
+  <thead>
+    <th scope="col">Date</th>
+    <th scope="col">Amount (USD)</th>
+    <th scope="col">Exchange rate</th>
+    <th scope="col">Amount (JPY)</th>
+    <th></th>
+    <th></th>
+  </thead>
+  <tbody>
+    {% for record in received_money_records %}
+    <tr>
+      <td>{{record[1]}}</td>
+      <td>{{ "{:,}".format(record[2]) }}</td>
+      <td>{{ "{:,}".format(record[3]) }}</td>
+      <td>{{ "{:,}".format(record[4]) }}</td>
+      <td><a href="/received_money_remove/{{record[0]}}" class="btn btn-lg btn-dark"><i class="far fa-trash-alt"></i></a></td>
+      <td><a href="/received_money_edit/{{record[0]}}" class="btn btn-lg btn-dark"><i class="fas fa-edit"></i></a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
