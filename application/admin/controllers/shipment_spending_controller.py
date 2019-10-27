@@ -36,7 +36,7 @@ class ShipmentSpendingController:
             db.session.commit()
             flash(f"Successfully added {date}, {weight}, {amount}", "success")
             return self.show_all_spendings()
-        form.date.data = to_yyyymmdd(datetime.date.today())
+        form.date.data = datetime.date.today()
         return render_template("shipment_spending/shipment_spending_add.html", form=form)
 
     def edit_shipment_spending(self, id):
