@@ -4,6 +4,7 @@ from application.admin.controllers.received_money_controller import ReceivedMone
 from application.admin.controllers.shipment_spending_controller import ShipmentSpendingController
 from application.admin.controllers.shipment_weight_controller import ShipmentWeightController
 from application.admin.controllers.visa_spending_controller import VisaSpendingController
+from application.admin.controllers.family_spending_controller import FamilySpendingController
 
 admin_bp = Blueprint('admin_bp', __name__, template_folder='templates', static_folder='static', url_prefix='/admin')
 
@@ -147,3 +148,39 @@ def mark_shipment_weight_as_paid(id):
 def show_all_shipment_weights():
     contr = ShipmentWeightController()
     return contr.show_all_shipment_weights()
+
+
+# family spending routes
+@admin_bp.route("/family_spending_main")
+@login_required
+def family_spending_main():
+    contr = FamilySpendingController()
+    return contr.family_spending_main()
+
+
+@admin_bp.route("/family_spending_by_month/<adate>")
+@login_required
+def family_spending_by_month(adate):
+    contr = FamilySpendingController()
+    return contr.family_spending_month(adate)
+
+
+@admin_bp.route("/add_family_spending", methods=['GET', 'POST'])
+@login_required
+def add_family_spending():
+    contr = FamilySpendingController()
+    return contr.add_family_spending()
+
+
+@admin_bp.route("/edit_family_spending/<id>", methods=['GET', 'POST'])
+@login_required
+def edit_family_spending(id):
+    contr = FamilySpendingController()
+    return contr.edit_family_spending(id)
+
+
+@admin_bp.route("/remove_family_spending", methods=['GET', 'POST'])
+@login_required
+def remove_family_spending(id):
+    contr = FamilySpendingController()
+    return contr.remove_family_spending(id)
