@@ -83,7 +83,7 @@ class FamilySpendingController:
             spending_df.loc[adate, 'saitama_liabilities'] = spending_df.loc[adate, self.saitama_items].sum()
             spending_df.loc[adate, 'saitama_new_balance'] = spending_df.loc[adate, 'saitama_current_balance'] + spending_df.loc[adate, 'saitama_liabilities']
             spending_df.loc[adate, 'mitsubishi_liabilities'] = spending_df.loc[adate, self.mitsubishi_items].sum()
-            spending_df.loc[adate, 'mitsubishi_new_balance'] = spending_df.loc[adate, 'mitsubishi_current_balance'] + spending_df.loc[adate, 'mitsubishi_liabilities']
+            spending_df.loc[adate, 'mitsubishi_new_balance'] = spending_df.loc[adate, 'mitsubishi_current_balance'] + spending_df.loc[adate, 'salary'] + spending_df.loc[adate, 'mitsubishi_liabilities']
         spending_df.sort_index(ascending=False, inplace=True)
         return render_template("family_spending/family_spending_main.html", spending_df=spending_df)
 
