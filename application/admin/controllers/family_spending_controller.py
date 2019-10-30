@@ -117,24 +117,28 @@ class FamilySpendingController:
         adate = datetime.date.today()
         # adate_records = self.model.get_items_by_date(datetime.date(adate.year, adate.month, 1))
         # spending_df = pd.DataFrame(columns=['id', 'date', 'name', 'amount'], data=adate_records)
-        spending_df = pd.read_sql(FamilySpending.query.filter(FamilySpending.date == adate).statement, FamilySpending.query.session.bind)
-        form.date.data = adate
-        for field in form:
-            if field.description in form.cost_names and field.description != 'date':
-                field.data = spending_df.loc[spending_df['name'] == field.description, 'amount'].values[0]
-        return render_template("family_spending/add_family_spending.html", form=form)
+        all_df = pd.read_sql(FamilySpending.query.statement, FamilySpending.query.session.bind)
+        most_recent_date = all_df['date'].max()
+        spending_df = pd.read_sql(FamilySpending.query.filter(FamilySpending.date == most_recent_date).statement, FamilySpending.query.session.bind)
+        if len(spending_df) != 0:
+            form.date.data = adate
+            for field in form:
+                if field.description in form.cost_names and field.description != 'date':
+                    field.data = spending_df.loc[spending_df['name'] == field.description, 'amount'].values[0]
+            return render_template("family_spending/add_family_spending.html", form=form)
+        else:
+            flash(f"No records were found as of {datetime.date(adate.year, adate.month, 1)}", "danger")
+            return self.family_spending_main()
 
     def edit_family_spending(self, id):
         form = FamilySpendingSingleItemForm()
         record = FamilySpending.query.get(id)
         if form.validate_on_submit():
-            id = id
             record.date = form.date.data
             record.name = form.name.data
-            record.amount = form.amount.data
+            if record.name in self.cost_cols and form.amount.data > 0:
+                record.amount = form.amount.data * -1
             db.session.commit()
-            # self.model.update_item(id, date, name, amount)
-
             flash(f"Updated {id} to {record.date}, {record.name}, {record.amount}", "success")
             return self.family_spending_month(record.date)
         form.id.data = id
