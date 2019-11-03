@@ -26,7 +26,7 @@ class ReceivedMoneyController:
         total_amount_usd = df['amount_usd'].sum()
         total_amount_jpy = df['amount_jpy'].sum()
         average_exchange_rate = df['exchange_rate'].mean()
-        return render_template("received_money/received_money_main.html", received_money_records=received_money_records, total_amount_usd=total_amount_usd, total_amount_jpy=total_amount_jpy, average_exchange_rate=average_exchange_rate,title="Received money")
+        return render_template("received_money/received_money_main.html", received_money_records=received_money_records, total_amount_usd=total_amount_usd, total_amount_jpy=total_amount_jpy, average_exchange_rate=average_exchange_rate, title="Received money")
 
     def add_received_money(self):
         form = ReceivedMoneyForm()
@@ -41,7 +41,7 @@ class ReceivedMoneyController:
             db.session.commit()
             flash(f"Saved {date} {amount_usd} {exchange_rate} successfully", "success")
             return self.show_all_received_money()
-        return render_template("received_money/received_money_add.html", form=form,title="Add received money")
+        return render_template("received_money/received_money_add.html", form=form, title="Add received money")
 
     def edit_received_money(self, id):
         form = ReceivedMoneyForm()
@@ -60,11 +60,11 @@ class ReceivedMoneyController:
             flash(f"Updated {form.id.data} to {date},{amount_usd},{exchange_rate} successfully", "success")
             return self.show_all_received_money()
         form.id.data = received_money.id
-        form.date.data = received_money.date
+        form.date.data = received_money.registered_date
         form.amount_usd.data = received_money.amount_usd
         form.exchange_rate.data = received_money.exchange_rate
         form.submit.data = "Update received money"
-        return render_template("received_money/received_money_edit.html", form=form,title="Edit received money")
+        return render_template("received_money/received_money_edit.html", form=form, title="Edit received money")
 
     def remove_received_money(self, id):
         received_money = ReceivedMoney.query.get(id)

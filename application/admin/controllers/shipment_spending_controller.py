@@ -52,6 +52,8 @@ class ShipmentSpendingController:
             db.session.commit()
             flash(f"Updated to {date},{weight},{amount}", "success")
             return self.show_all_spendings()
+        form.date.data = record.date
+        form.weight.data = record.weight
         return render_template("shipment_spending/shipment_spending_edit.html", form=form, title="Edit shipment spending")
 
     def remove_shipment_spending(self, id):

@@ -41,3 +41,7 @@ h2 {
 .table{
   padding:1rem 0;
 }
+
+.is_paid{
+  background-color: #32ff6a;
+}

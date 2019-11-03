@@ -11,6 +11,7 @@ login_manager = LoginManager()
 from .main import main_routes
 from .admin import admin_routes
 from .auth import auth_routes
+from .jspanda_orders import jspanda_orders_routes
 
 
 def create_app():
@@ -27,6 +28,7 @@ def create_app():
         app.register_blueprint(main_routes.main_bp)
         app.register_blueprint(admin_routes.admin_bp)
         app.register_blueprint(auth_routes.auth_bp)
+        app.register_blueprint(jspanda_orders_routes.jspanda_orders_bp)
 
         # create all tables
         db.create_all()

@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h3>{{title}}</h3>
+
+<table class="table">
+  <thead>
+    <th>Date</th>
+    <th>Name</th>
+    <th>Price</th>
+    <th>Quantity</th>
+    <th>Order sum</th>
+    <th>Ordered by</th>
+    <th>Extra notes</th>
+    <th>Is paid</th>
+  </thead>
+  <tbody>
+    {% for record in records %}
+      <tr class="{% if record.is_paid %} is_paid {% endif %}">
+        <td>{{record.date}}</td>
+        <td>{{record.name}}</td>
+        <td>{{record.price}}</td>
+        <td>{{record.quantity}}</td>
+        <td>{{record.order_sum}}</td>
+        <td>{{record.ordered_by}}</td>
+        <td>{{record.extra_notes}}</td>
+        <td>{{record.is_paid}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

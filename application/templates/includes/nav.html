@@ -11,6 +11,11 @@
         {% else %}
         <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
         {% endif %}
+        {% if current_user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="/jspanda_orders">JSPanda Orders</a>
+        </li>
+        {% endif %}
         {% if current_user.is_authenticated and current_user.is_admin %}
         <li class="nav-item"><a href="/admin" class="nav-link">Admin</a></li>
         {% endif %}

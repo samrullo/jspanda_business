@@ -68,6 +68,9 @@ class ShipmentWeightController:
             db.session.commit()
             flash(f"Updated to {date},{to_whom},{weight},{amount}", "success")
             return self.show_pending_shipment_weights()
+        form.date.data = record.date
+        form.to_whom.data = record.to_whom
+        form.weight.data = record.weight
         return render_template("shipment_weight/shipment_weight_edit.html", form=form, title="Edit shipment spending")
 
     def remove_shipment_weight(self, id):

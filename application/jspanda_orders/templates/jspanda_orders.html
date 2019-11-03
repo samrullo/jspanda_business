@@ -1,10 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{title}}</title>
-</head>
-<body>
+{% extends "layout.html" %}
+{% block content %}
 
-</body>
-</html>
+<h3>{{title}}</h3>
+
+<table class="table">
+  <thead>
+    <th>Date</th>
+    <th>Total cost</th>
+    <th>Order sum</th>
+    <th>Profit</th>
+    <th></th>
+  </thead>
+  <tbody>
+    {% for i,row in orders_df.iterrows() %}
+      <tr>
+        <td>{{i}}</td>
+        <td>{{ "{:,.2f}".format(row['total_cost']) }}</td>
+        <td>{{ "{:,.2f}".format(row['order_sum']) }}</td>
+        <td>{{ "{:,.2f}".format(row['profit']) }}</td>
+        <td>
+          <a class="btn btn-lg btn-dark" href="/jspanda_orders_by_date/{{i}}">View</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
