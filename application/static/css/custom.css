@@ -45,3 +45,7 @@ h2 {
 .is_paid{
   background-color: #32ff6a;
 }
+
+.add_jspanda_order{
+  padding: 1rem 0;
+}

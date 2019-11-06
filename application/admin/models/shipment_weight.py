@@ -9,3 +9,4 @@ class ShipmentWeight(db.Model):
     weight = db.Column(db.Float, nullable=False)
     amount = db.Column(db.Integer, nullable=False)
     is_paid = db.Column(db.Boolean)
+    order_date = db.Column(db.Date, nullable=True)

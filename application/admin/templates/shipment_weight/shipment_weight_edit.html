@@ -9,6 +9,10 @@
     {{ form.date() }}
   </div>
   <div class="form-group">
+    {{form.order_date.label}}
+    {{form.order_date()}}
+  </div>
+  <div class="form-group">
     {{form.to_whom.label}}
     {{form.to_whom()}}
   </div>

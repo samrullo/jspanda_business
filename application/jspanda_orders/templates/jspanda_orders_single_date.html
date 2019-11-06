@@ -3,29 +3,35 @@
 
 <h3>{{title}}</h3>
 
+<div class="add_jspanda_order">
+  <a class="btn btn-lg btn-dark" href="/add_jspanda_order/{{adate}}">Add jspanda order</a>
+</div>
+
 <table class="table">
   <thead>
-    <th>Date</th>
     <th>Name</th>
     <th>Price</th>
     <th>Quantity</th>
     <th>Order sum</th>
     <th>Ordered by</th>
     <th>Extra notes</th>
-    <th>Is paid</th>
+    <th></th>
+    <th></th>
+    <th></th>
   </thead>
   <tbody>
     {% for record in records %}
-      <tr class="{% if record.is_paid %} is_paid {% endif %}">
-        <td>{{record.date}}</td>
-        <td>{{record.name}}</td>
-        <td>{{record.price}}</td>
-        <td>{{record.quantity}}</td>
-        <td>{{record.order_sum}}</td>
-        <td>{{record.ordered_by}}</td>
-        <td>{{record.extra_notes}}</td>
-        <td>{{record.is_paid}}</td>
-      </tr>
+    <tr class="{% if record.is_paid %} is_paid {% endif %}">      
+      <td>{{record.name}}</td>
+      <td>{{record.price}}</td>
+      <td>{{record.quantity}}</td>
+      <td>{{record.order_sum}}</td>
+      <td>{{record.ordered_by}}</td>
+      <td>{{record.extra_notes}}</td>
+      <td><a class="btn btn-lg btn-dark" href="/mark_jspanda_order_as_paid_or_nonpaid/{{record.id}}">{% if record.is_paid %} Unpaid {% else %} Paid {% endif %}</a></td>
+      <td><a href="/remove_jspanda_order/{{record.id}}" class="btn btn-lg btn-dark"><i class="far fa-trash-alt"></i></a></td>
+      <td><a href="/edit_jspanda_order/{{record.id}}" class="btn btn-lg btn-dark"><i class="fas fa-edit"></i></a></td>
+    </tr>
     {% endfor %}
   </tbody>
 </table>

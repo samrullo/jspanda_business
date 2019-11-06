@@ -150,6 +150,13 @@ def show_all_shipment_weights():
     return contr.show_all_shipment_weights()
 
 
+@admin_bp.route("/show_shipment_weights_by_date")
+@login_required
+def show_shipment_weights_by_date():
+    contr = ShipmentWeightController()
+    return contr.show_shipment_weights_by_date()
+
+
 # family spending routes
 @admin_bp.route("/family_spending_main")
 @login_required

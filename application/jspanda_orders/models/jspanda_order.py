@@ -14,3 +14,5 @@ class JspandaOrder(db.Model):
     ordered_by = db.Column(db.String(100), nullable=True)
     extra_notes = db.Column(db.String(400), nullable=True)
     is_paid = db.Column(db.Boolean, nullable=False)
+    added_time = db.Column(db.DateTime, nullable=True)
+    modified_time = db.Column(db.DateTime, nullable=True)
