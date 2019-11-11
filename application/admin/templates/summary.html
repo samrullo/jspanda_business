@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h3>{{title}}</h3>
+
+<ul class="list-group">
+  <li class="list-group-item">Total received money: <span class="positive-numeric">{{"{:,}".format(total_received_money)}}</span></li>
+  <li class="list-group-item">Total transferred money: <span class="negative-numeric">{{"{:,}".format(total_transferral)}}</span></li>
+  <li class="list-group-item">Total visa spendings : <span class="negative-numeric">{{ "{:,}".format(total_visa_spending) }}</span></li>
+  <li class="list-group-item">Total shipment spending : <span class="negative-numeric">{{ "{:,}".format(total_shipment_spending) }}</span></li>
+  <li class="list-group-item" style="font-size:2rem; color:#851de0">Net : {{ "{:,}".format(total_received_money-total_transferral-total_visa_spending-total_shipment_spending) }}</li>
+</ul>
+{% endblock %}

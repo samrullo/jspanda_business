@@ -34,18 +34,19 @@ h2 {
   color: red;
 }
 
-.list-group{
-  padding:1rem 0;
+.list-group {
+  padding: 1rem 0;
 }
 
-.table{
-  padding:1rem 0;
+.table {
+  padding: 1rem 0;
+  margin: 1rem 0;
 }
 
-.is_paid{
+.is_paid {
   background-color: #32ff6a;
 }
 
-.add_jspanda_order{
+.add_jspanda_order {
   padding: 1rem 0;
 }

@@ -4,7 +4,9 @@ from application.admin.controllers.received_money_controller import ReceivedMone
 from application.admin.controllers.shipment_spending_controller import ShipmentSpendingController
 from application.admin.controllers.shipment_weight_controller import ShipmentWeightController
 from application.admin.controllers.visa_spending_controller import VisaSpendingController
+from application.admin.controllers.transferral_controller import TransferralController
 from application.admin.controllers.family_spending_controller import FamilySpendingController
+from application.admin.controllers.summary_controller import SummaryController
 
 admin_bp = Blueprint('admin_bp', __name__, template_folder='templates', static_folder='static', url_prefix='/admin')
 
@@ -18,6 +20,14 @@ def admin_home():
 @admin_bp.route('/dashboard')
 def admin_dashboard():
     return render_template("index.html", title="Admin dashboard")
+
+
+# show summary of income and spendings
+@admin_bp.route("/show_summary")
+@login_required
+def show_summary():
+    contr = SummaryController()
+    return contr.show_summary()
 
 
 # received money routes
@@ -86,6 +96,13 @@ def show_visa_spending():
     return contr.show_visa_spendings()
 
 
+@admin_bp.route("/show_visa_spending_by_date/<date>")
+@login_required
+def show_visa_spending_by_date(date):
+    contr = VisaSpendingController()
+    return contr.show_visa_spendings_by_date(date)
+
+
 @admin_bp.route("/add_visa_spending", methods=['GET', 'POST'])
 @login_required
 def add_visa_spending():
@@ -105,6 +122,35 @@ def edit_visa_spending(id):
 def remove_visa_spending(id):
     contr = VisaSpendingController()
     return contr.remove_visa_spending(id)
+
+
+# routes for transferrals
+@admin_bp.route("/show_transferrals")
+@login_required
+def show_transferrals():
+    contr = TransferralController()
+    return contr.show_transferrals()
+
+
+@admin_bp.route("/add_transferral", methods=['GET', 'POST'])
+@login_required
+def add_transferral():
+    contr = TransferralController()
+    return contr.add_transferral()
+
+
+@admin_bp.route("/edit_transferral/<id>", methods=['GET', 'POST'])
+@login_required
+def edit_transferral(id):
+    contr = TransferralController()
+    return contr.edit_transferral(id)
+
+
+@admin_bp.route("/remove_transferral/<id>", methods=['GET', 'POST'])
+@login_required
+def remove_transferral(id):
+    contr = TransferralController()
+    return contr.remove_transferral(id)
 
 
 # routes for shipment weights

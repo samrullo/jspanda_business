@@ -6,19 +6,16 @@
 <table class="table">
   <thead>
     <th scope="col">Date</th>
-    <th scope="col">Visa</th>
     <th scope="col">Amount (JPY)</th>
     <th></th>
     <th></th>
   </thead>
   <tbody>
-    {% for record in records %}
+    {% for date,row in visa_df.iterrows() %}
     <tr>
-      <td>{{record.date}}</td>
-      <td>{{record.visa}}</td>
-      <td>{{ "{:,}".format(record.amount) }}</td>
-      <td><a href="/admin/remove_visa_spending/{{record.id}}" class="btn btn-lg btn-dark"><i class="far fa-trash-alt"></i></a></td>
-      <td><a href="/admin/edit_visa_spending/{{record.id}}" class="btn btn-lg btn-dark"><i class="fas fa-edit"></i></a></td>
+      <td>{{date}}</td>
+      <td>{{ "{:,}".format(row['amount']) }}</td>
+      <td><a class="btn btn-lg btn-dark" href="/admin/show_visa_spending_by_date/{{date}}">View</a></td>
     </tr>
     {% endfor %}
   </tbody>

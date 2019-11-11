@@ -5,14 +5,10 @@
 <h3>{{title}}</h3>
 
 <div class="container">
-  <ul class="list-group">
-    <li class="list-group-item">
-      <a class="btn btn-lg" href="/jspanda_orders">JSPanda orders</a>
-    </li>
-    <li class="list-group-item">
-      <a class="btn btn-lg" href="/add_jspanda_order/{{adate}}">Add jspanda order</a>
-    </li>
-  </ul>
+  <div class="list-group">
+    <a class="list-group-item list-group-item-action" href="/jspanda_orders">JSPanda orders</a>
+    <a class="list-group-item list-group-item-action" href="/add_jspanda_order/{{adate}}">Add jspanda order</a>
+  </div>
 </div>
 
 {% endblock %}
