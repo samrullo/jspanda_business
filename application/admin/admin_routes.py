@@ -2,6 +2,7 @@ from flask import Blueprint, render_template
 from flask_login import login_required
 from application.admin.controllers.received_money_controller import ReceivedMoneyController
 from application.admin.controllers.shipment_spending_controller import ShipmentSpendingController
+from application.admin.controllers.jpost_controller import JpostSpendingController
 from application.admin.controllers.shipment_weight_controller import ShipmentWeightController
 from application.admin.controllers.visa_spending_controller import VisaSpendingController
 from application.admin.controllers.transferral_controller import TransferralController
@@ -86,6 +87,35 @@ def edit_shipment_spending(id):
 def remove_shipment_spending(id):
     contr = ShipmentSpendingController()
     return contr.remove_shipment_spending(id)
+
+
+# routes for yubin spendings
+@admin_bp.route("/show_jpost_spending")
+@login_required
+def show_jpost_spending():
+    contr = JpostSpendingController()
+    return contr.show_all_spendings()
+
+
+@admin_bp.route("/add_jpost_spending", methods=['GET', 'POST'])
+@login_required
+def add_jpost_spending():
+    contr = JpostSpendingController()
+    return contr.add_jpost_spending()
+
+
+@admin_bp.route("/edit_jpost_spending/<id>", methods=['GET', 'POST'])
+@login_required
+def edit_jpost_spending(id):
+    contr = JpostSpendingController()
+    return contr.edit_jpost_spending(id)
+
+
+@admin_bp.route("/remove_jpost_spending/<id>", methods=['GET', 'POST'])
+@login_required
+def remove_jpost_spending(id):
+    contr = JpostSpendingController()
+    return contr.remove_jpost_spending(id)
 
 
 # routes for visa spending

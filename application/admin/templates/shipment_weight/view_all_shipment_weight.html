@@ -7,6 +7,7 @@
 <table class="table">
   <thead>
     <th scope="col">Date</th>
+    <th scope="col">Order Date</th>
     <th scope="col">To whom</th>
     <th scope="col">Weight(kg)</th>
     <th scope="col">Amount</th>
@@ -19,6 +20,7 @@
     {% for record in records %}
     <tr>
       <td>{{record.date}}</td>
+      <td>{{record.order_date}}</td>
       <td>{{record.to_whom}}</td>
       <td>{{ "{:,}".format(record.weight) }}</td>
       <td>{{ "{:,}".format(record.amount) }}</td>

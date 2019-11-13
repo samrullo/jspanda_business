@@ -57,3 +57,17 @@ def remove_jspanda_order(id):
 def mark_jspanda_order_as_paid_or_nonpaid(id):
     contr = JspandaOrderController()
     return contr.mark_as_paid_or_nonpaid(id)
+
+
+@jspanda_orders_bp.route("/mark_jspanda_orders_as_paid_or_nonpaid_by_date/<adate>", methods=['GET', 'POST'])
+@login_required
+def mark_jspanda_orders_as_paid_or_nonpaid_by_date(adate):
+    contr = JspandaOrderController()
+    return contr.mark_as_paid_or_nonpaid_by_date(adate)
+
+
+@jspanda_orders_bp.route("/mark_jspanda_order_as_received_or_nonreceived/<id>", methods=['GET', 'POST'])
+@login_required
+def mark_jspanda_order_as_received_or_nonreceived(id):
+    contr = JspandaOrderController()
+    return contr.mark_as_recived_or_nonreceived(id)

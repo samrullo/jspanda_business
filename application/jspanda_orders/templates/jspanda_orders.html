@@ -3,25 +3,40 @@
 
 <h3>{{title}}</h3>
 
+<ul class="list-group">
+  <li class="list-group-item">Pending product cost : {{ "{:,.2f}".format(pending_product_cost) }}</li>
+  <li class="list-group-item">Pending shipment cost : {{ "{:,.2f}".format(pending_shipment_cost) }}</li>
+  <li class="list-group-item">Pending yubin cost : {{ "{:,.2f}".format(pending_yubin_cost) }}</li>
+  <li class="list-group-item list-group-item-warning">Pending total cost : {{ "{:,.2f}".format(pending_total_cost) }}</li>
+</ul>
+
 <table class="table">
   <thead>
     <th>Date</th>
     <th>Total cost</th>
+    <th>Shipment cost</th>
+    <th>Yubin cost</th>
     <th>Order sum</th>
     <th>Profit</th>
     <th></th>
+    <th></th>
   </thead>
   <tbody>
-    {% for i,row in orders_df.iterrows() %}
-      <tr>
-        <td>{{i}}</td>
-        <td>{{ "{:,.2f}".format(row['total_cost']) }}</td>
-        <td>{{ "{:,.2f}".format(row['order_sum']) }}</td>
-        <td>{{ "{:,.2f}".format(row['profit']) }}</td>
-        <td>
-          <a class="btn btn-lg btn-dark" href="/jspanda_orders_by_date/{{i}}">View</a>
-        </td>
-      </tr>
+    {% for i,row in orders_shipment_mrg_df.iterrows() %}
+    <tr class="{% if row['is_paid']==1%} table-success {% endif %}">
+      <td>{{i}}</td>
+      <td>{{ "{:,.2f}".format(row['total_cost']) }}</td>
+      <td>{{ "{:,.2f}".format(row['total_shipment_spending_usd']) }}</td>
+      <td>{{ "{:,.2f}".format(row['jpost_amount_usd']) }}</td>
+      <td>{{ "{:,.2f}".format(row['order_sum']) }}</td>
+      <td>{{ "{:,.2f}".format(row['profit']) }}</td>
+      <td>
+        <a class="btn btn-lg btn-dark" href="/jspanda_orders_by_date/{{i}}">View</a>
+      </td>
+      <td>
+        <a class="btn btn-lg btn-dark" href="/mark_jspanda_orders_as_paid_or_nonpaid_by_date/{{i}}">{% if row['is_paid'] != 1 %}Close{% else %} Reopen {% endif %}</a>
+      </td>
+    </tr>
     {% endfor %}
   </tbody>
 </table>
