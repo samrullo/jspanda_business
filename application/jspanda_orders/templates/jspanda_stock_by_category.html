@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h3>{{title}}</h3>
+
+<table class="table">
+  <thead>
+    <th>Category</th>
+    <th>Product count</th>
+    <th></th>
+  </thead>
+  <tbody>
+    {% for i,row in by_category_stock_df.iterrows() %}
+    <tr>
+      <td>{{row['name']}}</td>
+      <td>{{row['product_name']}}</td>
+      <td>
+        <a class="btn btn-lg btn-dark" href="/jspanda_stock_by_category/{{row['id']}}">View</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

@@ -55,6 +55,7 @@ class FamilySpendingForm(FlaskForm):
 class FamilySpendingController:
     def __init__(self):
         self.model = FamilySpending()
+        self.income_cols = ['mitsubishi_current_balance', 'saitama_current_balance', 'solar to receive', 'salary']
         self.cost_cols = ['metlife', 'mortgage', 'saison_lalaport_visa_saitama', 'cosmos_gasoline_visa_saitama', 'edion_visa_saitama', 'costco_old_visa_saitama',
                           'costco_new_visa_mitsubishi', 'yahoo_visa_saitama', 'rakuten_visa_mitsubishi', 'softbank', 'solar_panel', 'proyezd',
                           'sadik', 'samira_swimming', 'samira_russian', 'denki', 'gas', 'suv', 'timur school', 'jidoushazei', 'home tax']
@@ -138,6 +139,8 @@ class FamilySpendingController:
             record.name = form.name.data
             if record.name in self.cost_cols and form.amount.data > 0:
                 record.amount = form.amount.data * -1
+            if record.name in self.income_cols:
+                record.amount = form.amount.data
             db.session.commit()
             flash(f"Updated {id} to {record.date}, {record.name}, {record.amount}", "success")
             return self.family_spending_month(record.date)

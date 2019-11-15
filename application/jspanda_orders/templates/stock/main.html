@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h3>{{title}}</h3>
+
+<table class="table">
+  <thead>
+    <th>Product Name</th>
+    <th>Category</th>
+    <th>Price</th>
+    <th>Quantity</th>
+    <th>Extra</th>
+    <th></th>
+    <th></th>
+  </thead>
+  <tbody>
+    {% for i,row in stock_df.iterrows() %}
+    <tr>
+      <td>{{ row['product_name'] }}</td>
+      <td>{{ row['category']}}</td>
+      <td>{{row['price']}}</td>
+      <td>{{row['quantity']}}</td>
+      <td>{{row['extra_info']}}</td>
+      <td><a href="/remove_jspanda_stock/{{row['id']}}" class="btn btn-lg btn-dark"><i class="far fa-trash-alt"></i></a></td>
+      <td><a href="/edit_jspanda_stock/{{row['id']}}" class="btn btn-lg btn-dark"><i class="fas fa-edit"></i></a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

@@ -1,11 +1,9 @@
 from flask import Blueprint, render_template
 from flask_login import login_required
-from application.admin.controllers.received_money_controller import ReceivedMoneyController
-from application.admin.controllers.shipment_spending_controller import ShipmentSpendingController
-from application.admin.controllers.shipment_weight_controller import ShipmentWeightController
-from application.admin.controllers.visa_spending_controller import VisaSpendingController
-from application.admin.controllers.family_spending_controller import FamilySpendingController
 from application.jspanda_orders.controllers.jspanda_orders_controllers import JspandaOrderController
+from application.jspanda_orders.controllers.jspanda_category_controller import CategoryController
+from application.jspanda_orders.controllers.jspanda_product_controller import ProductController
+from application.jspanda_orders.controllers.jspanda_stock_controller import StockController
 
 jspanda_orders_bp = Blueprint('jspanda_orders_bp', __name__, template_folder='templates', static_folder='static')
 
@@ -71,3 +69,118 @@ def mark_jspanda_orders_as_paid_or_nonpaid_by_date(adate):
 def mark_jspanda_order_as_received_or_nonreceived(id):
     contr = JspandaOrderController()
     return contr.mark_as_recived_or_nonreceived(id)
+
+
+# routes for category
+@jspanda_orders_bp.route("/jspanda_category")
+@login_required
+def jspanda_category():
+    contr = CategoryController()
+    return contr.main()
+
+
+@jspanda_orders_bp.route("/add_jspanda_category", methods=['GET', 'POST'])
+@login_required
+def add_jspanda_category():
+    contr = CategoryController()
+    return contr.add()
+
+
+@jspanda_orders_bp.route("/edit_jspanda_category/<id>", methods=['GET', 'POST'])
+@login_required
+def edit_jspanda_category(id):
+    contr = CategoryController()
+    return contr.edit(id)
+
+
+@jspanda_orders_bp.route("/remove_jspanda_category/<id>", methods=['GET', 'POST'])
+@login_required
+def remove_jspanda_category(id):
+    contr = CategoryController()
+    return contr.remove(id)
+
+
+# routes for products
+@jspanda_orders_bp.route("/jspanda_product")
+@login_required
+def jspanda_product():
+    contr = ProductController()
+    return contr.main()
+
+
+@jspanda_orders_bp.route("/add_jspanda_product", methods=['GET', 'POST'])
+@login_required
+def add_jspanda_product():
+    contr = ProductController()
+    return contr.add()
+
+
+@jspanda_orders_bp.route("/edit_jspanda_product/<id>", methods=['GET', 'POST'])
+@login_required
+def edit_jspanda_product(id):
+    contr = ProductController()
+    return contr.edit(id)
+
+
+@jspanda_orders_bp.route("/remove_jspanda_product/<id>", methods=['GET', 'POST'])
+@login_required
+def remove_jspanda_product(id):
+    contr = ProductController()
+    return contr.remove(id)
+
+
+# routes for stock
+@jspanda_orders_bp.route("/jspanda_stock")
+@login_required
+def jspanda_stock():
+    contr = StockController()
+    return contr.main()
+
+
+@jspanda_orders_bp.route("/jspanda_empty_stock")
+@login_required
+def jspanda_empty_stock():
+    contr = StockController()
+    return contr.empty_stock()
+
+
+@jspanda_orders_bp.route("/jspanda_stock_by_category_summary")
+@login_required
+def jspanda_stock_by_category_summary():
+    contr = StockController()
+    return contr.show_by_category_stock_summary()
+
+
+@jspanda_orders_bp.route("/jspanda_stock_by_category/<category_id>")
+@login_required
+def jspanda_stock_by_category(category_id):
+    contr = StockController()
+    return contr.show_stock_by_category(category_id)
+
+
+@jspanda_orders_bp.route("/add_jspanda_stock", methods=['GET', 'POST'])
+@login_required
+def add_jspanda_stock():
+    contr = StockController()
+    return contr.add()
+
+
+@jspanda_orders_bp.route("/edit_jspanda_stock/<id>", methods=['GET', 'POST'])
+@login_required
+def edit_jspanda_stock(id):
+    contr = StockController()
+    return contr.edit(id)
+
+
+@jspanda_orders_bp.route("/remove_jspanda_stock/<id>", methods=['GET', 'POST'])
+@login_required
+def remove_jspanda_stock(id):
+    contr = StockController()
+    return contr.remove(id)
+
+
+# route for jspanda stock dashboard
+@jspanda_orders_bp.route("/jspanda_stock_dashboard")
+@login_required
+def jspanda_stock_dashboard():
+    return render_template("jspanda_stock_dashboard.html", title="Jspanda Stock dashboard")

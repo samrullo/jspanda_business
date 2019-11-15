@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h3>{{title}}</h3>
+
+<table class="table">
+  <thead>
+    <th>Name</th>
+    <th>Category</th>
+    <th>Price</th>
+    <th>Extra</th>
+    <th></th>
+    <th></th>
+  </thead>
+  <tbody>
+    {% for product in records %}
+    <tr>
+      <td>{{ product.name }}</td>
+      <td>{{product.category}}</td>
+      <td>{{product.price}}</td>
+      <td>{{product.extra_info}}</td>
+      <td><a href="/remove_jspanda_product/{{product.id}}" class="btn btn-lg btn-dark"><i class="far fa-trash-alt"></i></a></td>
+      <td><a href="/edit_jspanda_product/{{product.id}}" class="btn btn-lg btn-dark"><i class="fas fa-edit"></i></a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

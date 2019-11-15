@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h3>{{title}}</h3>
+
+<div class="container">
+  <h3>Stock</h3>
+  <div class="list-group">
+    <a class="list-group-item list-group-item-action" href="/jspanda_empty_stock">JSPanda Empty stock</a>
+    <a class="list-group-item list-group-item-action" href="/jspanda_stock">JSPanda stock</a>
+    <a class="list-group-item list-group-item-action" href="/jspanda_stock_by_category_summary">JSPanda by category stock</a>
+    <a class="list-group-item list-group-item-action" href="/add_jspanda_stock">Add stock</a>
+  </div>
+</div>
+
+<div class="container">
+  <h3>Category</h3>
+  <div class="list-group">
+    <a class="list-group-item list-group-item-action" href="/jspanda_category">Category</a>
+    <a class="list-group-item list-group-item-action" href="/add_jspanda_category">Add new category</a>
+  </div>
+</div>
+
+<div class="container">
+  <h3>Product</h3>
+  <a class="list-group-item list-group-item-action" href="/jspanda_product">Product</a>
+  <a class="list-group-item list-group-item-action" href="/add_jspanda_product">Add product</a>
+</div>
+
+{% endblock %}
