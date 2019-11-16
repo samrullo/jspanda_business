@@ -81,6 +81,7 @@ class StockController:
             db.session.commit()
             flash(f"Added stock for  {new_record.product}, {new_record.quantity}", "success")
             return self.main()
+        form.product.choices = [(product.id, product.name) for product in Product.query.all()]
         return render_template("stock/add.html", title="Add new stock", form=form)
 
     def edit(self, id):
@@ -94,11 +95,12 @@ class StockController:
             return self.main()
         form.product.data = record.product_id
         form.quantity.data = record.quantity
+        form.product.choices = [(product.id, product.name) for product in Product.query.all()]
         return render_template("stock/edit.html", title="Edit stock", form=form)
 
     def remove(self, id):
         record = Stock.query.get(id)
         db.session.delete(record)
         db.session.commit()
-        flash(f"Removed stock")
+        flash(f"Removed stock", "success")
         return self.main()

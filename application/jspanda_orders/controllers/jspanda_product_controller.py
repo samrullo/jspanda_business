@@ -40,6 +40,7 @@ class ProductController:
             flash(f"Added product {new_record.name}, {new_record.price},{new_record.extra_info},{new_record.category}", "success")
             return self.main()
         _logger.info(f"Validation not passed yet {form.category.data}")
+        form.category.choices = [(category.id, category.name) for category in Category.query.all()]
         return render_template("product/add.html", title="Add new product", form=form)
 
     def edit(self, id):
@@ -57,11 +58,12 @@ class ProductController:
         form.price.data = record.price
         form.category.data = record.category_id
         form.extra.data = record.extra_info
+        form.category.choices = [(category.id, category.name) for category in Category.query.all()]
         return render_template("product/edit.html", title="Edit product", form=form)
 
     def remove(self, id):
         record = Product.query.get(id)
         db.session.delete(record)
         db.session.commit()
-        flash(f"Removed product")
+        flash(f"Removed product", "success")
         return self.main()
