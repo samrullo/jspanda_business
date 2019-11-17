@@ -11,9 +11,18 @@ and open the template in the editor.
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+  <!-- Material Design Bootstrap -->
+  <!-- <link rel="stylesheet" href="{{ url_for('static',filename='css/mdb.min.css') }}"> -->
+
+  <!-- MDBootstrap Datatables  -->
+  <link href="{{ url_for('static',filename='css/addons/datatables.min.css') }}" rel="stylesheet">
 
   <!-- Custom css -->
   <link rel="stylesheet" href="{{url_for('static', filename='css/custom.css')}}">
@@ -24,6 +33,13 @@ and open the template in the editor.
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="{{ url_for('static',filename='js/mdb.min.js') }}"></script>
+
+  <!-- MDBootstrap Datatables  -->
+  <script type="text/javascript" src="{{ url_for('static',filename='js/addons/datatables.min.js') }}"></script>
+
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
   <!-- Fontawesome icon CDN -->
