@@ -34,6 +34,7 @@ class User(UserMixin, db.Model):
                            unique=False,
                            nullable=True)
     is_admin = db.Column(db.Boolean)
+    is_active = db.Column(db.Boolean)
 
     def set_password(self, password):
         """Create hashed password."""

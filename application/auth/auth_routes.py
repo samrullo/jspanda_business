@@ -56,6 +56,7 @@ def signup_page():
     if signup_form.validate_on_submit():
         # Get Form Fields
         name = signup_form.name.data
+        login = signup_form.login.data
         email = signup_form.email.data
         password = signup_form.password.data
         website = signup_form.website.data
@@ -63,6 +64,7 @@ def signup_page():
         if existing_user is None:
             logging.info("Will set up new user")
             user = User(name=name,
+                        login=login,
                         email=email,
                         password=generate_password_hash(password, method='sha256'),
                         website=website)
