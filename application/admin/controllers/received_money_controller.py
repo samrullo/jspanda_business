@@ -4,6 +4,7 @@ import logging
 import pandas as pd
 from flask import flash
 from flask import render_template
+from flask import redirect
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, HiddenField, DateField
 from application.utils.utils import to_yyyymmdd
@@ -40,7 +41,9 @@ class ReceivedMoneyController:
             db.session.add(new_received_money_record)
             db.session.commit()
             flash(f"Saved {date} {amount_usd} {exchange_rate} successfully", "success")
-            return self.show_all_received_money()
+            # return self.show_all_received_money()
+            return redirect("/admin/show_received_money")
+        form.date.data = datetime.date.today()
         return render_template("received_money/received_money_add.html", form=form, title="Add received money")
 
     def edit_received_money(self, id):
@@ -58,7 +61,7 @@ class ReceivedMoneyController:
             received_money.amount_jpy = amount_usd * exchange_rate
             db.session.commit()
             flash(f"Updated {form.id.data} to {date},{amount_usd},{exchange_rate} successfully", "success")
-            return self.show_all_received_money()
+            return redirect("/admin/show_received_money")
         form.id.data = received_money.id
         form.date.data = received_money.registered_date
         form.amount_usd.data = received_money.amount_usd
@@ -71,4 +74,4 @@ class ReceivedMoneyController:
         db.session.delete(received_money)
         db.session.commit()
         flash(f"Successfully removed {id} record", "success")
-        return self.show_all_received_money()
+        return redirect("/admin/show_received_money")

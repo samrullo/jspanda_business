@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 from flask import flash
 from flask import render_template
+from flask import redirect
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, HiddenField, IntegerField, DateField, FloatField
 from application.utils.utils import to_yyyymmdd
@@ -41,8 +42,8 @@ class ShipmentWeightController:
     def show_shipment_weights_by_date(self):
         df = pd.read_sql(ShipmentWeight.query.statement, ShipmentWeight.query.session.bind)
         shipments_df = df.groupby('date').sum()[['weight', 'amount']]
-        shipments_df.sort_index(ascending=False,inplace=True)
-        return render_template("shipment_weight/show_shipment_weights_by_date.html", shipments_df=shipments_df,title="Shipment weights by date")
+        shipments_df.sort_index(ascending=False, inplace=True)
+        return render_template("shipment_weight/show_shipment_weights_by_date.html", shipments_df=shipments_df, title="Shipment weights by date")
 
     def add_shipment_weight(self):
         form = ShipmentWeightForm()
@@ -56,7 +57,8 @@ class ShipmentWeightController:
             db.session.add(new_record)
             db.session.commit()
             flash(f"Successfully added {date}, {weight}, {amount}", "success")
-            return self.show_pending_shipment_weights()
+            # return self.show_pending_shipment_weights()
+            return redirect("/admin/show_shipment_weight")
         form.date.data = datetime.date.today()
         form.order_date.data = datetime.date.today()
         form.to_whom.data = "Sabina"
@@ -73,7 +75,7 @@ class ShipmentWeightController:
             record.amount = record.weight * self.shipment_per_kg_price
             db.session.commit()
             flash(f"Updated to {record.date},{record.to_whom},{record.weight},{record.amount}", "success")
-            return self.show_pending_shipment_weights()
+            return redirect("/admin/show_shipment_weight")
         form.date.data = record.date
         form.order_date.data = record.order_date
         form.to_whom.data = record.to_whom
@@ -85,11 +87,11 @@ class ShipmentWeightController:
         db.session.delete(record)
         db.session.commit()
         flash(f"Removed id {id}", "success")
-        return self.show_pending_shipment_weights()
+        return redirect("/admin/show_shipment_weight")
 
     def mark_as_paid(self, id):
         record = ShipmentWeight.query.get(id)
         record.is_paid = True
         db.session.commit()
         flash(f"Marked {id} as paid", "success")
-        return self.show_pending_shipment_weights()
+        return redirect("/admin/show_shipment_weight")
