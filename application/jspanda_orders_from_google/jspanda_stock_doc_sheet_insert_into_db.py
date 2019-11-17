@@ -25,6 +25,7 @@ raw_df['quantity'] = raw_df['quantity'].fillna(0)
 # statement = "update `stock` set quantity"
 
 product_df = pd.read_sql("select * from product", engine)
+stock_df = pd.read_sql("select * from stock", engine)
 
 metadata = MetaData()
 stock_tbl = Table("stock", metadata, autoload=True, autoload_with=engine)
@@ -32,7 +33,10 @@ con = engine.connect()
 for i, row in raw_df.iterrows():
     print(f"Will look for product with name {row['name']}")
     product_id = product_df.loc[product_df['name'] == row['name'], 'id'].values[0]
-    print(f"Will update product with id {product_id}, with name {row['name']} to quantity {row['quantity']}")
-    # insert_values = {'product_id': product_id, 'quantity': row['quantity']}
-    stmt = stock_tbl.update().where(stock_tbl.c.product_id == product_id).values({'quantity': row['quantity']})
-    con.execute(stmt)
+    if stock_df.loc[stock_df['product_id'] == product_id, 'quantity'].values[0] != row['quantity']:
+        print(f"Will update product with id {product_id}, with name {row['name']} to quantity {row['quantity']}")
+        # insert_values = {'product_id': product_id, 'quantity': row['quantity']}
+        stmt = stock_tbl.update().where(stock_tbl.c.product_id == product_id).values({'quantity': row['quantity']})
+        con.execute(stmt)
+    else:
+        print(f"Quantity of {product_id}:{row['name']} hasn't changed so will skip it")

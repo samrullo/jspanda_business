@@ -4,7 +4,13 @@
 
 <h3>{{title}}</h3>
 
-<table class="table">
+<ul class="list-group">
+  <li class="list-group-item list-group-item-warning">Total amount : {{ "{:,.2f}".format(total_stock_amount) }}</li>
+</ul>
+
+<input type="text" id="myInput" onkeyup="tableSearch()" placeholder="Search for names.." title="Type in a name">
+
+<table class="table table-hover" id="myTable">
   <thead>
     <th>Product Name</th>
     <th>Category</th>

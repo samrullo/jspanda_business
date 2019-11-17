@@ -71,6 +71,20 @@ def mark_jspanda_order_as_received_or_nonreceived(id):
     return contr.mark_as_recived_or_nonreceived(id)
 
 
+@jspanda_orders_bp.route("/mark_as_yubin_received_or_nonreceived/<id>")
+@login_required
+def mark_as_yubin_received_or_nonreceived(id):
+    contr = JspandaOrderController()
+    return contr.mark_as_yubin_received_or_nonreceived(id)
+
+
+@jspanda_orders_bp.route("/mark_jspanda_orders_as_received_by_date/<adate>")
+@login_required
+def mark_jspanda_orders_as_received_by_date(adate):
+    contr = JspandaOrderController()
+    return contr.mark_as_received_by_date(adate)
+
+
 # routes for category
 @jspanda_orders_bp.route("/jspanda_category")
 @login_required

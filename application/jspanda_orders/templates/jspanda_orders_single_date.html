@@ -3,9 +3,17 @@
 
 <h3>{{title}}</h3>
 
-<div class="add_jspanda_order">
-  <a class="btn btn-lg btn-dark" href="/add_jspanda_order/{{adate}}">Add jspanda order</a>
-</div>
+<ul class="list-group list-group-flush list-group-horizontal">
+  <li class="list-group-item">
+    <a class="btn btn-lg btn-outline-dark" href="/add_jspanda_order/{{adate}}">Add jspanda order</a>
+  </li>
+  <li class="list-group-item">
+    <a class="btn btn-lg btn-outline-dark" href="/jspanda_orders">JSPanda orders</a>
+  </li>
+  <li class="list-group-item">
+    <a class="btn btn-lg btn-outline-dark" href="/mark_jspanda_orders_as_received_by_date/{{adate}}">Mark All as arrived in Tashkent</a>
+  </li>
+</ul>
 
 <ul class="list-group">
   <li class="list-group-item">Product cost : {{ "{:,.2f}".format(total_cost) }}</li>
@@ -16,15 +24,20 @@
   <li class="list-group-item">Profit : {{ "{:,.2f}".format(profit) }}</li>
 </ul>
 
-<table class="table">
+<input type="text" id="myInput" onkeyup="tableSearch()" placeholder="Search for names.." title="Type in a name">
+
+<table class="table table-hover" id="myTable">
   <thead>
     <th>Name</th>
-    <th>Price</th>
+    <th>Cost</th>
     <th>Quantity</th>
     <th>Total Cost</th>
+    <th>Price</th>
     <th>Order sum</th>
     <th>Ordered by</th>
     <th>Extra notes</th>
+    <th>Received in Japan</th>
+    <th>Arrived in Tashkent</th>
     <th></th>
     <th></th>
     <th></th>
@@ -36,10 +49,13 @@
       <td>{{record.price}}</td>
       <td>{{record.quantity}}</td>
       <td>{{record.total_cost}}</td>
+      <td>{{record.selling_price_per_unit}}</td>
       <td>{{record.order_sum}}</td>
       <td>{{record.ordered_by}}</td>
       <td>{{record.extra_notes}}</td>
+      <td>{% if record.is_yubin_received %} OK {%endif%}</td>
       <td><a class="btn btn-lg btn-dark" href="/mark_jspanda_order_as_received_or_nonreceived/{{record.id}}">{% if record.is_received %} <i class="far fa-check-square"></i> {% else %} <i class="fas fa-check-square"></i> {% endif %}</a></td>
+      <td><a class="btn btn-lg btn-dark" href="/mark_as_yubin_received_or_nonreceived/{{record.id}}"><i class="fas fa-check-circle"></i></a></td>
       <td><a href="/remove_jspanda_order/{{record.id}}" class="btn btn-lg btn-dark"><i class="far fa-trash-alt"></i></a></td>
       <td><a href="/edit_jspanda_order/{{record.id}}" class="btn btn-lg btn-dark"><i class="fas fa-edit"></i></a></td>
     </tr>

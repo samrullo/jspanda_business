@@ -4,6 +4,7 @@ from application.admin.models.shipment_weight import ShipmentWeight
 from application.admin.models.jpost_spending import JpostSpending
 import logging
 import pandas as pd
+from flask import redirect
 from flask import flash
 from flask import render_template
 from flask_wtf import FlaskForm
@@ -83,7 +84,8 @@ class JspandaOrderController:
             db.session.add(new_record)
             db.session.commit()
             flash(f"Added {new_record} successfully", "success")
-            return self.show_jspanda_orders_by_date(form.date.data)
+            # return self.show_jspanda_orders_by_date(form.date.data)
+            return redirect(f"/jspanda_orders_by_date/{form.date.data}")
         form.date.data = datetime.datetime.strptime(adate, '%Y-%m-%d')
         return render_template("add_jspanda_order.html", title="Add jspanda order", form=form)
 
@@ -103,7 +105,8 @@ class JspandaOrderController:
             record.modified_time = datetime.datetime.now()
             db.session.commit()
             flash(f"Edited jspanda order {id}", "success")
-            return self.show_jspanda_orders_by_date(record.date)
+            # return self.show_jspanda_orders_by_date(record.date)
+            return redirect(f"/jspanda_orders_by_date/{record.date}")
         form.date.data = record.date
         form.name.data = record.name
         form.quantity.data = record.quantity
@@ -119,7 +122,8 @@ class JspandaOrderController:
         db.session.delete(record)
         db.session.commit()
         flash(f"Removed {id}", "success")
-        return self.show_jspanda_orders_by_date(adate)
+        # return self.show_jspanda_orders_by_date(adate)
+        return redirect(f"/jspanda_orders_by_date/{adate}")
 
     def mark_as_paid_or_nonpaid(self, id):
         record = JspandaOrder.query.get(id)
@@ -158,4 +162,25 @@ class JspandaOrderController:
         record.modified_time = datetime.datetime.now()
         db.session.commit()
         flash(f"Marked {record.id},{record.name} is_received to {record.is_received}", "success")
-        return self.show_jspanda_orders_by_date(record.date)
+        # return self.show_jspanda_orders_by_date(record.date)
+        return redirect(f"/jspanda_orders_by_date/{record.date}")
+
+    def mark_as_received_by_date(self, adate_str):
+        adate = datetime.datetime.strptime(adate_str, '%Y-%m-%d')
+        records = JspandaOrder.query.filter(JspandaOrder.date == adate).all()
+        for record in records:
+            record.is_received = True
+            db.session.commit()
+        flash(f"Marked all items for  {adate} as arrived in Tashkent", "success")
+        return redirect(f"/jspanda_orders_by_date/{adate_str}")
+
+    def mark_as_yubin_received_or_nonreceived(self, id):
+        record = JspandaOrder.query.get(id)
+        if record.is_yubin_received:
+            record.is_yubin_received = False
+        else:
+            record.is_yubin_received = True
+        record.modified_time = datetime.datetime.now()
+        db.session.commit()
+        flash(f"Marked {id} as yubin received or nonreceived", 'success')
+        return redirect(f"/jspanda_orders_by_date/{record.date}")

@@ -4,10 +4,18 @@
 
 <h3>{{title}}</h3>
 
-<table class="table">
+<ul class="list-group">
+  <li class="list-group-item list-group-item-warning">Total amount : {{ "{:,.2f}".format(total_amount) }}</li>
+</ul>
+
+
+<input type="text" id="myInput" onkeyup="tableSearch()" placeholder="Search for names.." title="Type in a name">
+
+<table class="table table-hover" id="myTable">
   <thead>
     <th>Category</th>
     <th>Product count</th>
+    <th>Total amount</th>
     <th></th>
   </thead>
   <tbody>
@@ -15,6 +23,7 @@
     <tr>
       <td>{{row['name']}}</td>
       <td>{{row['product_name']}}</td>
+      <td>{{ "{:,.2f}".format(row['amount']) }}</td>
       <td>
         <a class="btn btn-lg btn-dark" href="/jspanda_stock_by_category/{{row['id']}}">View</a>
       </td>

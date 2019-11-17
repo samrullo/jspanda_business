@@ -12,9 +12,9 @@ logger = get_logger()
 engine = create_engine(os.environ.get('SQLALCHEMY_DATABASE_URI'))
 
 gdoc_name = "Japansweetproject_new.xlsx"
-gdoc_sheet_name = "Заказы 081119"
+gdoc_sheet_name = "Заказы 201119"
 
-adate = datetime.date(2019, 11, 8)
+adate = datetime.date(2019, 11, 20)
 
 g_docs_obj = GoogleSpreadsheetToDataframe()
 raw_df = g_docs_obj.get_worksheet_as_dataframe(gdoc_name, gdoc_sheet_name)

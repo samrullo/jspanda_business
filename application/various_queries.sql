@@ -2,7 +2,7 @@ use jspanda;
 select * from received_money;
 
 select * from jspanda_orders;
-delete from jspanda_orders;
+delete from jspanda_orders where date='22221231';
 show  FULL columns from jspanda_orders;
 
 ALTER TABLE jspanda_orders MODIFY ordered_by VARCHAR(100) CHARACTER SET utf8;
@@ -10,6 +10,8 @@ ALTER TABLE jspanda_orders MODIFY extra_notes VARCHAR(400) CHARACTER SET utf8;
 ALTER TABLE jspanda_orders MODIFY name VARCHAR(200) CHARACTER SET utf8;
 
 ALTER TABLE jspanda_orders AUTO_INCREMENT = 1;
+
+alter table jspanda_orders add column is_yubin_received bool after is_received;
 
 SELECT character_set_name FROM information_schema.`COLUMNS` 
 WHERE table_schema = "jspanda_orders"

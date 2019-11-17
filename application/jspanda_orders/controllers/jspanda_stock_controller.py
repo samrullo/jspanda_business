@@ -6,6 +6,7 @@ import logging
 import pandas as pd
 from flask import flash
 from flask import render_template
+from flask import redirect
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, HiddenField, DateField, IntegerField, FloatField, TextAreaField
 from wtforms import SelectField
@@ -30,8 +31,10 @@ class StockController:
         and p.category_id=c.id
         """
         stock_df = pd.read_sql(query, db.engine)
+        stock_df['amount'] = stock_df['price'] * stock_df['quantity']
         stock_df.sort_values('quantity', inplace=True)
-        return render_template("stock/main.html", title="JSPanda Stock", stock_df=stock_df)
+        total_stock_amount = stock_df['amount'].sum()
+        return render_template("stock/main.html", title="JSPanda Stock", stock_df=stock_df, total_stock_amount=total_stock_amount)
 
     def empty_stock(self):
         query = """SELECT s.id,p.name product_name,c.name category, p.price, s.quantity,p.extra_info 
@@ -41,8 +44,9 @@ class StockController:
                 and s.quantity=0
                 """
         stock_df = pd.read_sql(query, db.engine)
+        stock_df['amount'] = stock_df['price'] * stock_df['quantity']
         stock_df.sort_values('quantity', inplace=True)
-        return render_template("stock/main.html", title="JSPanda Empty Stock", stock_df=stock_df)
+        return render_template("stock/main.html", title="JSPanda Empty Stock", stock_df=stock_df, total_stock_amount=stock_df['amount'].sum())
 
     def show_stock_by_category(self, category_id):
         query = f""" SELECT s.id,p.name product_name,c.name category, p.price, s.quantity,p.extra_info 
@@ -57,8 +61,10 @@ class StockController:
         else:
             category = "NOCATEGORY"
         stock_df = pd.read_sql(query, db.engine)
+        stock_df['amount'] = stock_df['price'] * stock_df['quantity']
         stock_df.sort_values('quantity', inplace=True)
-        return render_template("stock/main.html", title=f"{category} Stock", stock_df=stock_df)
+        total_stock_amount = stock_df['amount'].sum()
+        return render_template("stock/main.html", title=f"{category} Stock", stock_df=stock_df, total_stock_amount=total_stock_amount)
 
     def show_by_category_stock_summary(self):
         query = """SELECT s.id,p.name product_name,c.name category, p.price, s.quantity,p.extra_info 
@@ -67,11 +73,13 @@ class StockController:
                        and p.category_id=c.id                       
                        """
         stock_df = pd.read_sql(query, db.engine)
-        category_stock_df = pd.pivot_table(stock_df, index='category', values='product_name', aggfunc={'product_name': 'count'})
+        stock_df['amount'] = stock_df['price'] * stock_df['quantity']
+        total_amount = stock_df['amount'].sum()
+        category_stock_df = pd.pivot_table(stock_df, index='category', values=['product_name', 'amount'], aggfunc={'product_name': 'count', 'amount': 'sum'})
         category_df = pd.read_sql("SELECT * FROM category", db.engine)
         by_category_stock_df = pd.merge(left=category_df, right=category_stock_df, left_on='name', right_index=True)
         by_category_stock_df.sort_values('product_name', ascending=False, inplace=True)
-        return render_template("jspanda_stock_by_category.html", title="JSPanda By category Stock summary", by_category_stock_df=by_category_stock_df)
+        return render_template("jspanda_stock_by_category.html", title="JSPanda By category Stock summary", by_category_stock_df=by_category_stock_df, total_amount=total_amount)
 
     def add(self):
         form = StockForm()
@@ -80,7 +88,7 @@ class StockController:
             db.session.add(new_record)
             db.session.commit()
             flash(f"Added stock for  {new_record.product}, {new_record.quantity}", "success")
-            return self.main()
+            return redirect("/jspanda_stock")
         form.product.choices = [(product.id, product.name) for product in Product.query.all()]
         return render_template("stock/add.html", title="Add new stock", form=form)
 
@@ -92,7 +100,7 @@ class StockController:
             record.quantity = form.quantity.data
             db.session.commit()
             flash(f"Updated {record.id} to {record.product}, {record.quantity}", "success")
-            return self.main()
+            return redirect("/jspanda_stock")
         form.product.data = record.product_id
         form.quantity.data = record.quantity
         form.product.choices = [(product.id, product.name) for product in Product.query.all()]
@@ -103,4 +111,4 @@ class StockController:
         db.session.delete(record)
         db.session.commit()
         flash(f"Removed stock", "success")
-        return self.main()
+        return redirect("/jspanda_stock")
