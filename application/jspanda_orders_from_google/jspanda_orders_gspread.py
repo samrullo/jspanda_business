@@ -33,7 +33,7 @@ class GoogleSpreadsheetToDataframe:
     def prepare_insertable_jspanda_orders_dataframe(self, raw_df, adate):
         logging.info("Will prepare jspanda dataframe insertable into database")
         db_cols = ['date', 'name', 'quantity', 'price', 'selling_price_per_unit', 'total_cost', 'order_sum', 'ordered_by', 'extra_notes', 'is_paid']
-        cols = ['name', 'quantity', 'order_sum', 'price', 'selling_price_per_unit', 'remainder', 'ordered_by', 'extra_notes', 'something_else']
+        cols = ['name', 'quantity', 'order_sum', 'price', 'selling_price_per_unit', 'remainder', 'ordered_by', 'extra_notes', 'something_else', 'total']
         raw_df.columns = cols
         raw_df = raw_df.loc[raw_df['quantity'] != ""]
         new_df = pd.DataFrame(columns=db_cols)

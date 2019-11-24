@@ -134,7 +134,7 @@ class JspandaOrderController:
         record.modified_time = datetime.datetime.now()
         db.session.commit()
         flash(f"Marked {record.id},{record.name} is_paid to {record.is_paid} ", "success")
-        return self.show_jspanda_orders_by_date(record.date)
+        return redirect(f"/jspanda_orders_by_date/{record.date}")
 
     def mark_as_paid_or_nonpaid_by_date(self, adate_str):
         adate = datetime.datetime.strptime(adate_str, '%Y-%m-%d')
@@ -151,7 +151,7 @@ class JspandaOrderController:
                 record.is_paid = False
                 db.session.commit()
             flash(f"Reopened {adate}", "success")
-            return self.show_jspanda_orders()
+            return redirect(f"/jspanda_orders_by_date/{adate}")
 
     def mark_as_recived_or_nonreceived(self, id):
         record = JspandaOrder.query.get(id)

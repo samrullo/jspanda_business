@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 from flask import flash
 from flask import render_template
+from flask import redirect
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, HiddenField, IntegerField, FieldList, DateField
 
@@ -106,7 +107,7 @@ class FamilySpendingController:
         if form.validate_on_submit():
             date = form.date.data
             for field in form:
-                if field.label in self.cost_cols and field.data > 0:
+                if field.description in self.cost_cols and field.data > 0:
                     field.data = field.data * -1
                 record = FamilySpending(date=date, name=field.description, amount=field.data)
                 # self.model.add_item(date, field.label, field.data)
@@ -114,7 +115,7 @@ class FamilySpendingController:
                 db.session.commit()
                 logging.info(f"added {date} {field.description} {field.data}")
             flash(f"Added family spending for {date}", "success")
-            return self.family_spending_month(date)
+            return redirect(f"/admin/family_spending_by_month/{date}")
         adate = datetime.date.today()
         # adate_records = self.model.get_items_by_date(datetime.date(adate.year, adate.month, 1))
         # spending_df = pd.DataFrame(columns=['id', 'date', 'name', 'amount'], data=adate_records)
@@ -143,7 +144,7 @@ class FamilySpendingController:
                 record.amount = form.amount.data
             db.session.commit()
             flash(f"Updated {id} to {record.date}, {record.name}, {record.amount}", "success")
-            return self.family_spending_month(record.date)
+            return redirect(f"/admin/family_spending_by_month/{record.date}")
         form.id.data = id
         form.date.data = record.date
         form.name.data = record.name
@@ -156,4 +157,4 @@ class FamilySpendingController:
         db.session.delete(record)
         db.session.commit()
         flash(f"Removed {id} record", "success")
-        return self.family_spending_month(date)
+        return redirect(f"/admin/family_spending_by_month/{date}")

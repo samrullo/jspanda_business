@@ -13,9 +13,10 @@
 <table class="table table-hover" id="jspanda_orders_table">
   <thead>
     <th>Date</th>
-    <th>Total cost</th>
+    <th>Product cost</th>
     <th>Shipment cost</th>
     <th>Yubin cost</th>
+    <th>Total cost</th>
     <th>Order sum</th>
     <th>Profit</th>
     <th></th>
@@ -28,6 +29,7 @@
       <td>{{ "{:,.2f}".format(row['total_cost']) }}</td>
       <td>{{ "{:,.2f}".format(row['total_shipment_spending_usd']) }}</td>
       <td>{{ "{:,.2f}".format(row['jpost_amount_usd']) }}</td>
+      <td>{{ "{:,.2f}".format(row['jpost_amount_usd']+row['total_cost']+row['total_shipment_spending_usd']) }}</td>
       <td>{{ "{:,.2f}".format(row['order_sum']) }}</td>
       <td>{{ "{:,.2f}".format(row['profit']) }}</td>
       <td>

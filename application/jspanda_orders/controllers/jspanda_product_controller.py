@@ -5,6 +5,7 @@ import logging
 import pandas as pd
 from flask import flash
 from flask import render_template
+from flask import redirect
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, HiddenField, DateField, IntegerField, FloatField, TextAreaField
 from wtforms import SelectField
@@ -38,7 +39,7 @@ class ProductController:
             db.session.add(new_record)
             db.session.commit()
             flash(f"Added product {new_record.name}, {new_record.price},{new_record.extra_info},{new_record.category}", "success")
-            return self.main()
+            return redirect("/jspanda_product")
         _logger.info(f"Validation not passed yet {form.category.data}")
         form.category.choices = [(category.id, category.name) for category in Category.query.all()]
         return render_template("product/add.html", title="Add new product", form=form)
@@ -53,7 +54,7 @@ class ProductController:
             record.category_id = form.category.data
             db.session.commit()
             flash(f"Updated {record.id} to {record.name}, {record.price}, {record.category},{record.extra_info}", "success")
-            return self.main()
+            return redirect("/jspanda_product")
         form.name.data = record.name
         form.price.data = record.price
         form.category.data = record.category_id
@@ -66,4 +67,4 @@ class ProductController:
         db.session.delete(record)
         db.session.commit()
         flash(f"Removed product", "success")
-        return self.main()
+        return redirect("/jspanda_product")
