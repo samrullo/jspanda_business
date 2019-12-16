@@ -145,13 +145,13 @@ class JspandaOrderController:
                 record.is_paid = True
                 db.session.commit()
             flash(f"Closed {adate}", "success")
-            return self.show_jspanda_orders()
+            return redirect("/jspanda_orders")
         else:
             for record in records:
                 record.is_paid = False
                 db.session.commit()
             flash(f"Reopened {adate}", "success")
-            return redirect(f"/jspanda_orders_by_date/{adate}")
+            return redirect("/jspanda_orders")
 
     def mark_as_recived_or_nonreceived(self, id):
         record = JspandaOrder.query.get(id)

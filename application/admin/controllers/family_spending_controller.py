@@ -140,6 +140,8 @@ class FamilySpendingController:
             record.name = form.name.data
             if record.name in self.cost_cols and form.amount.data > 0:
                 record.amount = form.amount.data * -1
+            else:
+                record.amount = form.amount.data
             if record.name in self.income_cols:
                 record.amount = form.amount.data
             db.session.commit()

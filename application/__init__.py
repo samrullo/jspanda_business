@@ -1,3 +1,4 @@
+import os
 from flask import Flask, g
 from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
@@ -11,7 +12,6 @@ login_manager = LoginManager()
 from .main import main_routes
 from .admin import admin_routes
 from .auth import auth_routes
-
 
 
 def create_app():
@@ -28,11 +28,15 @@ def create_app():
         db.create_all()
 
         from .jspanda_orders import jspanda_orders_routes
+        from .jspanda_stats import jspanda_stats_routes
+
+        app.config['JSPANDA_STATS_FOLDER'] = os.path.join(app.root_path, 'static', 'img')
 
         # Register Blueprints
         app.register_blueprint(main_routes.main_bp)
         app.register_blueprint(admin_routes.admin_bp)
         app.register_blueprint(auth_routes.auth_bp)
         app.register_blueprint(jspanda_orders_routes.jspanda_orders_bp)
+        app.register_blueprint(jspanda_stats_routes.jspanda_stats_bp)
 
         return app

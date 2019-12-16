@@ -5,11 +5,11 @@ import re
 import logging
 
 folder = r'C:\Users\amrul\Documents\japan_sweets_business\rakuten_visa_spendings'
-file = 'rakuten_october.csv'
+file = 'rakuten_201911.csv'
 df = pd.read_csv(os.path.join(folder, file), encoding='sjis')
 print("loaded data")
 
-orig_cols = ['利用日' '利用店名・商品名' '利用者' '支払方法' '利用金額' '支払手数料' '支払総額' '9月支払金額' '10月繰越残高', '新規サイン']
+orig_cols =['利用日', '利用店名・商品名', '利用者', '支払方法', '利用金額', '支払手数料', '支払総額', '11月支払金額','12月繰越残高', '新規サイン']
 new_col_names = ['date', 'name', 'user', 'method', 'amount', 'tesuryo', 'total_amount', 'this_month_amount', 'next_month_balance', 'shinkisain']
 df.columns = new_col_names
 df['is_mine'] = False

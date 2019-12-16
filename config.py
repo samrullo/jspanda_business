@@ -8,3 +8,5 @@ class Config:
 
     SQLALCHEMY_DATABASE_URI = 'mysql://samrullo:18Aranid@jspandabusiness.crrz64gldft9.ap-south-1.rds.amazonaws.com/jspanda' or os.environ.get('SQLALCHEMY_DATABASE_URI')
     SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get('SQLALCHEMY_TRACK_MODIFICATIONS')
+
+    JSPANDA_STATS_FOLDER = ""

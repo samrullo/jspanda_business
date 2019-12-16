@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<table class="table">
+<table class="table table-hover">
 <thead>
   <th scope="col">date</th>
   <th>balance</th>
@@ -15,11 +15,11 @@
   {% for i,row in spending_df.iterrows() %}
     <tr>
       <td>{{i}}</td>
-      <td>{{"{:,}".format(row['balance'])}}</td>
-      <td>{{"{:,}".format(row['saitama_liabilities'])}}</td>
-      <td>{{"{:,}".format(row['saitama_new_balance'])}}</td>
-      <td>{{"{:,}".format(row['mitsubishi_liabilities'])}}</td>
-      <td>{{"{:,}".format(row['mitsubishi_new_balance'])}}</td>
+      <td class="{% if row['balance']<0 %} negative-numeric {% else %} positive-numeric {% endif %}">{{"{:,}".format(row['balance'])}}</td>
+      <td class="{% if row['saitama_liabilities']<0 %} negative-numeric {% else %} positive-numeric {%endif%}">{{"{:,}".format(row['saitama_liabilities'])}}</td>
+      <td class="{% if row['saitama_new_balance']<0%} negative-numeric {%else%} positive-numeric {%endif%}">{{"{:,}".format(row['saitama_new_balance'])}}</td>
+      <td class="{% if row['mitsubishi_liabilities']<0%} negative-numeric {% else %} positive-numeric {%endif%}">{{"{:,}".format(row['mitsubishi_liabilities'])}}</td>
+      <td class="{%if row['mitsubishi_new_balance']<0%} negative-numeric {%else%} positive-numeric {%endif%}">{{"{:,}".format(row['mitsubishi_new_balance'])}}</td>
       <td>
         <a href="/admin/family_spending_by_month/{{i}}" class="btn btn-lg btn-dark">View</a>
       </td>
