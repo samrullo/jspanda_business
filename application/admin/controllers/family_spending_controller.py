@@ -64,6 +64,7 @@ class FamilySpendingController:
                            'mortgage', 'saison_lalaport_visa_saitama', 'cosmos_gasoline_visa_saitama', 'edion_visa_saitama', 'costco_old_visa_saitama',
                            'costco_new_visa_mitsubishi', 'yahoo_visa_saitama', 'rakuten_visa_mitsubishi', 'softbank', 'solar_panel', 'proyezd',
                            'sadik', 'samira_swimming', 'samira_russian', 'denki', 'gas', 'suv', 'timur school', 'jidoushazei', 'home tax']
+        self.visa_cols = ['saison_lalaport_visa_saitama', 'cosmos_gasoline_visa_saitama', 'edion_visa_saitama', 'costco_old_visa_saitama', 'costco_new_visa_mitsubishi', 'yahoo_visa_saitama', 'rakuten_visa_mitsubishi']
         self.saitama_items = ['saison_lalaport_visa_saitama', 'cosmos_gasoline_visa_saitama', 'edion_visa_saitama', 'costco_old_visa_saitama', 'yahoo_visa_saitama', 'mortgage', 'solar_panel', 'samira_swimming', 'timur school']
         self.mitsubishi_items = ['metlife', 'costco_new_visa_mitsubishi', 'rakuten_visa_mitsubishi', 'denki', 'gas']
         self.calculated_names = ['balance', 'saitama_liabilities', 'saitama_new_balance', 'mitsubishi_liabilities', 'mitsubishi_new_balance']
@@ -82,6 +83,7 @@ class FamilySpendingController:
                 except IndexError:
                     spending_df.loc[adate, col] = 0
             spending_df.loc[adate, 'balance'] = spending_df.loc[adate, self.cost_names].sum()
+            spending_df.loc[adate, 'total_visa_spending'] = spending_df.loc[adate, self.visa_cols].sum()
             spending_df.loc[adate, 'saitama_liabilities'] = spending_df.loc[adate, self.saitama_items].sum()
             spending_df.loc[adate, 'saitama_new_balance'] = spending_df.loc[adate, 'saitama_current_balance'] + spending_df.loc[adate, 'saitama_liabilities']
             spending_df.loc[adate, 'mitsubishi_liabilities'] = spending_df.loc[adate, self.mitsubishi_items].sum()
@@ -96,6 +98,7 @@ class FamilySpendingController:
         logging.info(f"total of {len(spending_df)} as of {adate}")
         summary = {}
         summary['balance'] = spending_df.loc[spending_df['name'].isin(self.cost_names), 'amount'].sum()
+        summary['total_visa_spending'] = spending_df.loc[spending_df['name'].isin(self.visa_cols), 'amount'].sum()
         summary['saitama_liabilities'] = spending_df.loc[spending_df['name'].isin(self.saitama_items), 'amount'].sum()
         summary['saitama_new_balance'] = spending_df.loc[spending_df['name'] == 'saitama_current_balance', 'amount'].values[0] + summary['saitama_liabilities']
         summary['mitsubishi_liabilities'] = spending_df.loc[spending_df['name'].isin(self.mitsubishi_items), 'amount'].sum()

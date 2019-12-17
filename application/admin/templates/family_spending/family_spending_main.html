@@ -1,14 +1,15 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<table class="table table-hover">
-<thead>
+<table class="table table-hover orderByDateTable">
+<thead style="text-align:right">
   <th scope="col">date</th>
   <th>balance</th>
   <th>saitama liabilities</th>
   <th>saitama new balance</th>
   <th>mitsubishi liabilities</th>
   <th>mitsubishi new balance</th>
+  <th>total visa spending</th>
   <th></th>
 </thead>
 <tbody>
@@ -20,6 +21,7 @@
       <td class="{% if row['saitama_new_balance']<0%} negative-numeric {%else%} positive-numeric {%endif%}">{{"{:,}".format(row['saitama_new_balance'])}}</td>
       <td class="{% if row['mitsubishi_liabilities']<0%} negative-numeric {% else %} positive-numeric {%endif%}">{{"{:,}".format(row['mitsubishi_liabilities'])}}</td>
       <td class="{%if row['mitsubishi_new_balance']<0%} negative-numeric {%else%} positive-numeric {%endif%}">{{"{:,}".format(row['mitsubishi_new_balance'])}}</td>
+      <td class="{%if row['total_visa_spending']<0%} negative-numeric {%else%} positive-numeric {%endif%}">{{"{:,}".format(row['total_visa_spending'])}}</td>
       <td>
         <a href="/admin/family_spending_by_month/{{i}}" class="btn btn-lg btn-dark">View</a>
       </td>

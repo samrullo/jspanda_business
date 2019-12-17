@@ -1,6 +1,7 @@
 $(document).ready(function() {
   $('#myTable').DataTable();
   $('#jspanda_orders_table').DataTable({'order':[[0,'desc']]});
+  $('.orderByDateTable').DataTable({'order':[[0,'desc']]});
   $('.dataTables_length').addClass('bs-select');
 });
 
