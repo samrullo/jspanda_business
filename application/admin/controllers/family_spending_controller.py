@@ -103,7 +103,7 @@ class FamilySpendingController:
         summary['saitama_new_balance'] = spending_df.loc[spending_df['name'] == 'saitama_current_balance', 'amount'].values[0] + summary['saitama_liabilities']
         summary['mitsubishi_liabilities'] = spending_df.loc[spending_df['name'].isin(self.mitsubishi_items), 'amount'].sum()
         summary['mitsubishi_new_balance'] = spending_df.loc[spending_df['name'].isin(['mitsubishi_current_balance', 'salary']), 'amount'].sum() + summary['mitsubishi_liabilities']
-        return render_template("family_spending/family_spending_single_date.html", spending_df=spending_df, summary=summary, adate=adate)
+        return render_template("family_spending/family_spending_single_date.html", spending_df=spending_df, summary=summary, adate=adate, saitama_items=self.saitama_items, mitsubishi_items=self.mitsubishi_items)
 
     def add_family_spending(self):
         form = FamilySpendingForm()
