@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h3>{{title}}</h3>
+<a class="btn btn-lg btn-outline-dark" href="/admin/add_account">Add account</a>
+<table class="table table-hover orderByDateTable">
+  <thead>
+    <th scope="col">Name</th>
+    <th scope="col">Pasw</th>
+    <th scope="col">Url</th>
+    <th scope="col">Extra</th>
+    <th scope="col">Added Date</th>
+    <th></th>
+    <th></th>
+  </thead>
+  <tbody>
+    {% for record in records %}
+    <tr>
+      <td>{{record.name}}</td>
+      <td>{{record.pasw}}</td>
+      <td>{{record.url}}</td>
+      <td>{{record.extra}}</td>
+      <td>{{record.date}}</td>
+      <td><a href="/admin/remove_account/{{record.id}}" class="btn btn-lg btn-dark"><i class="far fa-trash-alt"></i></a></td>
+      <td><a href="/admin/edit_account/{{record.id}}" class="btn btn-lg btn-dark"><i class="fas fa-edit"></i></a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

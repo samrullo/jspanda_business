@@ -30,7 +30,7 @@ class ProductController:
 
     def main(self):
         records = Product.query.all()
-        return render_template("product/main.html", title="JSPanda Products", records=records)
+        return render_template("product/show_all_accounts.html", title="JSPanda Products", records=records)
 
     def add(self):
         form = ProductForm()

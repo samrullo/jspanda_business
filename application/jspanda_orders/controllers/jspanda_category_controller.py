@@ -20,7 +20,7 @@ class CategoryController:
 
     def main(self):
         records = Category.query.all()
-        return render_template("category/main.html", title="JSPanda Categories", records=records)
+        return render_template("category/show_all_accounts.html", title="JSPanda Categories", records=records)
 
     def add(self):
         form = CategoryForm()

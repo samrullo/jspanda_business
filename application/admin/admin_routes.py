@@ -8,6 +8,7 @@ from application.admin.controllers.visa_spending_controller import VisaSpendingC
 from application.admin.controllers.transferral_controller import TransferralController
 from application.admin.controllers.family_spending_controller import FamilySpendingController
 from application.admin.controllers.summary_controller import SummaryController
+from application.admin.controllers.account_controller import AccountController
 
 admin_bp = Blueprint('admin_bp', __name__, template_folder='templates', static_folder='static', url_prefix='/admin')
 
@@ -267,3 +268,32 @@ def edit_family_spending(id):
 def remove_family_spending(id):
     contr = FamilySpendingController()
     return contr.remove_family_spending(id)
+
+
+# account routes
+@admin_bp.route("/show_all_accounts", methods=['GET', 'POST'])
+@login_required
+def show_all_accounts():
+    contr = AccountController()
+    return contr.show_all_accounts()
+
+
+@admin_bp.route("/add_account", methods=['GET', 'POST'])
+@login_required
+def add_account():
+    contr = AccountController()
+    return contr.add()
+
+
+@admin_bp.route("/edit_account/<id>", methods=['GET', 'POST'])
+@login_required
+def edit_account(id):
+    contr = AccountController()
+    return contr.edit(id)
+
+
+@admin_bp.route("/remove_account/<id>", methods=['GET', 'POST'])
+@login_required
+def remove_account(id):
+    contr = AccountController()
+    return contr.remove(id)

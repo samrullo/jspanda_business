@@ -34,7 +34,7 @@ class StockController:
         stock_df['amount'] = stock_df['price'] * stock_df['quantity']
         stock_df.sort_values('quantity', inplace=True)
         total_stock_amount = stock_df['amount'].sum()
-        return render_template("stock/main.html", title="JSPanda Stock", stock_df=stock_df, total_stock_amount=total_stock_amount)
+        return render_template("stock/show_all_accounts.html", title="JSPanda Stock", stock_df=stock_df, total_stock_amount=total_stock_amount)
 
     def empty_stock(self):
         query = """SELECT s.id,p.name product_name,c.name category, p.price, s.quantity,p.extra_info 
@@ -46,7 +46,7 @@ class StockController:
         stock_df = pd.read_sql(query, db.engine)
         stock_df['amount'] = stock_df['price'] * stock_df['quantity']
         stock_df.sort_values('quantity', inplace=True)
-        return render_template("stock/main.html", title="JSPanda Empty Stock", stock_df=stock_df, total_stock_amount=stock_df['amount'].sum())
+        return render_template("stock/show_all_accounts.html", title="JSPanda Empty Stock", stock_df=stock_df, total_stock_amount=stock_df['amount'].sum())
 
     def show_stock_by_category(self, category_id):
         query = f""" SELECT s.id,p.name product_name,c.name category, p.price, s.quantity,p.extra_info 
@@ -64,7 +64,7 @@ class StockController:
         stock_df['amount'] = stock_df['price'] * stock_df['quantity']
         stock_df.sort_values('quantity', inplace=True)
         total_stock_amount = stock_df['amount'].sum()
-        return render_template("stock/main.html", title=f"{category} Stock", stock_df=stock_df, total_stock_amount=total_stock_amount)
+        return render_template("stock/show_all_accounts.html", title=f"{category} Stock", stock_df=stock_df, total_stock_amount=total_stock_amount)
 
     def show_by_category_stock_summary(self):
         query = """SELECT s.id,p.name product_name,c.name category, p.price, s.quantity,p.extra_info 
