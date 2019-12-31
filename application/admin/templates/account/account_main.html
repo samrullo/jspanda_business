@@ -6,10 +6,11 @@
 <table class="table table-hover orderByDateTable">
   <thead>
     <th scope="col">Name</th>
+    <th scope="col">Username</th>
     <th scope="col">Pasw</th>
     <th scope="col">Url</th>
     <th scope="col">Extra</th>
-    <th scope="col">Added Date</th>
+    <th scope="col">Date</th>
     <th></th>
     <th></th>
   </thead>
@@ -17,6 +18,7 @@
     {% for record in records %}
     <tr>
       <td>{{record.name}}</td>
+      <td>{{record.username}}</td>
       <td>{{record.pasw}}</td>
       <td>{{record.url}}</td>
       <td>{{record.extra}}</td>

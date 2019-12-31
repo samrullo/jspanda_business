@@ -11,6 +11,7 @@ from application.utils.utils import to_yyyymmdd
 
 class AccountForm(FlaskForm):
     name = StringField("Name", render_kw={"class": "form-control"})
+    username = StringField("Username", render_kw={"class": "form-control"})
     pasw = StringField("Pasw", render_kw={"class": "form-control"})
     url = StringField("Url", render_kw={"class": "form-control"})
     extra = TextAreaField("Extra", render_kw={"class": "form-control"})
@@ -30,7 +31,7 @@ class AccountController:
         form = AccountForm()
         form.date.data = datetime.date.today()
         if form.validate_on_submit():
-            new_record = Account(name=form.name.data, pasw=form.pasw.data, url=form.url.data, extra=form.extra.data, date=form.date.data)
+            new_record = Account(name=form.name.data,username=form.username.data, pasw=form.pasw.data, url=form.url.data, extra=form.extra.data, date=form.date.data)
             db.session.add(new_record)
             db.session.commit()
             flash(f"Successfull added {str(new_record)}", "success")
@@ -42,6 +43,7 @@ class AccountController:
         form = AccountForm()
         if form.validate_on_submit():
             record.name = form.name.data
+            record.username=form.username.data
             record.pasw = form.pasw.data
             record.url = form.url.data
             record.date = form.date.data
@@ -50,6 +52,7 @@ class AccountController:
             flash(f"Successfully updated {id} to {str(record)}", "success")
             return redirect("/admin/show_all_accounts")
         form.name.data = record.name
+        form.username.data=record.username
         form.pasw.data = record.pasw
         form.url.data = record.url
         form.date.data = record.date
