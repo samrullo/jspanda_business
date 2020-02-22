@@ -1,7 +1,26 @@
 $(document).ready(function() {
-  $('#myTable').DataTable();
-  $('#jspanda_orders_table').DataTable({'order':[[0,'desc']]});
-  $('.orderByDateTable').DataTable({'order':[[0,'desc']]});
+  $('#myTable').DataTable({
+    'order': [
+      [$("")]
+    ]
+  });
+  $('#jspanda_orders_table').DataTable({
+    'order': [
+      [0, 'desc']
+    ]
+  });
+
+
+  //first get order_col_no which specifies what columns should be used for ordering
+  var order_col_no = Number($(".orderByDateTable thead").attr("order_col_no"))
+  if (order_col_no == "" || order_col_no == null) {
+    order_col_no = 0;
+  }
+  $('.orderByDateTable').DataTable({
+    'order': [
+      [order_col_no, 'desc']
+    ]
+  });
   $('.dataTables_length').addClass('bs-select');
 });
 

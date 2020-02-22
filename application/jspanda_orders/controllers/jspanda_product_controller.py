@@ -7,8 +7,9 @@ from flask import flash
 from flask import render_template
 from flask import redirect
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, HiddenField, DateField, IntegerField, FloatField, TextAreaField
+from wtforms import StringField, SubmitField, HiddenField, DateField, IntegerField, FloatField, TextAreaField, FileField
 from wtforms import SelectField
+from flask_uploads import UploadSet
 from application.utils.utils import to_yyyymmdd
 
 _logger = logging.getLogger(__name__)

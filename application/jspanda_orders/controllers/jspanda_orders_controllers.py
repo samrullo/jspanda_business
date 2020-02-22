@@ -55,6 +55,31 @@ class JspandaOrderController:
         pending_total_cost = pending_product_cost + pending_shipment_cost + pending_yubin_cost
         return render_template("jspanda_orders.html", title="Jspanda orders", orders_shipment_mrg_df=orders_shipment_mrg_df, pending_product_cost=pending_product_cost, pending_shipment_cost=pending_shipment_cost, pending_yubin_cost=pending_yubin_cost, pending_total_cost=pending_total_cost)
 
+    def show_jspanda_monthly_profit(self):
+        df = pd.read_sql(JspandaOrder.query.statement, JspandaOrder.query.session.bind)
+        # orders_cost_df = df.groupby('date').sum()[['total_cost', 'order_sum']]
+        # orders_is_paid_df = df.groupby('date').mean()[['is_paid']]
+        orders_df = pd.pivot_table(df, index='date', values=['total_cost', 'order_sum', 'is_paid'], aggfunc={'total_cost': 'sum', 'order_sum': 'sum', 'is_paid': 'mean'})
+        shipment_weights_df = pd.read_sql(ShipmentWeight.query.statement, ShipmentWeight.query.session.bind)
+        shipment_weights_df['total_shipment_spending_usd'] = shipment_weights_df['amount'] / self.usdjpy_rate
+        shipment_weights_by_date_df = shipment_weights_df.groupby("order_date").sum()[['total_shipment_spending_usd']]
+
+        jpost_df = pd.read_sql(JpostSpending.query.statement, JpostSpending.query.session.bind)
+        jpost_by_date_df = jpost_df.groupby('order_date').sum()[['amount']]
+        jpost_by_date_df['jpost_amount_usd'] = jpost_by_date_df['amount'] / self.usdjpy_rate
+
+        orders_mrg_df = pd.merge(left=orders_df, right=shipment_weights_by_date_df, left_index=True, right_index=True, how="left")
+        orders_shipment_mrg_df = pd.merge(left=orders_mrg_df, right=jpost_by_date_df, left_index=True, right_index=True, how="left")
+        orders_shipment_mrg_df.fillna(0, inplace=True)
+        orders_shipment_mrg_df['profit'] = orders_shipment_mrg_df['order_sum'] - orders_shipment_mrg_df['total_cost'] - orders_shipment_mrg_df['total_shipment_spending_usd'] - orders_shipment_mrg_df['jpost_amount_usd']
+        orders_shipment_mrg_df = orders_shipment_mrg_df.sort_index(ascending=False)
+        pending_product_cost = orders_shipment_mrg_df.loc[orders_shipment_mrg_df['is_paid'] != 1, 'total_cost'].sum()
+        pending_shipment_cost = orders_shipment_mrg_df.loc[orders_shipment_mrg_df['is_paid'] != 1, 'total_shipment_spending_usd'].sum()
+        pending_yubin_cost = orders_shipment_mrg_df.loc[orders_shipment_mrg_df['is_paid'] != 1, 'jpost_amount_usd'].sum()
+        pending_total_cost = pending_product_cost + pending_shipment_cost + pending_yubin_cost
+        return render_template("jspanda_monthly_summary.html", title="Jspanda orders", orders_shipment_mrg_df=orders_shipment_mrg_df, pending_product_cost=pending_product_cost, pending_shipment_cost=pending_shipment_cost, pending_yubin_cost=pending_yubin_cost, pending_total_cost=pending_total_cost)
+
+
     def show_jspanda_orders_by_date(self, adate):
         records = JspandaOrder.query.filter(JspandaOrder.date == adate).order_by(JspandaOrder.modified_time.desc()).all()
         orders_df = pd.read_sql(JspandaOrder.query.filter(JspandaOrder.date == adate).statement, JspandaOrder.query.filter(JspandaOrder.date == adate).session.bind)

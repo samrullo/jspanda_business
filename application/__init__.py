@@ -29,6 +29,8 @@ def create_app():
 
         from .jspanda_orders import jspanda_orders_routes
         from .jspanda_stats import jspanda_stats_routes
+        from .jspanda_tests import jspanda_test_routes
+        from .users_admin import users_admin_routes
 
         app.config['JSPANDA_STATS_FOLDER'] = os.path.join(app.root_path, 'static', 'img')
 
@@ -38,5 +40,7 @@ def create_app():
         app.register_blueprint(auth_routes.auth_bp)
         app.register_blueprint(jspanda_orders_routes.jspanda_orders_bp)
         app.register_blueprint(jspanda_stats_routes.jspanda_stats_bp)
+        app.register_blueprint(jspanda_test_routes.jspanda_test_bp)
+        app.register_blueprint(users_admin_routes.users_admin_bp)
 
         return app

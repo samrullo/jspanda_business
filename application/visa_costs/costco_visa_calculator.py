@@ -9,10 +9,10 @@ import os
 import datetime
 
 folder = r'C:\Users\amrul\Documents\japan_sweets_business\costco_visa_spendings'
-file = 'costco_visa_201912.xlsx'
+file = 'costco_visa_202002.xlsx'
 # df = pd.read_excel(os.path.join(folder, file), dtype={'ご利用日': str, 'ご利用先など': str, '支払開始': str})
 raw_df = pd.read_excel(os.path.join(folder, file), parse_dates=True)
-df=raw_df[['ご利用日', 'ご利用先など', 'ご利', '支払', '支払.1', '支払開始', 'ご利用金額', '手数料・利息']].copy()
+df = raw_df[['ご利用日', 'ご利用先など', 'ご利', '支払', '支払.1', '支払開始', 'ご利用金額', '手数料・利息']].copy()
 cols = ['date', 'name', 'who', 'payment_method', 'payment_times', 'payment_start_year_month', 'payed_amount', 'interest']
 df.columns = cols
 df['used_date'] = pd.TimedeltaIndex(df['date'], unit='d') + datetime.datetime(1900, 1, 1)
@@ -27,3 +27,5 @@ print("Total(family spent):{:,}".format(df.loc[df['who'] == '家族', 'payed_amo
 
 dinara_df = df.loc[df['who'] == '家族'].copy()
 mine_df = df.loc[df['who'] != '家族'].copy()
+
+print(f"breakdown by start year month : \n {df.groupby('payment_start_year_month').sum()['payed_amount']}")

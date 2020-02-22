@@ -3,7 +3,9 @@
 {% block content %}
 
 {% if current_user.is_authenticated %}
-<h3>Hello, {{current_user.name}}</h3>
+<h3>Добро пожаловатъ, {{current_user.name}}</h3>
+{% else %}
+<h3>Добро пожаловатъ дорогой гостъ</h3>
 {% endif %}
 <div class="list-group">
   {% if current_user.is_authenticated and current_user.is_active%}

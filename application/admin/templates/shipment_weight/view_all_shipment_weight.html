@@ -2,10 +2,13 @@
 
 {% block content %}
 <h3>{{title}}</h3>
-<p>Total weight : {{total_weight}}, Total amount in jpy : {{ "{:,}".format(total_amount) }}</p>
-<a class="btn btn-lg" href="/admin/add_shipment_weight">Add shipment weight</a>
+<ul class="list-group">
+  <li class="list-group-item">Total weight : {{ "{:,.2f}".format(total_weight) }}</li>
+  <li class="list-group-item">Total amount in jpy : {{ "{:,.2f}".format(total_amount) }}</li>
+</ul>
+<a class="btn btn-lg btn-outline-dark" href="/admin/add_shipment_weight">Add shipment weight</a>
 <table class="table table-hover orderByDateTable">
-  <thead>
+  <thead order_col_no="0">
     <th scope="col">Date</th>
     <th scope="col">Order Date</th>
     <th scope="col">To whom</th>

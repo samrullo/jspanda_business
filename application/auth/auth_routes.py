@@ -7,6 +7,7 @@ from .auth_forms import LoginForm, SignupForm
 from .auth_model import db, User
 from application import login_manager
 import logging
+import datetime
 
 _logger = logging.getLogger(__name__)
 logging.basicConfig()
@@ -67,7 +68,8 @@ def signup_page():
                         login=login,
                         email=email,
                         password=generate_password_hash(password, method='sha256'),
-                        website=website)
+                        website=website,
+                        created_on=datetime.datetime.now())
             db.session.add(user)
             db.session.commit()
             login_user(user)
