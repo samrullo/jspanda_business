@@ -5,8 +5,8 @@ import re
 import logging
 
 folder = r'C:\Users\amrul\Documents\japan_sweets_business\rakuten_visa_spendings'
-file = 'rakuten_202002.csv'
-df = pd.read_csv(os.path.join(folder, file), encoding='sjis')
+file = 'rakuten_202003.csv'
+df = pd.read_csv(os.path.join(folder, file))
 print("loaded data")
 
 orig_cols =['利用日', '利用店名・商品名', '利用者', '支払方法', '利用金額', '支払手数料', '支払総額', '支払月','12月支払金額', '1月繰越残高', '1月以降支払金額']
