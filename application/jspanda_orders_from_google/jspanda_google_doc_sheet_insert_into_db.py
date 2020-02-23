@@ -12,9 +12,9 @@ logger = get_logger()
 engine = create_engine('mysql://samrullo:18Aranid@jspandabusiness.crrz64gldft9.ap-south-1.rds.amazonaws.com/jspanda?charset=utf8')
 
 gdoc_name = "Japansweetproject_new.xlsx"
-gdoc_sheet_name = "Заказы 220220"
+gdoc_sheet_name = "Заказы 250220"
 
-adate = datetime.date(2020, 2, 22)
+adate = datetime.date(2020, 2, 25)
 
 g_docs_obj = GoogleSpreadsheetToDataframe()
 raw_df = g_docs_obj.get_worksheet_as_dataframe(gdoc_name, gdoc_sheet_name)

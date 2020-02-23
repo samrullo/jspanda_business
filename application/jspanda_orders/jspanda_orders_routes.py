@@ -22,6 +22,13 @@ def jspanda_orders():
     return contr.show_jspanda_orders()
 
 
+@jspanda_orders_bp.route("/jspanda_monthly_orders")
+@login_required
+def jspanda_monthly_orders():
+    contr = JspandaOrderController()
+    return contr.show_jspanda_monthly_profit()
+
+
 @jspanda_orders_bp.route("/jspanda_orders_by_date/<adate>")
 @login_required
 def jspanda_orders_by_date(adate):
