@@ -12,3 +12,8 @@ def home():
 @main_bp.route('/fx')
 def fx():
     return render_template("fxcalc.html")
+
+
+@main_bp.route('/hisobkitob')
+def hisobkitob():
+    return render_template("hisobkitob.html")
