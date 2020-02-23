@@ -28,7 +28,7 @@
     var received_money = Number($("#received_money").val());
     var fx_rate = Number($("#fx_rate").val());
     var weight = Number($("#weight").val());
-    var result = received_money * fx_rate + (weight * 1500);
+    var result = received_money * fx_rate - (weight * 1500);
     $(".price").html(new Intl.NumberFormat('ja-JP', {
       style: 'currency',
       currency: 'JPY'
