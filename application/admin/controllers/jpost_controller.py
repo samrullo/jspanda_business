@@ -3,7 +3,7 @@ from application.admin.models.jpost_spending import JpostSpending, db
 import logging
 import pandas as pd
 from flask import flash
-from flask import render_template
+from flask import render_template, redirect, url_for
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, HiddenField, IntegerField, DateField, FloatField
 from application.utils.utils import to_yyyymmdd
@@ -33,7 +33,7 @@ class JpostSpendingController:
             db.session.add(new_record)
             db.session.commit()
             flash(f"Successfully added {new_record.date}, {new_record.order_date}, {new_record.amount}", "success")
-            return self.show_all_spendings()
+            return redirect(url_for('admin_bp.show_jpost_spending'))
         form.date.data = datetime.date.today()
         form.order_date.data = datetime.date.today()
         return render_template("jpost_spending/jpost_spending_add.html", form=form, title="Add yubin spending")
@@ -47,7 +47,7 @@ class JpostSpendingController:
             record.amount = form.amount.data
             db.session.commit()
             flash(f"Updated to {record.date},{record.order_date},{record.amount}", "success")
-            return self.show_all_spendings()
+            return redirect(url_for('admin_bp.show_jpost_spending'))
         form.date.data = record.date
         form.order_date.data = record.order_date
         form.amount.data = record.amount
@@ -58,4 +58,4 @@ class JpostSpendingController:
         db.session.delete(record)
         db.session.commit()
         flash(f"Removed id {id}", "success")
-        return self.show_all_spendings()
+        return redirect(url_for('admin_bp.show_jpost_spending'))

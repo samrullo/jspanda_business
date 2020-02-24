@@ -17,7 +17,8 @@ gdoc_sheet_name = "Основной в наличии "
 g_docs_obj = GoogleSpreadsheetToDataframe()
 raw_df = g_docs_obj.get_worksheet_as_dataframe(gdoc_name, gdoc_sheet_name)
 raw_df = raw_df.iloc[:, :6]
-raw_df.columns = ['name', 'quantity', 'category', 'price', 'extra_info']
+raw_df.columns = ['name', 'quantity', 'category', 'price', 'extra_info','extra_info2']
+# raw_df.columns = ['name', 'quantity', 'category', 'price']
 raw_df['quantity'] = pd.to_numeric(raw_df['quantity'])
 raw_df['quantity'] = raw_df['quantity'].fillna(0)
 

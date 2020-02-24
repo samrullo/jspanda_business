@@ -4,8 +4,8 @@
 <h3>{{title}}</h3>
 <p>Total amount in jpy : {{ "{:,}".format(total_amount) }}</p>
 <a class="btn btn-lg btn-outline-dark" href="/admin/add_jpost_spending">Add yubin spending</a>
-<table class="table table-hover" id='myTable'>
-  <thead>
+<table class="table table-hover orderByDateTable">
+  <thead order_col_no="0">
     <th scope="col">Date</th>
     <th scope="col">Order Date</th>
     <th scope="col">Amount</th>
