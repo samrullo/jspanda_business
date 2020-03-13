@@ -12,14 +12,17 @@ logger = get_logger()
 engine = create_engine('mysql://samrullo:18Aranid@jspandabusiness.crrz64gldft9.ap-south-1.rds.amazonaws.com/jspanda?charset=utf8')
 
 gdoc_name = "Japansweetproject_new.xlsx"
-gdoc_sheet_name = "Заказы 160220"
+gdoc_sheet_name = "Заказы 150320"
 
-adate = datetime.date(2020, 2, 16)
+adate = datetime.date(2020, 3, 15)
 
 g_docs_obj = GoogleSpreadsheetToDataframe()
 raw_df = g_docs_obj.get_worksheet_as_dataframe(gdoc_name, gdoc_sheet_name)
 if len(raw_df.columns) > 9:
     raw_df = raw_df.iloc[:, :9]
+
+if len(raw_df.columns) == 8:
+    raw_df['extra_col'] = ""
 jspanda_df = g_docs_obj.prepare_insertable_jspanda_orders_dataframe(raw_df, adate)
 
 # next will insert jspanda_df records into database

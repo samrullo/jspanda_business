@@ -5,26 +5,19 @@
 
 <ul class="list-group">
   <li class="list-group-item">Не оплаченный себестоимость : {{ "{:,.2f}".format(pending_product_cost) }}</li>
-  <li class="list-group-item">Не оплаченный за отправку : {{ "{:,.2f}".format(pending_shipment_cost) }}</li>
-  <li class="list-group-item">Не оплаченный за отправку местная почта : {{ "{:,.2f}".format(pending_yubin_cost) }}</li>
-  <li class="list-group-item list-group-item-warning">Не оплаченный общий расход : {{ "{:,.2f}".format(pending_total_cost) }}</li>
 </ul>
+
 
 <table class="table table-hover" id="jspanda_orders_table">
   <thead>
     <th>Дата отправки</th>
     <th>Общая себестоимость под заказ</th>
-    <th>Общая себестоимость на продажу</th>
-    <th>Общая себестоимость</th>
     <th>За отправку</th>
     <th>За отправку местная почта</th>
     <th>Общий расход</th>
     <th>Общий доход с под заказ</th>
-    <th>Общий доход с на продажу</th>
-    <th>Общий доход</th>
     <th>Прибыл с под заказ</th>
-    <th>Прибыл с на продажу</th>
-    <th>Общий прибыл</th>
+
     <th></th>
     <th></th>
   </thead>
@@ -33,17 +26,11 @@
     <tr class="{% if row['is_paid']==1%} table-success {% endif %}">
       <td>{{i}}</td>
       <td>{{ "{:,.2f}".format(row['total_cost_ne_na_prodaju']) }}</td>
-      <td>{{ "{:,.2f}".format(row['total_cost_na_prodaju']) }}</td>
-      <td>{{ "{:,.2f}".format(row['total_cost']) }}</td>
       <td>{{ "{:,.2f}".format(row['total_shipment_spending_usd']) }}</td>
       <td>{{ "{:,.2f}".format(row['jpost_amount_usd']) }}</td>
-      <td>{{ "{:,.2f}".format(row['jpost_amount_usd']+row['total_cost']+row['total_shipment_spending_usd']) }}</td>
+      <td>{{ "{:,.2f}".format(row['jpost_amount_usd']+row['total_cost_ne_na_prodaju']+row['total_shipment_spending_usd']) }}</td>
       <td>{{ "{:,.2f}".format(row['order_sum_ne_na_prodaju']) }}</td>
-      <td>{{ "{:,.2f}".format(row['order_sum_na_prodaju']) }}</td>
-      <td>{{ "{:,.2f}".format(row['order_sum']) }}</td>
-      <td>{{ "{:,.2f}".format(row['profit_ne_na_prodaju_adjusted']) }}</td>
-      <td>{{ "{:,.2f}".format(row['profit_na_prodaju_adjusted']) }}</td>
-      <td>{{ "{:,.2f}".format(row['profit']) }}</td>
+      <td>{{ "{:,.2f}".format(row['profit_ne_na_prodaju']) }}</td>
       <td>
         <a class="btn btn-lg btn-dark" href="/jspanda_orders_by_date/{{i}}">View</a>
       </td>

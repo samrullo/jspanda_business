@@ -9,7 +9,7 @@ file = 'rakuten_202003.csv'
 df = pd.read_csv(os.path.join(folder, file))
 print("loaded data")
 
-orig_cols =['利用日', '利用店名・商品名', '利用者', '支払方法', '利用金額', '支払手数料', '支払総額', '支払月','12月支払金額', '1月繰越残高', '1月以降支払金額']
+orig_cols = ['利用日', '利用店名・商品名', '利用者', '支払方法', '利用金額', '支払手数料', '支払総額', '支払月', '12月支払金額', '1月繰越残高', '1月以降支払金額']
 new_col_names = ['date', 'name', 'user', 'method', 'amount', 'tesuryo', 'total_amount', 'payment_month', 'this_month_amount', 'next_month_balance', 'next_next_month_balance']
 df.columns = new_col_names
 df['is_mine'] = False
@@ -35,7 +35,7 @@ for i, row in kazoku_df.iterrows():
 print("finished is_mine assigning")
 not_mine_df = mine_df.loc[np.logical_not(mine_df['is_mine'])]
 real_mine_df = pd.concat([mine_df.loc[mine_df['is_mine']].copy(), kazoku_df.loc[kazoku_df['is_mine']].copy()])
-kazoku_df=kazoku_df.loc[np.logical_not(kazoku_df['is_mine'])].copy()
+kazoku_df = kazoku_df.loc[np.logical_not(kazoku_df['is_mine'])].copy()
 
 print("rakuten mine records : {}\n not mine records out of rakuten mine records : {}".format(len(mine_df), len(not_mine_df)))
 
@@ -52,3 +52,6 @@ print("Kazoku total amount :{:,}".format(kazoku_df['final_total_amount'].sum()))
 print("Not mine total amount : {:,}".format(not_mine_df['final_total_amount'].sum()))
 print("Dinara business total amount : {:,}".format(kazoku_df['final_total_amount'].sum() + not_mine_df['final_total_amount'].sum()))
 print("Real mine total amount : {:,}".format(real_mine_df['final_total_amount'].sum()))
+
+dinara_df = pd.concat([kazoku_df, not_mine_df])
+print(f"Dinara business by month : \n {dinara_df.groupby('payment_month').sum()['amount']}")

@@ -7,8 +7,10 @@
 <div class="container">
   <h3>JSPanda Orders links</h3>
   <div class="list-group">
-    <a class="list-group-item list-group-item-action" href="/jspanda_orders">JSPanda orders</a>
-    <a class="list-group-item list-group-item-action" href="{{url_for('jspanda_orders_bp.jspanda_monthly_orders')}}">JSPanda montly orders</a>
+    <a class="list-group-item list-group-item-action" href="/jspanda_orders">Все заказы</a>
+    <a class="list-group-item list-group-item-action" href="/jspanda_orders_na_prodaju">На продажу</a>
+    <a class="list-group-item list-group-item-action" href="/jspanda_orders_pod_zakaz">Под заказ</a>
+    <a class="list-group-item list-group-item-action" href="{{url_for('jspanda_orders_bp.jspanda_monthly_orders')}}">Итоги по месяцам</a>
     <a class="list-group-item list-group-item-action" href="/add_jspanda_order/{{adate}}">Add jspanda order</a>
   </div>
 </div>

@@ -3,6 +3,7 @@ from application.jspanda_orders.models.jspanda_order import JspandaOrder, db
 from application.admin.models.shipment_weight import ShipmentWeight
 from application.admin.models.jpost_spending import JpostSpending
 import logging
+import numpy as np
 import pandas as pd
 from flask import redirect
 from flask import flash
@@ -11,6 +12,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, HiddenField, DateField, IntegerField, FloatField, TextAreaField
 from application.utils.utils import to_yyyymmdd
 from collections import namedtuple
+import re
 
 
 class JspandaOrderForm(FlaskForm):
@@ -29,9 +31,29 @@ class JspandaOrderController:
         self.name = "jspanda_controller"
         self.usdjpy_rate = 100
 
+    def get_jspanda_na_prodaju_orders(self):
+        jspanda_orders_df = pd.read_sql(JspandaOrder.query.statement, JspandaOrder.query.session.bind)
+        jspanda_orders_df['is_for_jspanda_stock'] = jspanda_orders_df['ordered_by'].map(lambda x: True if re.search("na prodaju", x) else False)
+        jspanda_stock_df = jspanda_orders_df.loc[jspanda_orders_df['is_for_jspanda_stock']].copy()
+        jspanda_stock_pvt_df = pd.pivot_table(jspanda_stock_df, index='date', values=['total_cost', 'order_sum', 'is_paid'], aggfunc={'total_cost': 'sum', 'order_sum': 'sum', 'is_paid': 'mean'})
+        return jspanda_stock_pvt_df
+
+    def get_jspanda_not_na_prodaju_orders(self):
+        jspanda_orders_df = pd.read_sql(JspandaOrder.query.statement, JspandaOrder.query.session.bind)
+        jspanda_orders_df['is_for_jspanda_stock'] = jspanda_orders_df['ordered_by'].map(lambda x: True if re.search("na prodaju", x) else False)
+        jspanda_stock_df = jspanda_orders_df.loc[np.logical_not(jspanda_orders_df['is_for_jspanda_stock'])].copy()
+        jspanda_stock_pvt_df = pd.pivot_table(jspanda_stock_df, index='date', values=['total_cost', 'order_sum', 'is_paid'], aggfunc={'total_cost': 'sum', 'order_sum': 'sum', 'is_paid': 'mean'})
+        return jspanda_stock_pvt_df
+
     def get_jspanda_orders_shipments_merged(self):
         df = pd.read_sql(JspandaOrder.query.statement, JspandaOrder.query.session.bind)
         orders_df = pd.pivot_table(df, index='date', values=['total_cost', 'order_sum', 'is_paid'], aggfunc={'total_cost': 'sum', 'order_sum': 'sum', 'is_paid': 'mean'})
+        na_prodaju_orders_df = self.get_jspanda_na_prodaju_orders()
+        orders_df = pd.merge(left=orders_df, right=na_prodaju_orders_df, left_index=True, right_index=True, how="left", suffixes=('', '_na_prodaju'))
+
+        ne_na_prodaju_orders_df = self.get_jspanda_not_na_prodaju_orders()
+        orders_df = pd.merge(left=orders_df, right=ne_na_prodaju_orders_df, left_index=True, right_index=True, how="left", suffixes=('', '_ne_na_prodaju'))
+
         shipment_weights_df = pd.read_sql(ShipmentWeight.query.statement, ShipmentWeight.query.session.bind)
         shipment_weights_df['total_shipment_spending_usd'] = shipment_weights_df['amount'] / self.usdjpy_rate
         shipment_weights_by_date_df = shipment_weights_df.groupby("order_date").sum()[['total_shipment_spending_usd']]
@@ -58,11 +80,11 @@ class JspandaOrderController:
         total_revenue = orders_shipment_mrg_df['order_sum'].sum()
         total_profit = orders_shipment_mrg_df['profit'].sum()
 
-        start_date=orders_shipment_mrg_df.index.min()
-        end_date=orders_shipment_mrg_df.index.max()
+        start_date = orders_shipment_mrg_df.index.min()
+        end_date = orders_shipment_mrg_df.index.max()
 
-        ret = namedtuple('ret', ['orders_shipment_mrg_df', 'pending_product_cost', 'pending_shipment_cost', 'pending_yubin_cost', 'pending_total_cost', 'total_product_cost', 'total_shipment_cost', 'total_yubin_cost', 'total_cost', 'total_revenue', 'total_profit','start_date','end_date'])
-        return ret(orders_shipment_mrg_df, pending_product_cost, pending_shipment_cost, pending_yubin_cost, pending_total_cost, total_product_cost, total_shipment_cost, total_yubin_cost, total_cost, total_revenue, total_profit,start_date,end_date)
+        ret = namedtuple('ret', ['orders_shipment_mrg_df', 'pending_product_cost', 'pending_shipment_cost', 'pending_yubin_cost', 'pending_total_cost', 'total_product_cost', 'total_shipment_cost', 'total_yubin_cost', 'total_cost', 'total_revenue', 'total_profit', 'start_date', 'end_date'])
+        return ret(orders_shipment_mrg_df, pending_product_cost, pending_shipment_cost, pending_yubin_cost, pending_total_cost, total_product_cost, total_shipment_cost, total_yubin_cost, total_cost, total_revenue, total_profit, start_date, end_date)
 
     def jspanda_orders_home(self):
         orders_shipments_merged = self.get_jspanda_orders_shipments_merged()
@@ -81,26 +103,56 @@ class JspandaOrderController:
                                end_date=orders_shipments_merged.end_date)
 
     def show_jspanda_orders(self):
-        df = pd.read_sql(JspandaOrder.query.statement, JspandaOrder.query.session.bind)
-        orders_df = pd.pivot_table(df, index='date', values=['total_cost', 'order_sum', 'is_paid'], aggfunc={'total_cost': 'sum', 'order_sum': 'sum', 'is_paid': 'mean'})
-        shipment_weights_df = pd.read_sql(ShipmentWeight.query.statement, ShipmentWeight.query.session.bind)
-        shipment_weights_df['total_shipment_spending_usd'] = shipment_weights_df['amount'] / self.usdjpy_rate
-        shipment_weights_by_date_df = shipment_weights_df.groupby("order_date").sum()[['total_shipment_spending_usd']]
+        orders_shipments_merged = self.get_jspanda_orders_shipments_merged()
+        orders_shipment_mrg_df = orders_shipments_merged.orders_shipment_mrg_df
+        orders_shipment_mrg_df['profit_na_prodaju'] = orders_shipment_mrg_df['order_sum_na_prodaju'] - orders_shipment_mrg_df['total_cost_na_prodaju']
+        orders_shipment_mrg_df['profit_ne_na_prodaju'] = orders_shipment_mrg_df['order_sum_ne_na_prodaju'] - orders_shipment_mrg_df['total_cost_ne_na_prodaju']
+        orders_shipment_mrg_df['na_prodaju_and_ne_na_prodaju_total_profit'] = orders_shipment_mrg_df['profit_na_prodaju'] + orders_shipment_mrg_df['profit_ne_na_prodaju']
+        orders_shipment_mrg_df['na_prodaju_profit_weight'] = orders_shipment_mrg_df['profit_na_prodaju'] / orders_shipment_mrg_df['na_prodaju_and_ne_na_prodaju_total_profit']
+        orders_shipment_mrg_df['ne_na_prodaju_profit_weight'] = orders_shipment_mrg_df['profit_ne_na_prodaju'] / orders_shipment_mrg_df['na_prodaju_and_ne_na_prodaju_total_profit']
+        orders_shipment_mrg_df['profit_na_prodaju_adjusted'] = orders_shipment_mrg_df['na_prodaju_profit_weight'] * orders_shipment_mrg_df['profit']
+        orders_shipment_mrg_df['profit_ne_na_prodaju_adjusted'] = orders_shipment_mrg_df['ne_na_prodaju_profit_weight'] * orders_shipment_mrg_df['profit']
+        return render_template("jspanda_orders.html", title="Jspanda Orders",
+                               orders_shipment_mrg_df=orders_shipments_merged.orders_shipment_mrg_df,
+                               adate=datetime.date.today(),
+                               pending_product_cost=orders_shipments_merged.pending_product_cost,
+                               pending_shipment_cost=orders_shipments_merged.pending_shipment_cost,
+                               pending_yubin_cost=orders_shipments_merged.pending_yubin_cost,
+                               pending_total_cost=orders_shipments_merged.pending_total_cost,
+                               total_product_cost=orders_shipments_merged.total_product_cost,
+                               total_shipment_cost=orders_shipments_merged.total_shipment_cost,
+                               total_yubin_cost=orders_shipments_merged.total_yubin_cost,
+                               total_cost=orders_shipments_merged.total_cost,
+                               total_revenue=orders_shipments_merged.total_revenue,
+                               total_profit=orders_shipments_merged.total_profit,
+                               start_date=orders_shipments_merged.start_date,
+                               end_date=orders_shipments_merged.end_date)
 
-        jpost_df = pd.read_sql(JpostSpending.query.statement, JpostSpending.query.session.bind)
-        jpost_by_date_df = jpost_df.groupby('order_date').sum()[['amount']]
-        jpost_by_date_df['jpost_amount_usd'] = jpost_by_date_df['amount'] / self.usdjpy_rate
+    def show_jspanda_pod_zakaz_orders(self):
+        orders_shipments_merged = self.get_jspanda_orders_shipments_merged()
+        orders_shipment_mrg_df = orders_shipments_merged.orders_shipment_mrg_df
+        orders_shipment_mrg_df['profit_na_prodaju'] = orders_shipment_mrg_df['order_sum_na_prodaju'] - orders_shipment_mrg_df['total_cost_na_prodaju']
+        orders_shipment_mrg_df['profit_ne_na_prodaju'] = orders_shipment_mrg_df['order_sum_ne_na_prodaju'] - orders_shipment_mrg_df['total_cost_ne_na_prodaju']
+        orders_shipment_mrg_df['na_prodaju_and_ne_na_prodaju_total_profit'] = orders_shipment_mrg_df['profit_na_prodaju'] + orders_shipment_mrg_df['profit_ne_na_prodaju']
+        orders_shipment_mrg_df['na_prodaju_profit_weight'] = orders_shipment_mrg_df['profit_na_prodaju'] / orders_shipment_mrg_df['na_prodaju_and_ne_na_prodaju_total_profit']
+        orders_shipment_mrg_df['ne_na_prodaju_profit_weight'] = orders_shipment_mrg_df['profit_ne_na_prodaju'] / orders_shipment_mrg_df['na_prodaju_and_ne_na_prodaju_total_profit']
+        orders_shipment_mrg_df['profit_na_prodaju_adjusted'] = orders_shipment_mrg_df['na_prodaju_profit_weight'] * orders_shipment_mrg_df['profit']
+        orders_shipment_mrg_df['profit_ne_na_prodaju_adjusted'] = orders_shipment_mrg_df['ne_na_prodaju_profit_weight'] * orders_shipment_mrg_df['profit']
+        pending_product_cost = orders_shipment_mrg_df.loc[orders_shipment_mrg_df['is_paid'] != 1, 'total_cost_ne_na_prodaju'].sum()
+        return render_template("jspanda_orders_pod_zakaz.html", title="Под заказ", orders_shipment_mrg_df=orders_shipments_merged.orders_shipment_mrg_df, pending_product_cost=pending_product_cost)
 
-        orders_mrg_df = pd.merge(left=orders_df, right=shipment_weights_by_date_df, left_index=True, right_index=True, how="left")
-        orders_shipment_mrg_df = pd.merge(left=orders_mrg_df, right=jpost_by_date_df, left_index=True, right_index=True, how="left")
-        orders_shipment_mrg_df.fillna(0, inplace=True)
-        orders_shipment_mrg_df['profit'] = orders_shipment_mrg_df['order_sum'] - orders_shipment_mrg_df['total_cost'] - orders_shipment_mrg_df['total_shipment_spending_usd'] - orders_shipment_mrg_df['jpost_amount_usd']
-        orders_shipment_mrg_df = orders_shipment_mrg_df.sort_index(ascending=False)
-        pending_product_cost = orders_shipment_mrg_df.loc[orders_shipment_mrg_df['is_paid'] != 1, 'total_cost'].sum()
-        pending_shipment_cost = orders_shipment_mrg_df.loc[orders_shipment_mrg_df['is_paid'] != 1, 'total_shipment_spending_usd'].sum()
-        pending_yubin_cost = orders_shipment_mrg_df.loc[orders_shipment_mrg_df['is_paid'] != 1, 'jpost_amount_usd'].sum()
-        pending_total_cost = pending_product_cost + pending_shipment_cost + pending_yubin_cost
-        return render_template("jspanda_orders.html", title="Jspanda orders", orders_shipment_mrg_df=orders_shipment_mrg_df, pending_product_cost=pending_product_cost, pending_shipment_cost=pending_shipment_cost, pending_yubin_cost=pending_yubin_cost, pending_total_cost=pending_total_cost)
+    def show_jspanda_na_prodaju_orders(self):
+        orders_shipments_merged = self.get_jspanda_orders_shipments_merged()
+        orders_shipment_mrg_df = orders_shipments_merged.orders_shipment_mrg_df
+        orders_shipment_mrg_df['profit_na_prodaju'] = orders_shipment_mrg_df['order_sum_na_prodaju'] - orders_shipment_mrg_df['total_cost_na_prodaju']
+        orders_shipment_mrg_df['profit_ne_na_prodaju'] = orders_shipment_mrg_df['order_sum_ne_na_prodaju'] - orders_shipment_mrg_df['total_cost_ne_na_prodaju']
+        orders_shipment_mrg_df['na_prodaju_and_ne_na_prodaju_total_profit'] = orders_shipment_mrg_df['profit_na_prodaju'] + orders_shipment_mrg_df['profit_ne_na_prodaju']
+        orders_shipment_mrg_df['na_prodaju_profit_weight'] = orders_shipment_mrg_df['profit_na_prodaju'] / orders_shipment_mrg_df['na_prodaju_and_ne_na_prodaju_total_profit']
+        orders_shipment_mrg_df['ne_na_prodaju_profit_weight'] = orders_shipment_mrg_df['profit_ne_na_prodaju'] / orders_shipment_mrg_df['na_prodaju_and_ne_na_prodaju_total_profit']
+        orders_shipment_mrg_df['profit_na_prodaju_adjusted'] = orders_shipment_mrg_df['na_prodaju_profit_weight'] * orders_shipment_mrg_df['profit']
+        orders_shipment_mrg_df['profit_ne_na_prodaju_adjusted'] = orders_shipment_mrg_df['ne_na_prodaju_profit_weight'] * orders_shipment_mrg_df['profit']
+        pending_product_cost = orders_shipment_mrg_df.loc[orders_shipment_mrg_df['is_paid'] != 1, 'total_cost_na_prodaju'].sum()
+        return render_template("jspanda_orders_na_prodaju.html", title="На продажу", orders_shipment_mrg_df=orders_shipments_merged.orders_shipment_mrg_df, pending_product_cost=pending_product_cost)
 
     def show_jspanda_monthly_profit(self):
         df = pd.read_sql(JspandaOrder.query.statement, JspandaOrder.query.session.bind)
@@ -139,6 +191,14 @@ class JspandaOrderController:
         total_yubin_spending = jpost_df['amount'].sum() / self.usdjpy_rate
         profit = total_order_sum - total_cost - total_shipment_spending - total_yubin_spending
         return render_template("jspanda_orders_single_date.html", title=f"Jspanda order as of {adate}", adate=adate, records=records, total_cost=total_cost, total_order_sum=total_order_sum, total_shipment_spending=total_shipment_spending, total_yubin_spending=total_yubin_spending, profit=profit)
+
+    def show_jspanda_orders_by_date_na_prodaju(self, adate):
+        records = JspandaOrder.query.filter(JspandaOrder.date == adate, JspandaOrder.ordered_by.like('%na prodaju%')).order_by(JspandaOrder.modified_time.desc()).all()
+        orders_df = pd.read_sql(JspandaOrder.query.filter(JspandaOrder.date == adate, JspandaOrder.ordered_by.like('%na prodaju%')).statement, JspandaOrder.query.filter(JspandaOrder.date == adate).session.bind)
+        total_cost = orders_df['total_cost'].sum()
+        total_order_sum = orders_df['order_sum'].sum()
+        profit = total_order_sum - total_cost
+        return render_template("jspanda_orders_single_date_na_prodaju.html", title=f"Товары на продажу отправленные  {adate}", adate=adate, records=records, total_cost=total_cost, total_order_sum=total_order_sum, profit=profit)
 
     def add_jspanda_order(self, adate):
         form = JspandaOrderForm()

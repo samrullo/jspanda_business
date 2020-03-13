@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h3>{{title}}</h3>
+
+<ul class="list-group">
+  <li class="list-group-item">Общий расход : {{ "{:,.2f}".format(total_cost) }}</li>
+  <li class="list-group-item">Общий доход : {{ "{:,.2f}".format(total_order_sum) }}</li>
+  <li class="list-group-item">Прибыл : {{ "{:,.2f}".format(profit) }}</li>
+</ul>
+
+<table class="table table-hover orderByDateTable">
+  <thead order_col_no="1">
+    <th>Название</th>
+    <th>Себестоимость</th>
+    <th>Количество</th>
+    <th>Общий расход</th>
+    <th>Цена продажи</th>
+    <th>Общий доход</th>
+    <th>Комментарии</th>
+    <th>Прибыл в Ташкент</th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </thead>
+  <tbody>
+    {% for record in records %}
+    <tr class="{% if record.is_received %} table-success {% endif %}">
+      <td>{{record.name}}</td>
+      <td>{{record.price}}</td>
+      <td>{{record.quantity}}</td>
+      <td>{{record.total_cost}}</td>
+      <td>{{record.selling_price_per_unit}}</td>
+      <td>{{record.order_sum}}</td>
+      <td>{{record.ordered_by}}</td>
+      <td>{{record.extra_notes}}</td>
+      <td>{% if record.is_yubin_received %} OK {%endif%}</td>
+      <td><a class="btn btn-lg btn-dark" href="/mark_jspanda_order_as_received_or_nonreceived/{{record.id}}">{% if record.is_received %} <i class="far fa-check-square"></i> {% else %} <i class="fas fa-check-square"></i> {% endif %}</a></td>
+      <td><a class="btn btn-lg btn-dark" href="/mark_as_yubin_received_or_nonreceived/{{record.id}}"><i class="fas fa-check-circle"></i></a></td>
+      <td><a href="/remove_jspanda_order/{{record.id}}" class="btn btn-lg btn-dark"><i class="far fa-trash-alt"></i></a></td>
+      <td><a href="/edit_jspanda_order/{{record.id}}" class="btn btn-lg btn-dark"><i class="fas fa-edit"></i></a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

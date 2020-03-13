@@ -22,6 +22,20 @@ def jspanda_orders():
     return contr.show_jspanda_orders()
 
 
+@jspanda_orders_bp.route("/jspanda_orders_na_prodaju")
+@login_required
+def jspanda_orders_na_prodaju():
+    contr = JspandaOrderController()
+    return contr.show_jspanda_na_prodaju_orders()
+
+
+@jspanda_orders_bp.route("/jspanda_orders_pod_zakaz")
+@login_required
+def jspanda_orders_pod_zakaz():
+    contr = JspandaOrderController()
+    return contr.show_jspanda_pod_zakaz_orders()
+
+
 @jspanda_orders_bp.route("/jspanda_monthly_orders")
 @login_required
 def jspanda_monthly_orders():
@@ -34,6 +48,13 @@ def jspanda_monthly_orders():
 def jspanda_orders_by_date(adate):
     contr = JspandaOrderController()
     return contr.show_jspanda_orders_by_date(adate)
+
+
+@jspanda_orders_bp.route("/jspanda_orders_by_date_na_prodaju/<adate>")
+@login_required
+def jspanda_orders_by_date_na_prodaju(adate):
+    contr = JspandaOrderController()
+    return contr.show_jspanda_orders_by_date_na_prodaju(adate)
 
 
 @jspanda_orders_bp.route("/add_jspanda_order/<adate>", methods=['GET', 'POST'])
