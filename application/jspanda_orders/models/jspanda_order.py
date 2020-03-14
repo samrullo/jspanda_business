@@ -16,5 +16,6 @@ class JspandaOrder(db.Model):
     is_paid = db.Column(db.Boolean, nullable=False)
     is_received = db.Column(db.Boolean, nullable=False)
     is_yubin_received = db.Column(db.Boolean, nullable=False)
+    is_na_prodaju = db.Column(db.Boolean, nullable=False)
     added_time = db.Column(db.DateTime, nullable=True)
     modified_time = db.Column(db.DateTime, nullable=True)

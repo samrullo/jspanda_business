@@ -2,15 +2,11 @@
 
 {% block content %}
 
-{% if current_user.is_authenticated %}
-<h3>Добро пожаловатъ, {{current_user.name}}</h3>
-{% else %}
-<h3>Добро пожаловатъ дорогой гостъ</h3>
-{% endif %}
 <div class="list-group">
   {% if current_user.is_authenticated and current_user.is_active%}
+  <a class="list-group-item list-group-item-action" href="/jspanda_orders_home">JSPanda orders</a>
   <a class="list-group-item list-group-item-action" href="/jspanda_stock_dashboard">JSPanda Stock Dashboard</a>
-  <a class="list-group-item list-group-item-action" href="/jspanda_orders_home">JSPanda Orders</a>
+
   {% endif %}
   {% if current_user.is_authenticated and current_user.is_admin and current_user.is_active%}
   <a class="list-group-item list-group-item-action" href="/admin">Admin home</a>

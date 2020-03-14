@@ -5,7 +5,7 @@ from application.admin.models.jpost_spending import JpostSpending
 import logging
 import numpy as np
 import pandas as pd
-from flask import redirect
+from flask import redirect, url_for
 from flask import flash
 from flask import render_template
 from flask_wtf import FlaskForm
@@ -152,7 +152,38 @@ class JspandaOrderController:
         orders_shipment_mrg_df['profit_na_prodaju_adjusted'] = orders_shipment_mrg_df['na_prodaju_profit_weight'] * orders_shipment_mrg_df['profit']
         orders_shipment_mrg_df['profit_ne_na_prodaju_adjusted'] = orders_shipment_mrg_df['ne_na_prodaju_profit_weight'] * orders_shipment_mrg_df['profit']
         pending_product_cost = orders_shipment_mrg_df.loc[orders_shipment_mrg_df['is_paid'] != 1, 'total_cost_na_prodaju'].sum()
-        return render_template("jspanda_orders_na_prodaju.html", title="На продажу", orders_shipment_mrg_df=orders_shipments_merged.orders_shipment_mrg_df, pending_product_cost=pending_product_cost)
+        return render_template("na_prodaju/jspanda_orders_na_prodaju.html", title="На продажу по дням отправки", orders_shipment_mrg_df=orders_shipments_merged.orders_shipment_mrg_df, pending_product_cost=pending_product_cost)
+
+    def show_jspanda_orders_unsold_na_prodaju(self):
+        """
+
+        :return:
+        """
+        query = JspandaOrder.query.filter(JspandaOrder.is_na_prodaju == True, JspandaOrder.is_paid == False)
+        unsold_na_prodaju_df = pd.read_sql(query.statement, query.session.bind)
+        unsold_na_prodaju_df['profit'] = unsold_na_prodaju_df['order_sum'] - unsold_na_prodaju_df['total_cost']
+        pending_cost = unsold_na_prodaju_df['total_cost'].sum()
+        pending_revenue = unsold_na_prodaju_df['order_sum'].sum()
+        pending_profit = pending_revenue - pending_cost
+        return render_template("na_prodaju/unsold_na_prodaju.html", unsold_na_prodaju_df=unsold_na_prodaju_df, pending_cost=pending_cost, pending_revenue=pending_revenue, pending_profit=pending_profit)
+
+    def show_jspanda_orders_by_date_na_prodaju(self, adate):
+        query = JspandaOrder.query.filter(JspandaOrder.date == adate, JspandaOrder.is_na_prodaju == True)
+        orders_df = pd.read_sql(query.statement, query.session.bind)
+        orders_df['profit'] = orders_df['total_cost']
+        total_cost = orders_df['total_cost'].sum()
+        total_revenue = orders_df['order_sum'].sum()
+        total_profit = total_revenue - total_cost
+        return render_template("na_prodaju/jspanda_orders_single_date_na_prodaju.html", title=f"Товары на продажу отправленные  {adate}", adate=adate, orders_df=orders_df, total_cost=total_cost, total_revenue=total_revenue, total_profit=total_profit)
+
+    def show_jspanda_orders_all_na_prodaju(self):
+        query = JspandaOrder.query.filter(JspandaOrder.is_na_prodaju == True)
+        na_prodaju_df = pd.read_sql(query.statement, query.session.bind)
+        na_prodaju_df['profit'] = na_prodaju_df['order_sum'] - na_prodaju_df['total_cost']
+        total_cost = na_prodaju_df['total_cost'].sum()
+        total_revenue = na_prodaju_df['order_sum'].sum()
+        total_profit = total_revenue - total_cost
+        return render_template("na_prodaju/all_na_prodaju.html", na_prodaju_df=na_prodaju_df, total_cost=total_cost, total_revenue=total_revenue, total_profit=total_profit)
 
     def show_jspanda_monthly_profit(self):
         df = pd.read_sql(JspandaOrder.query.statement, JspandaOrder.query.session.bind)
@@ -191,14 +222,6 @@ class JspandaOrderController:
         total_yubin_spending = jpost_df['amount'].sum() / self.usdjpy_rate
         profit = total_order_sum - total_cost - total_shipment_spending - total_yubin_spending
         return render_template("jspanda_orders_single_date.html", title=f"Jspanda order as of {adate}", adate=adate, records=records, total_cost=total_cost, total_order_sum=total_order_sum, total_shipment_spending=total_shipment_spending, total_yubin_spending=total_yubin_spending, profit=profit)
-
-    def show_jspanda_orders_by_date_na_prodaju(self, adate):
-        records = JspandaOrder.query.filter(JspandaOrder.date == adate, JspandaOrder.ordered_by.like('%na prodaju%')).order_by(JspandaOrder.modified_time.desc()).all()
-        orders_df = pd.read_sql(JspandaOrder.query.filter(JspandaOrder.date == adate, JspandaOrder.ordered_by.like('%na prodaju%')).statement, JspandaOrder.query.filter(JspandaOrder.date == adate).session.bind)
-        total_cost = orders_df['total_cost'].sum()
-        total_order_sum = orders_df['order_sum'].sum()
-        profit = total_order_sum - total_cost
-        return render_template("jspanda_orders_single_date_na_prodaju.html", title=f"Товары на продажу отправленные  {adate}", adate=adate, records=records, total_cost=total_cost, total_order_sum=total_order_sum, profit=profit)
 
     def add_jspanda_order(self, adate):
         form = JspandaOrderForm()
@@ -258,7 +281,7 @@ class JspandaOrderController:
         # return self.show_jspanda_orders_by_date(adate)
         return redirect(f"/jspanda_orders_by_date/{adate}")
 
-    def mark_as_paid_or_nonpaid(self, id):
+    def mark_as_paid_or_nonpaid(self, id, from_page=""):
         record = JspandaOrder.query.get(id)
         if record.is_paid == True:
             record.is_paid = False
@@ -267,6 +290,13 @@ class JspandaOrderController:
         record.modified_time = datetime.datetime.now()
         db.session.commit()
         flash(f"Marked {record.id},{record.name} is_paid to {record.is_paid} ", "success")
+        if from_page == 'jspanda_orders_by_date_na_prodaju':
+            logging.info(f"from page is : {from_page}")
+            return redirect(f"/{from_page}/{record.date}")
+        if from_page == 'all_na_prodaju':
+            return redirect(url_for('jspanda_orders_bp.jspanda_orders_all_na_prodaju'))
+        if from_page=='unsold_na_prodaju':
+            return redirect(url_for('jspanda_orders_bp.jspanda_orders_unsold_na_prodaju'))
         return redirect(f"/jspanda_orders_by_date/{record.date}")
 
     def mark_as_paid_or_nonpaid_by_date(self, adate_str):

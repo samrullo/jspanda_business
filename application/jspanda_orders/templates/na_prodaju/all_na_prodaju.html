@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h3>{{title}}</h3>
+
+<ul class="list-group">
+  <li class="list-group-item">Общий расход : {{ "{:,.2f}".format(total_cost) }}</li>
+  <li class="list-group-item">Общий доход : {{ "{:,.2f}".format(total_revenue) }}</li>
+  <li class="list-group-item">Общий прибыль : {{ "{:,.2f}".format(total_profit) }}</li>
+</ul>
+
+<table class="table table-hover orderByDateTable">
+  <thead order_col_no="0">
+    <th>Дата прихода</th>
+    <th>Нименование товара</th>
+    <th>Цена закупки(ед.)</th>
+    <th>Количество</th>
+    <th>Сумма закупки</th>
+    <th>Цена продажи(ед)</th>
+    <th>Общий доход</th>
+    <th>Прибыль</th>
+    <th>Пометить кака проданный или не проданный</th>
+    <th>Редактировать</th>
+  </thead>
+  <tbody>
+    {% for i,row in na_prodaju_df.iterrows() %}
+    <tr class="{% if row['is_received'] %} table-success {% endif %}">
+      <td>{{row['date']}}</td>
+      <td>{{row['name']}}</td>
+      <td>{{row['price']}}</td>
+      <td>{{row['quantity']}}</td>
+      <td>{{row['total_cost']}}</td>
+      <td>{{row['selling_price_per_unit']}}</td>
+      <td>{{row['order_sum']}}</td>
+      <td>{{row['profit']}}</td>
+      <td>
+        <a class="btn btn-lg btn-dark" href="{{url_for('jspanda_orders_bp.mark_jspanda_order_as_paid_or_nonpaid',id=row['id'],from_page='all_na_prodaju'}}"><i class="far fa-check-square"></i></a>
+      </td>
+      <td><a href="/edit_jspanda_order/{{row['id']}}" class="btn btn-lg btn-dark"><i class="fas fa-edit"></i></a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

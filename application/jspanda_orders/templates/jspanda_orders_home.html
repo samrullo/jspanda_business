@@ -5,10 +5,19 @@
 <h3>{{title}}</h3>
 
 <div class="container">
-  <h3>JSPanda Orders links</h3>
+  <h3>Ссылки для товаров на продажу</h3>
+  <div class="list-group">
+    <a class="list-group-item list-group-item-action" href="{{url_for('jspanda_orders_bp.jspanda_orders_unsold_na_prodaju')}}">Товары на продажу (еще не проданные)</a>
+    <a class="list-group-item list-group-item-action" href="/jspanda_orders_na_prodaju">Товары на продажу (по дням отправки)</a>
+    <a class="list-group-item list-group-item-action" href="{{url_for('jspanda_orders_bp.jspanda_orders_all_na_prodaju')}}">Все товары на продажу</a>
+  </div>
+</div>
+
+<div class="container">
+  <h3>Смотреть итоги по дням отправки</h3>
   <div class="list-group">
     <a class="list-group-item list-group-item-action" href="/jspanda_orders">Все заказы</a>
-    <a class="list-group-item list-group-item-action" href="/jspanda_orders_na_prodaju">На продажу</a>
+
     <a class="list-group-item list-group-item-action" href="/jspanda_orders_pod_zakaz">Под заказ</a>
     <a class="list-group-item list-group-item-action" href="{{url_for('jspanda_orders_bp.jspanda_monthly_orders')}}">Итоги по месяцам</a>
     <a class="list-group-item list-group-item-action" href="/add_jspanda_order/{{adate}}">Add jspanda order</a>

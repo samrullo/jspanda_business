@@ -29,6 +29,20 @@ def jspanda_orders_na_prodaju():
     return contr.show_jspanda_na_prodaju_orders()
 
 
+@jspanda_orders_bp.route("/jspanda_orders_unsold_na_prodaju")
+@login_required
+def jspanda_orders_unsold_na_prodaju():
+    contr = JspandaOrderController()
+    return contr.show_jspanda_orders_unsold_na_prodaju()
+
+
+@jspanda_orders_bp.route("/jspanda_orders_all_na_prodaju")
+@login_required
+def jspanda_orders_all_na_prodaju():
+    contr = JspandaOrderController()
+    return contr.show_jspanda_orders_all_na_prodaju()
+
+
 @jspanda_orders_bp.route("/jspanda_orders_pod_zakaz")
 @login_required
 def jspanda_orders_pod_zakaz():
@@ -78,11 +92,11 @@ def remove_jspanda_order(id):
     return contr.remove_jspanda_order(id)
 
 
-@jspanda_orders_bp.route("/mark_jspanda_order_as_paid_or_nonpaid/<id>", methods=['GET', 'POST'])
+@jspanda_orders_bp.route("/mark_jspanda_order_as_paid_or_nonpaid/<id>/<from_page>", methods=['GET', 'POST'])
 @login_required
-def mark_jspanda_order_as_paid_or_nonpaid(id):
+def mark_jspanda_order_as_paid_or_nonpaid(id, from_page):
     contr = JspandaOrderController()
-    return contr.mark_as_paid_or_nonpaid(id)
+    return contr.mark_as_paid_or_nonpaid(id, from_page)
 
 
 @jspanda_orders_bp.route("/mark_jspanda_orders_as_paid_or_nonpaid_by_date/<adate>", methods=['GET', 'POST'])
