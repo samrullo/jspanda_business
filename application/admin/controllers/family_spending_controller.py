@@ -110,13 +110,14 @@ class FamilySpendingController:
         if form.validate_on_submit():
             date = form.date.data
             for field in form:
-                if field.description in self.cost_cols and field.data > 0:
-                    field.data = field.data * -1
-                record = FamilySpending(date=date, name=field.description, amount=field.data)
-                # self.model.add_item(date, field.label, field.data)
-                db.session.add(record)
-                db.session.commit()
-                logging.info(f"added {date} {field.description} {field.data}")
+                if field.description in self.income_cols+self.cost_cols:
+                    if field.description in self.cost_cols and field.data > 0:
+                        field.data = field.data * -1
+                    record = FamilySpending(date=date, name=field.description, amount=field.data)
+                    # self.model.add_item(date, field.label, field.data)
+                    db.session.add(record)
+                    db.session.commit()
+                    logging.info(f"added {date} {field.description} {field.data}")
             flash(f"Added family spending for {date}", "success")
             return redirect(f"/admin/family_spending_by_month/{date}")
         adate = datetime.date.today()
