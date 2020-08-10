@@ -263,7 +263,7 @@ def edit_family_spending(id):
     return contr.edit_family_spending(id)
 
 
-@admin_bp.route("/remove_family_spending", methods=['GET', 'POST'])
+@admin_bp.route("/remove_family_spending/<id>", methods=['GET', 'POST'])
 @login_required
 def remove_family_spending(id):
     contr = FamilySpendingController()

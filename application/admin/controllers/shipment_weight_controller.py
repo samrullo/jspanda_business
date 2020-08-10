@@ -23,7 +23,7 @@ class ShipmentWeightForm(FlaskForm):
 
 class ShipmentWeightController:
     def __init__(self):
-        self.shipment_per_kg_price = 1500
+        self.shipment_per_kg_price = 2000
 
     def show_pending_shipment_weights(self):
         records = ShipmentWeight.query.filter(ShipmentWeight.is_paid == False).order_by(ShipmentWeight.date.desc()).all()

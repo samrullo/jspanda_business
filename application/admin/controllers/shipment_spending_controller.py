@@ -17,7 +17,7 @@ class ShipmentSpendingForm(FlaskForm):
 
 class ShipmentSpendingController:
     def __init__(self):
-        self.shipment_per_kg_price = 1500
+        self.shipment_per_kg_price = 2000
 
     def show_all_spendings(self):
         records = ShipmentSpending.query.order_by(ShipmentSpending.date.desc()).all()
