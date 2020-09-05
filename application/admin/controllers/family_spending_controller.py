@@ -22,7 +22,7 @@ class FamilySpendingForm(FlaskForm):
     cost_names = ['date', 'mitsubishi_current_balance', 'saitama_current_balance', 'solar to receive', 'salary', 'metlife',
                   'mortgage', 'saison_lalaport_visa_saitama', 'cosmos_gasoline_visa_saitama', 'edion_visa_saitama', 'costco_old_visa_saitama',
                   'costco_new_visa_mitsubishi', 'yahoo_visa_saitama', 'rakuten_visa_mitsubishi', 'softbank', 'solar_panel', 'proyezd',
-                  'sadik', 'samira_swimming', 'samira_russian', 'denki', 'gas', 'suv', 'timur school', 'jidoushazei', 'home tax']
+                  'sadik', 'samira_swimming', 'samira_russian', 'denki', 'gas', 'suv', 'timur school','karen school', 'jidoushazei', 'home tax']
 
     date = StringField("date", description="date", render_kw={"class": "form-control", "data-clear-btn": "true"})
     mitsubishi_current_balance = IntegerField("mitsubishi_current_balance", description="mitsubishi_current_balance", render_kw={"class": "form-control", })
@@ -48,6 +48,7 @@ class FamilySpendingForm(FlaskForm):
     gas = IntegerField("gas", description="gas", render_kw={"class": "form-control", })
     suv = IntegerField("suv", description="suv", render_kw={"class": "form-control", })
     timur_school = IntegerField("timur school", description="timur school", render_kw={"class": "form-control", })
+    karen_school = IntegerField("karen school", description="karen school", render_kw={"class": "form-control", })
     jidoushazei = IntegerField("jidoushazei", description="jidoushazei", render_kw={"class": "form-control", })
     home_tax = IntegerField("home tax", description="home tax", render_kw={"class": "form-control", })
     submit = SubmitField("Save family spending", render_kw={"class": "btn btn-lg btn-dark"})
@@ -59,14 +60,14 @@ class FamilySpendingController:
         self.income_cols = ['mitsubishi_current_balance', 'saitama_current_balance', 'solar to receive', 'salary']
         self.cost_cols = ['metlife', 'mortgage', 'saison_lalaport_visa_saitama', 'cosmos_gasoline_visa_saitama', 'edion_visa_saitama', 'costco_old_visa_saitama',
                           'costco_new_visa_mitsubishi', 'yahoo_visa_saitama', 'rakuten_visa_mitsubishi', 'softbank', 'solar_panel', 'proyezd',
-                          'sadik', 'samira_swimming', 'samira_russian', 'denki', 'gas', 'suv', 'timur school', 'jidoushazei', 'home tax']
+                          'sadik', 'samira_swimming', 'samira_russian', 'denki', 'gas', 'suv', 'timur school','karen school', 'jidoushazei', 'home tax']
         self.cost_names = ['month', 'mitsubishi_current_balance', 'saitama_current_balance', 'solar to receive', 'salary', 'metlife',
                            'mortgage', 'saison_lalaport_visa_saitama', 'cosmos_gasoline_visa_saitama', 'edion_visa_saitama', 'costco_old_visa_saitama',
                            'costco_new_visa_mitsubishi', 'yahoo_visa_saitama', 'rakuten_visa_mitsubishi', 'softbank', 'solar_panel', 'proyezd',
-                           'sadik', 'samira_swimming', 'samira_russian', 'denki', 'gas', 'suv', 'timur school', 'jidoushazei', 'home tax']
+                           'sadik', 'samira_swimming', 'samira_russian', 'denki', 'gas', 'suv', 'timur school','karen school', 'jidoushazei', 'home tax']
         self.visa_cols = ['saison_lalaport_visa_saitama', 'cosmos_gasoline_visa_saitama', 'edion_visa_saitama', 'costco_old_visa_saitama', 'costco_new_visa_mitsubishi', 'yahoo_visa_saitama', 'rakuten_visa_mitsubishi']
         self.saitama_items = ['saison_lalaport_visa_saitama', 'cosmos_gasoline_visa_saitama', 'edion_visa_saitama', 'costco_old_visa_saitama', 'yahoo_visa_saitama', 'mortgage', 'solar_panel', 'samira_swimming', 'timur school']
-        self.mitsubishi_items = ['metlife', 'costco_new_visa_mitsubishi', 'rakuten_visa_mitsubishi', 'denki', 'gas']
+        self.mitsubishi_items = ['metlife', 'costco_new_visa_mitsubishi', 'rakuten_visa_mitsubishi', 'denki', 'gas','karen school']
         self.calculated_names = ['balance', 'saitama_liabilities', 'saitama_new_balance', 'mitsubishi_liabilities', 'mitsubishi_new_balance']
 
     def family_spending_main(self):

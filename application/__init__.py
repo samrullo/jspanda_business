@@ -12,6 +12,7 @@ login_manager = LoginManager()
 from .main import main_routes
 from .admin import admin_routes
 from .auth import auth_routes
+from .ssl_validation import ssl_validation_bp
 
 
 def create_app():
@@ -42,5 +43,6 @@ def create_app():
         app.register_blueprint(jspanda_stats_routes.jspanda_stats_bp)
         app.register_blueprint(jspanda_test_routes.jspanda_test_bp)
         app.register_blueprint(users_admin_routes.users_admin_bp)
+        app.register_blueprint(ssl_validation_bp)
 
         return app
