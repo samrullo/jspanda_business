@@ -19,7 +19,8 @@ $(document).ready(function() {
   $('.orderByDateTable').DataTable({
     'order': [
       [order_col_no, 'desc']
-    ]
+    ],
+    'scrollX': true
   });
   $('.dataTables_length').addClass('bs-select');
 });
