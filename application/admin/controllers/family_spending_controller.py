@@ -22,7 +22,7 @@ class FamilySpendingForm(FlaskForm):
     cost_names = ['date', 'mitsubishi_current_balance', 'saitama_current_balance', 'solar to receive', 'salary', 'metlife',
                   'mortgage', 'saison_lalaport_visa_saitama', 'cosmos_gasoline_visa_saitama', 'edion_visa_saitama', 'costco_old_visa_saitama',
                   'costco_new_visa_mitsubishi', 'yahoo_visa_saitama', 'rakuten_visa_mitsubishi', 'softbank', 'solar_panel', 'proyezd',
-                  'sadik', 'samira_swimming', 'samira_russian', 'denki', 'gas', 'suv', 'timur school','karen school', 'jidoushazei', 'home tax']
+                  'sadik', 'samira_swimming', 'samira_russian', 'denki', 'gas', 'suv', 'timur school', 'karen school', 'jidoushazei', 'home tax']
 
     date = StringField("date", description="date", render_kw={"class": "form-control", "data-clear-btn": "true"})
     mitsubishi_current_balance = IntegerField("mitsubishi_current_balance", description="mitsubishi_current_balance", render_kw={"class": "form-control", })
@@ -60,14 +60,14 @@ class FamilySpendingController:
         self.income_cols = ['mitsubishi_current_balance', 'saitama_current_balance', 'solar to receive', 'salary']
         self.cost_cols = ['metlife', 'mortgage', 'saison_lalaport_visa_saitama', 'cosmos_gasoline_visa_saitama', 'edion_visa_saitama', 'costco_old_visa_saitama',
                           'costco_new_visa_mitsubishi', 'yahoo_visa_saitama', 'rakuten_visa_mitsubishi', 'softbank', 'solar_panel', 'proyezd',
-                          'sadik', 'samira_swimming', 'samira_russian', 'denki', 'gas', 'suv', 'timur school','karen school', 'jidoushazei', 'home tax']
+                          'sadik', 'samira_swimming', 'samira_russian', 'denki', 'gas', 'suv', 'timur school', 'karen school', 'jidoushazei', 'home tax']
         self.cost_names = ['month', 'mitsubishi_current_balance', 'saitama_current_balance', 'solar to receive', 'salary', 'metlife',
                            'mortgage', 'saison_lalaport_visa_saitama', 'cosmos_gasoline_visa_saitama', 'edion_visa_saitama', 'costco_old_visa_saitama',
                            'costco_new_visa_mitsubishi', 'yahoo_visa_saitama', 'rakuten_visa_mitsubishi', 'softbank', 'solar_panel', 'proyezd',
-                           'sadik', 'samira_swimming', 'samira_russian', 'denki', 'gas', 'suv', 'timur school','karen school', 'jidoushazei', 'home tax']
+                           'sadik', 'samira_swimming', 'samira_russian', 'denki', 'gas', 'suv', 'timur school', 'karen school', 'jidoushazei', 'home tax']
         self.visa_cols = ['saison_lalaport_visa_saitama', 'cosmos_gasoline_visa_saitama', 'edion_visa_saitama', 'costco_old_visa_saitama', 'costco_new_visa_mitsubishi', 'yahoo_visa_saitama', 'rakuten_visa_mitsubishi']
         self.saitama_items = ['saison_lalaport_visa_saitama', 'cosmos_gasoline_visa_saitama', 'edion_visa_saitama', 'costco_old_visa_saitama', 'yahoo_visa_saitama', 'mortgage', 'solar_panel', 'samira_swimming', 'timur school']
-        self.mitsubishi_items = ['metlife', 'costco_new_visa_mitsubishi', 'rakuten_visa_mitsubishi', 'denki', 'gas','karen school']
+        self.mitsubishi_items = ['metlife', 'costco_new_visa_mitsubishi', 'rakuten_visa_mitsubishi', 'denki', 'gas', 'karen school']
         self.calculated_names = ['balance', 'saitama_liabilities', 'saitama_new_balance', 'mitsubishi_liabilities', 'mitsubishi_new_balance']
 
     def family_spending_main(self):
@@ -111,7 +111,7 @@ class FamilySpendingController:
         if form.validate_on_submit():
             date = form.date.data
             for field in form:
-                if field.description in self.income_cols+self.cost_cols:
+                if field.description in self.income_cols + self.cost_cols:
                     if field.description in self.cost_cols and field.data > 0:
                         field.data = field.data * -1
                     record = FamilySpending(date=date, name=field.description, amount=field.data)
@@ -131,7 +131,11 @@ class FamilySpendingController:
             form.date.data = adate
             for field in form:
                 if field.description in form.cost_names and field.description != 'date':
-                    field.data = spending_df.loc[spending_df['name'] == field.description, 'amount'].values[0]
+                    spending_amount_series = spending_df.loc[spending_df['name'] == field.description, 'amount']
+                    if len(spending_amount_series) > 0:
+                        field.data = spending_df.loc[spending_df['name'] == field.description, 'amount'].values[0]
+                    else:
+                        field.data = 0
             return render_template("family_spending/add_family_spending.html", form=form)
         else:
             flash(f"No records were found as of {datetime.date(adate.year, adate.month, 1)}", "danger")
