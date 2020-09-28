@@ -6,7 +6,6 @@
 
   <h3>Hisob kitob</h3>
 
-
   <div class="form-group">
     <input class="form-control" type="number" id="received_money" name="received_money" pattern="[0-9]*" value="" placeholder="received money">
   </div>
@@ -17,22 +16,61 @@
     <input class="form-control" type="number" id="weight" name="weight" pattern="[0-9]*" value="" placeholder="weight">
   </div>
   <div class="form-group">
+    <input class="form-control" type="number" id="weight_price_per_kg" name="weight_price_per_kg" value="2000" placeholder="weight price per kg">
+  </div>
+  <div class="form-group">
     <button class="btn btn-lg btn-dark" type="submit" name="button">Calculate</button>
   </div>
 
-  <div class="price"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-3">
+        Prixod
+      </div>
+      <div class="col-3 received_amount inflow">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3">
+        Yuk qarzi
+      </div>
+      <div class="col-3 weight_amount outflow">
 
-</div>
-<script type="text/javascript">
-  $("button").on("click", function() {
-    var received_money = Number($("#received_money").val());
-    var fx_rate = Number($("#fx_rate").val());
-    var weight = Number($("#weight").val());
-    var result = received_money * fx_rate - (weight * 1500);
-    $(".price").html(new Intl.NumberFormat('ja-JP', {
-      style: 'currency',
-      currency: 'JPY'
-    }).format(result));
-  });
-</script>
-{% endblock %}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3">
+        Menga o'tkazing
+      </div>
+      <div class="col-3 net_amount inflow">
+
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    function setFieldValue(field, value) {
+      field.html(new Intl.NumberFormat('ja-JP', {
+        style: 'currency',
+        currency: 'JPY'
+      }).format(value));
+    }
+
+
+    $("button").on("click", function() {
+      var received_money = Number($("#received_money").val());
+      var fx_rate = Number($("#fx_rate").val());
+      var received_amount = received_money * fx_rate;
+      setFieldValue($(".received_amount"), received_amount)
+
+
+      var weight = Number($("#weight").val());
+      var weight_price_per_kg = Number($("#weight_price_per_kg").val());
+      var weight_amount = weight * weight_price_per_kg;
+      setFieldValue($(".weight_amount"), weight_amount);
+
+      var result = received_amount - weight_amount;
+      setFieldValue($(".net_amount"), result)
+    });
+  </script>
+  {% endblock %}

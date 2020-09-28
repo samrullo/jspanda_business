@@ -3,6 +3,16 @@
   color: purple;
 }
 
+.inflow{
+  font-size:1.5rem;
+  color:blue;
+}
+
+.outflow{
+  font-size:1.5rem;
+  color:red;
+}
+
 .pagination-page-info {
   padding: .6em;
   padding-left: 0;
