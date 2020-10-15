@@ -4,10 +4,11 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
 import logging
+from config import Config
 
 
 class GoogleSpreadsheetToDataframe:
-    def __init__(self, google_credentials_folder=r"C:\Users\amrul\Documents\japan_sweets_business\google_service_key", google_credentials_file="jspanda-abb0ef8b0971.json"):
+    def __init__(self, google_credentials_folder=Config.GOOGLE_CREDENTIALS_FOLDER, google_credentials_file=Config.GOOGLE_CREDENTIALS_FILE):
         logging.info(f"Will initialize jspanda gspread to dataframe instance")
         self.google_credentials_folder = google_credentials_folder
         self.google_credentials_file = google_credentials_file

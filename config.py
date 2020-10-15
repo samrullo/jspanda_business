@@ -17,3 +17,6 @@ class Config:
     JSPANDA_STATS_FOLDER = ""
 
     UPLOADED_PHOTOS_DEST = "static/img"
+
+    GOOGLE_CREDENTIALS_FOLDER = os.path.join(basedir, "credentials")
+    GOOGLE_CREDENTIALS_FILE = os.path.join(basedir, "jspanda-abb0ef8b0971.json")
