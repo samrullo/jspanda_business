@@ -12,9 +12,9 @@ logger = get_logger()
 engine = create_engine('mysql://sql12359588:7DcFthZEPG@sql12.freemysqlhosting.net/sql12359588?charset=utf8')
 
 gdoc_name = "Japansweetproject_new.xlsx"
-gdoc_sheet_name = "Заказы 121020"
+gdoc_sheet_name = "Заказы 021220"
 
-adate = datetime.date(2020, 10, 12)
+adate = datetime.date(2020, 12, 2)
 
 g_docs_obj = GoogleSpreadsheetToDataframe()
 raw_df = g_docs_obj.get_worksheet_as_dataframe(gdoc_name, gdoc_sheet_name)

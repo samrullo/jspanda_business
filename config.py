@@ -11,7 +11,8 @@ class Config:
     SSL_VALIDATION_FOLDER = os.path.join(basedir, "application/static/ssl_validation_files")
 
     # SQLALCHEMY_DATABASE_URI = 'mysql://samrullo:18Aranid@jspandabusiness.crrz64gldft9.ap-south-1.rds.amazonaws.com/jspanda' or os.environ.get('SQLALCHEMY_DATABASE_URI')
-    SQLALCHEMY_DATABASE_URI = 'mysql://sql12359588:7DcFthZEPG@sql12.freemysqlhosting.net/sql12359588'
+    # SQLALCHEMY_DATABASE_URI = 'mysql://sql12359588:7DcFthZEPG@sql12.freemysqlhosting.net/sql12359588'
+    SQLALCHEMY_DATABASE_URI = 'mysql://samrullo:18Rirezu@68.183.81.44/sql12359588'
     SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get('SQLALCHEMY_TRACK_MODIFICATIONS')
 
     JSPANDA_STATS_FOLDER = ""
@@ -19,4 +20,4 @@ class Config:
     UPLOADED_PHOTOS_DEST = "static/img"
 
     GOOGLE_CREDENTIALS_FOLDER = os.path.join(basedir, "credentials")
-    GOOGLE_CREDENTIALS_FILE = os.path.join(basedir, "jspanda-abb0ef8b0971.json")
+    GOOGLE_CREDENTIALS_FILE = os.path.join(GOOGLE_CREDENTIALS_FOLDER, "jspanda-abb0ef8b0971.json")

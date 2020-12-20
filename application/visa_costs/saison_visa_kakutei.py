@@ -10,7 +10,7 @@ def to_yyyymmdd(date):
 
 
 folder = r'C:\Users\amrul\Documents\japan_sweets_business\saison_visa_spendings'
-file = 'SAISON_202007.csv'
+file = 'SAISON_202012.csv'
 df = pd.read_csv(os.path.join(folder, file), header=3, encoding="shift-jis")
 print(f"loaded data : {len(df)}")
 
