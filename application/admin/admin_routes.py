@@ -163,6 +163,14 @@ def show_transferrals():
     return contr.show_transferrals()
 
 
+# routes for transferrals
+@admin_bp.route("/show_monthly_transferrals")
+@login_required
+def show_monthly_transferrals():
+    contr = TransferralController()
+    return contr.show_monthly_transferrals()
+
+
 @admin_bp.route("/add_transferral", methods=['GET', 'POST'])
 @login_required
 def add_transferral():

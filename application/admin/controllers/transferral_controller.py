@@ -27,6 +27,14 @@ class TransferralController:
         total_amount = df['amount'].sum()
         return render_template("transferral/transferral_main.html", records=records, total_amount=total_amount, title="Transferrals")
 
+    def show_monthly_transferrals(self):
+        records = Transferral.query.all()
+        transferrals_df = pd.DataFrame(columns=['date', 'amount'], data=[(record.date, record.amount) for record in records])
+        transferrals_df['year_month'] = transferrals_df['date'].map(lambda adate: datetime.date(adate.year, adate.month, 1))
+        grp_transferrals_df = transferrals_df.groupby('year_month')[['amount']].sum()
+        grp_transferrals_df = grp_transferrals_df.sort_index(ascending=False)
+        return render_template("transferral/transferral_show_monthly.html", grp_transferrals_df=grp_transferrals_df, title="Monthly transferrals", total_amount=transferrals_df['amount'].sum())
+
     def add_transferral(self):
         form = TransferralForm()
         if form.validate_on_submit():

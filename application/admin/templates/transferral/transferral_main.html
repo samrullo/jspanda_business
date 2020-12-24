@@ -2,7 +2,9 @@
 
 {% block content %}
 <h3>{{title}}</h3>
-<p>Total amount in jpy : {{ "{:,}".format(total_amount) }}</p>
+<ul class="list-group">
+  <li class="list-group-item list-group-item-warning">Total amount in jpy : {{ "{:,}".format(total_amount) }}</li>
+</ul>
 <a class="btn btn-lg btn-dark" href="/admin/add_transferral">Add transferral</a>
 <table class="table">
   <thead>

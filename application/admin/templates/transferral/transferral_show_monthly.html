@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h3>{{title}}</h3>
+<ul class="list-group">
+  <li class="list-group-item list-group-item-warning">Total amount in jpy : {{ "{:,}".format(total_amount) }}</li>
+</ul>
+<table class="table table-hover table-responsive orderByDateTable">
+  <thead order_col_no="0">
+    <th scope="col">Month</th>
+    <th scope="col">Amount (JPY)</th>
+  </thead>
+  <tbody>
+    {% for i,row in grp_transferrals_df.iterrows() %}
+    <tr>
+      <td>{{i}}</td>
+      <td>{{ "{:,}".format(row['amount']) }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
