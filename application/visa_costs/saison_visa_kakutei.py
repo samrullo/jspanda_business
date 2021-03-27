@@ -10,7 +10,8 @@ def to_yyyymmdd(date):
 
 
 folder = r'C:\Users\amrul\Documents\japan_sweets_business\saison_visa_spendings'
-file = 'SAISON_202012.csv'
+year_month = "202101"
+file = f'SAISON_{year_month}.csv'
 df = pd.read_csv(os.path.join(folder, file), header=3, encoding="shift-jis")
 print(f"loaded data : {len(df)}")
 
@@ -25,13 +26,20 @@ visa_df.sort_values('amount', ascending=False, inplace=True)
 print(visa_df[['date', 'name', 'amount']].to_string())
 visa_df.to_excel(os.path.join(folder, f"saison_{to_yyyymmdd(min_date)}_to_{to_yyyymmdd(max_date)}.xlsx"))
 
-import seaborn as sns
-import matplotlib.pyplot as plt
-import matplotlib
+# import seaborn as sns
+# import matplotlib.pyplot as plt
+# import matplotlib
+#
+# sns.set(font="IPAexGothic")
+# g = sns.barplot(x="amount", y="name", data=visa_df)
+#
+# plt.xlabel("金額", fontname="IPAexGothic")
+# plt.ylabel("ショッピング支店", fontname="IPAexGothic")
+# plt.show()
 
-sns.set(font="IPAexGothic")
-g = sns.barplot(x="amount", y="name", data=visa_df)
+grp_df = visa_df.groupby('name')[['amount']].sum()
+grp_df = grp_df.sort_values('amount', ascending=False)
+for i, row in grp_df.iterrows():
+    print(f"{i: <30} : {row['amount']: >10}")
 
-plt.xlabel("金額", fontname="IPAexGothic")
-plt.ylabel("ショッピング支店", fontname="IPAexGothic")
-plt.show()
+grp_df.to_excel(os.path.join(folder,f"grouped_by_name_{year_month}.xlsx"))

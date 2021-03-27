@@ -9,7 +9,7 @@ import os
 import datetime
 
 folder = r'C:\Users\amrul\Documents\japan_sweets_business\costco_visa_spendings'
-file = 'costco_visa_202012.csv'
+file = 'costco_visa_202103.csv'
 # df = pd.read_excel(os.path.join(folder, file), dtype={'ご利用日': str, 'ご利用先など': str, '支払開始': str})
 
 raw_df = pd.read_csv(os.path.join(folder, file), parse_dates=True, header=9, encoding='shift-jis')
@@ -24,6 +24,7 @@ df.columns = cols
 # df['used_date'] = pd.TimedeltaIndex(df['date'], unit='d') + datetime.datetime(1900, 1, 1)
 df['paid_amount'] = df['paid_amount'].str.replace('\\', '')
 df['paid_amount'] = df['paid_amount'].str.replace(',', '')
+df['paid_amount'] = df['paid_amount'].str.replace('*', '')
 df['paid_amount'] = pd.to_numeric(df['paid_amount'])
 print("Total:{:,}".format(df['paid_amount'].sum()))
 # ['ご利用日', 'ご利用先など', 'ご利', '支払', '支払.1', '支払開始', 'ご利用金額', '手数料・利息']
@@ -47,4 +48,12 @@ print(f"costco wholesale : {costco_wholesale_df.paid_amount.sum()}")
 print(f"mine : {mine_df.paid_amount.sum()}")
 print(f"total mine : {costco_wholesale_df.paid_amount.sum() + mine_df.paid_amount.sum()}")
 print(f"total costco card spending : {df.paid_amount.sum()}")
+print("---------------------------------------------------------")
+
+print("---------------------------------------------------------")
+print(f"real dinara business : {dinara_df.paid_amount.sum():,.1f}")
+print(f"costco wholesale : {costco_wholesale_df.paid_amount.sum():,.1f}")
+print(f"mine : {mine_df.paid_amount.sum():,.1f}")
+print(f"total mine : {costco_wholesale_df.paid_amount.sum() + mine_df.paid_amount.sum():,.1f}")
+print(f"total costco card spending : {df.paid_amount.sum():,.1f}")
 print("---------------------------------------------------------")

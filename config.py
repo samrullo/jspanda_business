@@ -12,8 +12,8 @@ class Config:
 
     # SQLALCHEMY_DATABASE_URI = 'mysql://samrullo:18Aranid@jspandabusiness.crrz64gldft9.ap-south-1.rds.amazonaws.com/jspanda' or os.environ.get('SQLALCHEMY_DATABASE_URI')
     # SQLALCHEMY_DATABASE_URI = 'mysql://sql12359588:7DcFthZEPG@sql12.freemysqlhosting.net/sql12359588'
-    # SQLALCHEMY_DATABASE_URI = 'mysql://samrullo:18Rirezu@68.183.81.44/sql12359588'
-    SQLALCHEMY_DATABASE_URI = 'mysql://subkhon:18Rirezu@localhost/sql12359588'
+    SQLALCHEMY_DATABASE_URI = 'mysql://samrullo:18Rirezu@68.183.81.44/sql12359588'
+    # SQLALCHEMY_DATABASE_URI = 'mysql://subkhon:18Rirezu@localhost/sql12359588'
     SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get('SQLALCHEMY_TRACK_MODIFICATIONS')
 
     JSPANDA_STATS_FOLDER = ""

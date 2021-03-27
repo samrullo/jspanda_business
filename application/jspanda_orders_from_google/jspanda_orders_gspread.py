@@ -49,6 +49,13 @@ class GoogleSpreadsheetToDataframe:
         # sometimes price or selling price may have string total
         raw_df['selling_price_per_unit'] = raw_df['selling_price_per_unit'].apply(lambda x: x.replace("total", "")).apply(lambda x: x.strip())
 
+        # if selling price is not a number set it to empty
+        for i, row in raw_df.iterrows():
+            selling_price = row['selling_price_per_unit']
+            selling_price_tokens = selling_price.split(" ")
+            if len(selling_price_tokens) > 1:
+                raw_df.loc[i, 'selling_price_per_unit'] = row['price']
+
         # now will attempt to get price and selling_price as numeric
         new_df['price'] = pd.to_numeric(raw_df['price'])
         new_df['selling_price_per_unit'] = pd.to_numeric(raw_df['selling_price_per_unit'])

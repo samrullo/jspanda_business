@@ -1,8 +1,9 @@
 import datetime
-from application.admin.models.shipment_weight import ShipmentWeight, db
+from application.admin.models.shipment_weight import ShipmentWeight, ShipmentPrice, db
 import logging
 import pandas as pd
 import numpy as np
+from flask import current_app
 from flask import flash
 from flask import render_template
 from flask import redirect
@@ -23,7 +24,12 @@ class ShipmentWeightForm(FlaskForm):
 
 class ShipmentWeightController:
     def __init__(self):
-        self.shipment_per_kg_price = 2000
+        shipment_prices = ShipmentPrice.query.filter(ShipmentPrice.end == None).all()
+        current_app.logger.info(f"below are retrieved shipment prices : {shipment_prices}")
+        if len(shipment_prices) > 0:
+            self.shipment_per_kg_price = shipment_prices[0].price
+        else:
+            self.shipment_per_kg_price = 2000
 
     def show_pending_shipment_weights(self):
         records = ShipmentWeight.query.filter(ShipmentWeight.is_paid == False).order_by(ShipmentWeight.date.desc()).all()

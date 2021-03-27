@@ -48,3 +48,5 @@ After connecting to your mysql server
 ```
 >source <dumped sql file full path>;
 ```
+
+# linux command to save sql 

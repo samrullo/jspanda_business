@@ -13,6 +13,7 @@ Flask
 Flask-BabelEx==0.9.3
 Flask-Login==0.4.1
 Flask-Mail==0.9.1
+Flask-Admin
 flask-mongoengine==0.9.5
 flask-paginate==0.5.3
 Flask-Principal==0.4.0

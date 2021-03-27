@@ -4,10 +4,12 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
 from flask_redis import FlaskRedis
 from flask_login import LoginManager
+from flask_admin import Admin
 
 # Globally accessible libraries
 db = SQLAlchemy()
 login_manager = LoginManager()
+admin_flask = Admin(name="jspanda_business", url="/db_admin")
 
 from .main import main_routes
 from .admin import admin_routes
@@ -24,6 +26,8 @@ def create_app():
     db.init_app(app)
     login_manager.init_app(app)
 
+    admin_flask.init_app(app)
+
     with app.app_context():
         # create all tables
         db.create_all()
@@ -32,6 +36,7 @@ def create_app():
         from .jspanda_stats import jspanda_stats_routes
         from .jspanda_tests import jspanda_test_routes
         from .users_admin import users_admin_routes
+        from .db_admin import db_admin_bp
 
         app.config['JSPANDA_STATS_FOLDER'] = os.path.join(app.root_path, 'static', 'img')
 
@@ -44,5 +49,6 @@ def create_app():
         app.register_blueprint(jspanda_test_routes.jspanda_test_bp)
         app.register_blueprint(users_admin_routes.users_admin_bp)
         app.register_blueprint(ssl_validation_bp)
+        app.register_blueprint(db_admin_bp)
 
         return app

@@ -9,12 +9,12 @@ from application.jspanda_orders_from_google.jspanda_orders_gspread import Google
 
 logger = get_logger()
 
-engine = create_engine('mysql://sql12359588:7DcFthZEPG@sql12.freemysqlhosting.net/sql12359588?charset=utf8')
+engine = create_engine('mysql://samrullo:18Rirezu@68.183.81.44/sql12359588?charset=utf8')
 
 gdoc_name = "Japansweetproject_new.xlsx"
-gdoc_sheet_name = "Заказы 021220"
+gdoc_sheet_name = "Заказы 250321"
 
-adate = datetime.date(2020, 12, 2)
+adate = datetime.date(2021, 3, 25)
 
 g_docs_obj = GoogleSpreadsheetToDataframe()
 raw_df = g_docs_obj.get_worksheet_as_dataframe(gdoc_name, gdoc_sheet_name)

@@ -3,6 +3,7 @@ from application.admin.models.family_spending import FamilySpending, db
 import logging
 import pandas as pd
 import numpy as np
+from flask import current_app
 from flask import flash
 from flask import render_template
 from flask import redirect
@@ -22,7 +23,7 @@ class FamilySpendingForm(FlaskForm):
     cost_names = ['date', 'mitsubishi_current_balance', 'saitama_current_balance', 'solar to receive', 'salary', 'metlife',
                   'mortgage', 'saison_lalaport_visa_saitama', 'cosmos_gasoline_visa_saitama', 'edion_visa_saitama', 'costco_old_visa_saitama',
                   'costco_new_visa_mitsubishi', 'yahoo_visa_saitama', 'rakuten_visa_mitsubishi','amazon_visa_mitsubishi', 'softbank', 'solar_panel', 'proyezd',
-                  'sadik', 'samira_swimming', 'samira_russian', 'denki', 'gas', 'suv', 'timur school', 'karen school', 'jidoushazei', 'home tax']
+                  'sadik', 'samira_swimming', 'samira_russian', 'denki', 'gas', 'suv', 'timur school', 'karen school', 'matsuda_cx5_debt','jidoushazei', 'home tax']
 
     date = StringField("date", description="date", render_kw={"class": "form-control", "data-clear-btn": "true"})
     mitsubishi_current_balance = IntegerField("mitsubishi_current_balance", description="mitsubishi_current_balance", render_kw={"class": "form-control", })
@@ -50,6 +51,7 @@ class FamilySpendingForm(FlaskForm):
     suv = IntegerField("suv", description="suv", render_kw={"class": "form-control", })
     timur_school = IntegerField("timur school", description="timur school", render_kw={"class": "form-control", })
     karen_school = IntegerField("karen school", description="karen school", render_kw={"class": "form-control", })
+    matsuda_cx5_debt = IntegerField("matsuda_cx5_debt", description="matsuda_cx5_debt", render_kw={"class": "form-control", })
     jidoushazei = IntegerField("jidoushazei", description="jidoushazei", render_kw={"class": "form-control", })
     home_tax = IntegerField("home tax", description="home tax", render_kw={"class": "form-control", })
     submit = SubmitField("Save family spending", render_kw={"class": "btn btn-lg btn-dark"})
@@ -61,14 +63,14 @@ class FamilySpendingController:
         self.income_cols = ['mitsubishi_current_balance', 'saitama_current_balance', 'solar to receive', 'salary']
         self.cost_cols = ['metlife', 'mortgage', 'saison_lalaport_visa_saitama', 'cosmos_gasoline_visa_saitama', 'edion_visa_saitama', 'costco_old_visa_saitama',
                           'costco_new_visa_mitsubishi', 'yahoo_visa_saitama', 'rakuten_visa_mitsubishi', 'amazon_visa_mitsubishi','softbank', 'solar_panel', 'proyezd',
-                          'sadik', 'samira_swimming', 'samira_russian', 'denki', 'gas', 'suv', 'timur school', 'karen school', 'jidoushazei', 'home tax']
+                          'sadik', 'samira_swimming', 'samira_russian', 'denki', 'gas', 'suv', 'timur school', 'karen school','matsuda_cx5_debt', 'jidoushazei', 'home tax']
         self.cost_names = ['month', 'mitsubishi_current_balance', 'saitama_current_balance', 'solar to receive', 'salary', 'metlife',
                            'mortgage', 'saison_lalaport_visa_saitama', 'cosmos_gasoline_visa_saitama', 'edion_visa_saitama', 'costco_old_visa_saitama',
                            'costco_new_visa_mitsubishi', 'yahoo_visa_saitama', 'rakuten_visa_mitsubishi', 'amazon_visa_mitsubishi','softbank', 'solar_panel', 'proyezd',
-                           'sadik', 'samira_swimming', 'samira_russian', 'denki', 'gas', 'suv', 'timur school', 'karen school', 'jidoushazei', 'home tax']
+                           'sadik', 'samira_swimming', 'samira_russian', 'denki', 'gas', 'suv', 'timur school', 'karen school','matsuda_cx5_debt', 'jidoushazei', 'home tax']
         self.visa_cols = ['saison_lalaport_visa_saitama', 'cosmos_gasoline_visa_saitama', 'edion_visa_saitama', 'costco_old_visa_saitama', 'costco_new_visa_mitsubishi', 'yahoo_visa_saitama', 'rakuten_visa_mitsubishi','amazon_visa_mitsubishi']
         self.saitama_items = ['saison_lalaport_visa_saitama', 'cosmos_gasoline_visa_saitama', 'edion_visa_saitama', 'costco_old_visa_saitama', 'yahoo_visa_saitama', 'mortgage', 'solar_panel', 'samira_swimming', 'timur school']
-        self.mitsubishi_items = ['metlife', 'costco_new_visa_mitsubishi', 'rakuten_visa_mitsubishi', 'amazon_visa_mitsubishi','denki', 'gas', 'karen school']
+        self.mitsubishi_items = ['metlife', 'costco_new_visa_mitsubishi', 'rakuten_visa_mitsubishi', 'amazon_visa_mitsubishi','denki', 'gas', 'karen school','matsuda_cx5_debt']
         self.calculated_names = ['balance', 'saitama_liabilities', 'saitama_new_balance', 'mitsubishi_liabilities', 'mitsubishi_new_balance']
 
     def family_spending_main(self):
@@ -77,9 +79,9 @@ class FamilySpendingController:
         all_df = pd.read_sql(FamilySpending.query.statement, FamilySpending.query.session.bind)
         spending_df = pd.DataFrame()
         for adate in all_df['date'].unique():
-            logging.info(f"will prepare spendings for {adate}")
+            current_app.logger.info(f"will prepare spendings for {adate}")
             for col in self.cost_names:
-                logging.info(f"set value for date {adate} column {col}")
+                current_app.logger.info(f"set value for date {adate} column {col}")
                 try:
                     spending_df.loc[adate, col] = all_df.loc[np.logical_and(all_df['date'] == adate, all_df['name'] == col), 'amount'].values[0]
                 except IndexError:
