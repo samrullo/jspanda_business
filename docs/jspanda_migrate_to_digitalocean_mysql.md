@@ -18,6 +18,18 @@ If you accidentally set it, you can reset it by running below
 sudo /usr/sbin/mysqld --skip-grant-tables --skip-networking &
 ```
 
+To list existing mysql users
+
+```mysql
+> select user,host from mysql.user;
+```
+
+When I changed my internet provider I started getting error that my host is not allowed connection
+So I had to run below command
+
+```mysql
+mysql> RENAME 'samrullo'@'softbank060070023127.bbtec.net' TO 'samrullo'@'222-229-250-41.saitama.fdn.vectant.ne.jp';
+```
 ## Opening port 3306
 
 It is unsafe to open port 3306 for any remote machine.

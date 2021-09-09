@@ -9,7 +9,7 @@ import os
 import datetime
 
 folder = r'C:\Users\amrul\Documents\japan_sweets_business\costco_visa_spendings'
-file = 'costco_visa_202103.csv'
+file = 'costco_visa_202106.csv'
 # df = pd.read_excel(os.path.join(folder, file), dtype={'ご利用日': str, 'ご利用先など': str, '支払開始': str})
 
 raw_df = pd.read_csv(os.path.join(folder, file), parse_dates=True, header=9, encoding='shift-jis')

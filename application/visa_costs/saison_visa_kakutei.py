@@ -10,7 +10,7 @@ def to_yyyymmdd(date):
 
 
 folder = r'C:\Users\amrul\Documents\japan_sweets_business\saison_visa_spendings'
-year_month = "202101"
+year_month = "202106"
 file = f'SAISON_{year_month}.csv'
 df = pd.read_csv(os.path.join(folder, file), header=3, encoding="shift-jis")
 print(f"loaded data : {len(df)}")
@@ -37,7 +37,7 @@ visa_df.to_excel(os.path.join(folder, f"saison_{to_yyyymmdd(min_date)}_to_{to_yy
 # plt.ylabel("ショッピング支店", fontname="IPAexGothic")
 # plt.show()
 
-grp_df = visa_df.groupby('name')[['amount']].sum()
+grp_df = visa_df.groupby('name')[['amount']].sum().sort_values('amount',ascending=False)
 grp_df = grp_df.sort_values('amount', ascending=False)
 for i, row in grp_df.iterrows():
     print(f"{i: <30} : {row['amount']: >10}")

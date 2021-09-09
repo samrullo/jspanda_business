@@ -12,9 +12,9 @@ logger = get_logger()
 engine = create_engine('mysql://samrullo:18Rirezu@68.183.81.44/sql12359588?charset=utf8')
 
 gdoc_name = "Japansweetproject_new.xlsx"
-gdoc_sheet_name = "Заказы 250321"
+gdoc_sheet_name = "Заказы 27.08.21"
 
-adate = datetime.date(2021, 3, 25)
+adate = datetime.date(2021, 8, 27)
 
 g_docs_obj = GoogleSpreadsheetToDataframe()
 raw_df = g_docs_obj.get_worksheet_as_dataframe(gdoc_name, gdoc_sheet_name)
@@ -27,6 +27,12 @@ if len(raw_df.columns) == 8:
 if len(raw_df.columns) == 7:
     raw_df['extra_col'] = ""
     raw_df['extra_col2'] = ""
+
+if len(raw_df.columns) == 6:
+    raw_df['extra_col'] = ""
+    raw_df['extra_col2'] = ""
+    raw_df['extra_col3'] = ""
+
 
 jspanda_df = g_docs_obj.prepare_insertable_jspanda_orders_dataframe(raw_df, adate)
 
