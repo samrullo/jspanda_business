@@ -1,4 +1,6 @@
 import datetime
+from flask import current_app
+from application.admin.models.shipment_weight import ShipmentPrice
 from application.admin.models.shipment_spending import ShipmentSpending, db
 import logging
 import pandas as pd
@@ -17,7 +19,12 @@ class ShipmentSpendingForm(FlaskForm):
 
 class ShipmentSpendingController:
     def __init__(self):
-        self.shipment_per_kg_price = 2000
+        shipment_prices = ShipmentPrice.query.filter(ShipmentPrice.end == None).all()
+        current_app.logger.info(f"below are retrieved shipment prices : {shipment_prices}")
+        if len(shipment_prices) > 0:
+            self.shipment_per_kg_price = shipment_prices[0].price
+        else:
+            self.shipment_per_kg_price = 2000
 
     def show_all_spendings(self):
         records = ShipmentSpending.query.order_by(ShipmentSpending.date.desc()).all()

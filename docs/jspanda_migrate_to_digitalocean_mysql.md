@@ -28,7 +28,7 @@ When I changed my internet provider I started getting error that my host is not 
 So I had to run below command
 
 ```mysql
-mysql> RENAME 'samrullo'@'softbank060070023127.bbtec.net' TO 'samrullo'@'222-229-250-41.saitama.fdn.vectant.ne.jp';
+mysql> RENAME USER 'samrullo'@'softbank060070023127.bbtec.net' TO 'samrullo'@'222-229-250-41.saitama.fdn.vectant.ne.jp';
 ```
 ## Opening port 3306
 
