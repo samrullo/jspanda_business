@@ -1,5 +1,5 @@
-from application.jspanda_orders.models.product import Product, db
 from application.jspanda_orders.models.category import Category
+from application.jspanda_orders.models.product import Product, db
 import datetime
 import logging
 import pandas as pd

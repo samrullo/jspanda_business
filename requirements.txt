@@ -63,3 +63,5 @@ Werkzeug==0.15.5
 WTForms==2.2.1
 xlrd==1.2.0
 PyQt5==5.15.0
+virtualenv==20.13.0
+flask-migrate==3.1.0

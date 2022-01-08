@@ -4,7 +4,7 @@ import os
 import datetime
 
 folder = r'C:\Users\amrul\Documents\japan_sweets_business\amazon_visa_spendings'
-file = 'amazon_kakutei_202109.csv'
+file = 'amazon_kakutei_202112.csv'
 # df = pd.read_excel(os.path.join(folder, file), dtype={'ご利用日': str, 'ご利用先など': str, '支払開始': str})
 
 raw_df = pd.read_csv(os.path.join(folder, file), skiprows=1, skipfooter=1, encoding='shift-jis')
