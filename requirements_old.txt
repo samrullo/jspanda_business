@@ -9,11 +9,11 @@ Click==7.0
 cryptography==2.8
 cycler==0.10.0
 docutils==0.15.2
-Flask
+Flask==2.0.2
 Flask-BabelEx==0.9.3
 Flask-Login==0.4.1
 Flask-Mail==0.9.1
-Flask-Admin
+Flask-Admin==1.5.7
 flask-mongoengine==0.9.5
 flask-paginate==0.5.3
 Flask-Principal==0.4.0
@@ -62,6 +62,5 @@ urllib3==1.25.3
 Werkzeug==0.15.5
 WTForms==2.2.1
 xlrd==1.2.0
-PyQt5==5.15.0
 virtualenv==20.13.0
 flask-migrate==3.1.0
