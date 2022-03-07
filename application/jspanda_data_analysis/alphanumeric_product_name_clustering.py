@@ -11,7 +11,7 @@ FORMAT = '%(asctime)-15s %(message)s'
 logging.basicConfig(format=FORMAT, level=logging.INFO)
 logger = logging.getLogger()
 
-engine = create_engine('mysql://samrullo:18Aranid@jspandabusiness.crrz64gldft9.ap-south-1.rds.amazonaws.com/jspanda?charset=utf8')
+engine = create_engine('mysql://samrullo:18Rirezu@68.183.81.44/sql12359588?charset=utf8')
 
 query = "SELECT * FROM `jspanda_orders`"
 orders_df = pd.read_sql(query, engine)
@@ -40,8 +40,9 @@ from sklearn.decomposition import TruncatedSVD
 from sklearn.cluster import KMeans
 from sklearn.pipeline import make_pipeline
 
+n_clusters=3000
 svd = TruncatedSVD(n_components=100)
-kmeans = KMeans(n_clusters=100)
+kmeans = KMeans(n_clusters=n_clusters)
 pipeline = make_pipeline(svd, kmeans)
 logger.info(f"finished making pipeline with TruncatedSVD and KMeans")
 
@@ -138,23 +139,24 @@ plt.show()
 filename = "total_profit_by_cluster_bar_plot.jpg"
 g.fig.savefig(os.path.join(folder, filename), format="jpg")
 
-# let's see 2019
-orders_2019_df = orders_clust_df.loc[orders_clust_df['year'] == 2019].copy()
-orders_grp_2019_df = orders_2019_df.groupby('month').sum()[['total_cost', 'order_sum', 'profit']]
-orders_grp_2019_df['month'] = orders_grp_2019_df.index
-g = sns.catplot(x='month', y='order_sum', data=orders_grp_2019_df, kind='bar')
-g.fig.suptitle("Order sum by monthes of 2019")
+# let's see certain year
+target_year=2021
+orders_one_year_df = orders_clust_df.loc[orders_clust_df['year'] == target_year].copy()
+orders_grp_one_year_df = orders_one_year_df.groupby('month').sum()[['total_cost', 'order_sum', 'profit']]
+orders_grp_one_year_df['month'] = orders_grp_one_year_df.index
+g = sns.catplot(x='month', y='order_sum', data=orders_grp_one_year_df, kind='bar')
+g.fig.suptitle("Order sum by monthes of 2021")
 plt.show()
 
 # I want to order 2019 orders by month. Then order in descending order by profit. then save to sheets
 writer = pd.ExcelWriter(os.path.join(folder, "order_2019_by_month.xlsx"), engine="xlsxwriter")
 
-for month in orders_2019_df['month'].tolist():
-    orders_one_month_df = orders_2019_df.loc[orders_2019_df['month'] == month].copy()
+for month in orders_one_year_df['month'].tolist():
+    orders_one_month_df = orders_one_year_df.loc[orders_one_year_df['month'] == month].copy()
     orders_one_month_df.sort_values('order_sum', ascending=False, inplace=True)
     total_order_sum = orders_one_month_df['order_sum'].sum()
     orders_one_month_df['order_sum_pct'] = (orders_one_month_df['order_sum'] / total_order_sum) * 100
     orders_one_month_df['ordur_sum_pct_cum'] = orders_one_month_df['order_sum_pct'].cumsum()
     orders_one_month_df.to_excel(writer, sheet_name=f"2019-{month}", index=False)
 
-logger.info(f"finished saving 2019 orders by month to seperate sheets")
+logger.info(f"finished saving {target_year} orders by month to seperate sheets")

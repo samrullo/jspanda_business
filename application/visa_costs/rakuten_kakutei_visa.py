@@ -5,7 +5,7 @@ import re
 import logging
 
 folder = r'C:\Users\amrul\Documents\japan_sweets_business\rakuten_visa_spendings'
-file = 'rakuten_kakutei_202112.csv'
+file = 'rakuten_kakutei_202201.csv'
 df = pd.read_csv(os.path.join(folder, file))
 print("loaded data")
 
