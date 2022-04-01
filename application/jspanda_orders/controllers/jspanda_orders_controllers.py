@@ -33,6 +33,7 @@ class JspandaOrderController:
 
     def get_jspanda_na_prodaju_orders(self):
         jspanda_orders_df = pd.read_sql(JspandaOrder.query.statement, JspandaOrder.query.session.bind)
+        jspanda_orders_df["ordered_by"]=jspanda_orders_df["ordered_by"].fillna("").apply(str)
         jspanda_orders_df['is_for_jspanda_stock'] = jspanda_orders_df['ordered_by'].map(lambda x: True if re.search("na prodaju", x) else False)
         jspanda_stock_df = jspanda_orders_df.loc[jspanda_orders_df['is_for_jspanda_stock']].copy()
         jspanda_stock_pvt_df = pd.pivot_table(jspanda_stock_df, index='date', values=['total_cost', 'order_sum', 'is_paid'], aggfunc={'total_cost': 'sum', 'order_sum': 'sum', 'is_paid': 'mean'})
@@ -40,6 +41,7 @@ class JspandaOrderController:
 
     def get_jspanda_not_na_prodaju_orders(self):
         jspanda_orders_df = pd.read_sql(JspandaOrder.query.statement, JspandaOrder.query.session.bind)
+        jspanda_orders_df["ordered_by"] = jspanda_orders_df["ordered_by"].fillna("").apply(str)
         jspanda_orders_df['is_for_jspanda_stock'] = jspanda_orders_df['ordered_by'].map(lambda x: True if re.search("na prodaju", x) else False)
         jspanda_stock_df = jspanda_orders_df.loc[np.logical_not(jspanda_orders_df['is_for_jspanda_stock'])].copy()
         jspanda_stock_pvt_df = pd.pivot_table(jspanda_stock_df, index='date', values=['total_cost', 'order_sum', 'is_paid'], aggfunc={'total_cost': 'sum', 'order_sum': 'sum', 'is_paid': 'mean'})

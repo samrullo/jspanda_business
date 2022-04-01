@@ -12,7 +12,7 @@ from application.utils.utils import to_yyyymmdd
 
 
 class ShipmentSpendingForm(FlaskForm):
-    date = DateField("Date", render_kw={"class": "form-control"}, format='%Y%m%d')
+    date = DateField("Date", render_kw={"class": "form-control"})
     weight = FloatField("Weight", render_kw={"class": "form-control", "pattern": "[0-9]+([\.,][0-9]+)?", "step": "0.01"})
     submit = SubmitField("Submit", render_kw={"class": "btn bnt-lg btn-dark"})
 

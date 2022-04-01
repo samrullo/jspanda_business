@@ -33,8 +33,6 @@ def create_app():
         db.create_all()
 
         from .jspanda_orders import jspanda_orders_routes
-        from .jspanda_stats import jspanda_stats_routes
-        from .jspanda_tests import jspanda_test_routes
         from .users_admin import users_admin_routes
         from .db_admin import db_admin_bp
 
@@ -45,8 +43,6 @@ def create_app():
         app.register_blueprint(admin_routes.admin_bp)
         app.register_blueprint(auth_routes.auth_bp)
         app.register_blueprint(jspanda_orders_routes.jspanda_orders_bp)
-        app.register_blueprint(jspanda_stats_routes.jspanda_stats_bp)
-        app.register_blueprint(jspanda_test_routes.jspanda_test_bp)
         app.register_blueprint(users_admin_routes.users_admin_bp)
         app.register_blueprint(ssl_validation_bp)
         app.register_blueprint(db_admin_bp)

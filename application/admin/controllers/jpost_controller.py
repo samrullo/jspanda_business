@@ -10,8 +10,8 @@ from application.utils.utils import to_yyyymmdd
 
 
 class JpostSpendingForm(FlaskForm):
-    date = DateField("Date", render_kw={"class": "form-control"}, format='%Y%m%d')
-    order_date = DateField("Order Date", render_kw={"class": "form-control"}, format='%Y%m%d')
+    date = DateField("Date", render_kw={"class": "form-control"})
+    order_date = DateField("Order Date", render_kw={"class": "form-control"})
     amount = IntegerField("Yubin spending", render_kw={"class": "form-control", "pattern": "[0-9]+([\.,][0-9]+)?", "step": "0.01"})
     submit = SubmitField("Submit", render_kw={"class": "btn btn-lg btn-dark"})
 

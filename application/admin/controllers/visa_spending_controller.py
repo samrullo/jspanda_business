@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 class VisaSpendingForm(FlaskForm):
     visa = StringField("Visa", render_kw={"class": "form-control"})
-    date = DateField("Date", render_kw={"class": "form-control"}, format='%Y%m%d')
+    date = DateField("Date", render_kw={"class": "form-control"})
     amount = IntegerField("Amount", render_kw={"class": "form-control", "pattern": "[0-9]*"})
     submit = SubmitField("Submit", render_kw={"class": "btn bnt-lg btn-dark"})
 

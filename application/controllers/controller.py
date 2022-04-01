@@ -10,8 +10,6 @@ from flask import redirect
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, FileRequired
 from wtforms import StringField, SubmitField, HiddenField, DateField, IntegerField, FloatField, TextAreaField, FileField, validators
-import boto3
-from botocore.exceptions import ClientError
 from application.utils.utils import to_yyyymmdd
 
 

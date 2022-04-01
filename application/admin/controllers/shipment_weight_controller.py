@@ -13,8 +13,8 @@ from application.utils.utils import to_yyyymmdd
 
 
 class ShipmentWeightForm(FlaskForm):
-    date = DateField("Date", render_kw={"class": "form-control"}, format='%Y%m%d')
-    order_date = DateField("Order Date", render_kw={"class": "form-control"}, format='%Y%m%d')
+    date = DateField("Date", render_kw={"class": "form-control"})
+    order_date = DateField("Order Date", render_kw={"class": "form-control"})
     to_whom = StringField("To whom", render_kw={"class": "form-control"})
     weight = FloatField("Weight", render_kw={"class": "form-control", "pattern": "[0-9]+([\.,][0-9]+)?", "step": "0.01"})
     # pattern="[0-9]+([\.,][0-9]+)?" step="0.01"

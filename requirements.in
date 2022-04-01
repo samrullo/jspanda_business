@@ -1,0 +1,13 @@
+pandas
+Flask
+Flask-Session
+Flask-Login
+Flask-Admin
+Flask-WTF
+Flask-Uploads
+Flask-SQLAlchemy
+Flask-Migrate
+Flask-Redis
+email_validator
+python-dotenv
+psycopg2-binary

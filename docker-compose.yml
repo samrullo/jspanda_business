@@ -1,0 +1,43 @@
+version: "3.7"
+
+services:
+  jspanda:
+    container_name: "jspanda"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/app
+    ports:
+      - "3000:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SECRET_KEY: JSPANDA_SECRET
+      SQLALCHEMY_DATABASE_URI: "postgresql://postgres:postgres@postgres:5432/jspanda"
+      CFLAGS: -Qunused-arguments
+      CPPFLAGS: -Qunused-arguments
+      FLASK_ENV: production
+      TOKEN_EXPIRATION: 3600
+    networks:
+      - jspanda-networks
+  postgres:
+    container_name: "postgres"
+    build:
+      context: .
+      dockerfile: postgres.dockerfile
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: jspanda
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d jspanda"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - jspanda-networks
+networks:
+  jspanda-networks:
+    driver: bridge

@@ -26,16 +26,6 @@ visa_df.sort_values('amount', ascending=False, inplace=True)
 print(visa_df[['date', 'name', 'amount']].to_string())
 visa_df.to_excel(os.path.join(folder, f"saison_{to_yyyymmdd(min_date)}_to_{to_yyyymmdd(max_date)}.xlsx"))
 
-# import seaborn as sns
-# import matplotlib.pyplot as plt
-# import matplotlib
-#
-# sns.set(font="IPAexGothic")
-# g = sns.barplot(x="amount", y="name", data=visa_df)
-#
-# plt.xlabel("金額", fontname="IPAexGothic")
-# plt.ylabel("ショッピング支店", fontname="IPAexGothic")
-# plt.show()
 
 grp_df = visa_df.groupby('name')[['amount']].sum().sort_values('amount',ascending=False)
 grp_df = grp_df.sort_values('amount', ascending=False)

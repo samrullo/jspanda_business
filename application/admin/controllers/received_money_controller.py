@@ -12,7 +12,7 @@ from application.utils.utils import to_yyyymmdd
 
 class ReceivedMoneyForm(FlaskForm):
     id = HiddenField("id")
-    date = DateField("date", render_kw={"class": "form-control"}, format='%Y%m%d')
+    date = DateField("date", render_kw={"class": "form-control"})
     amount_usd = StringField("amount_usd", render_kw={"class": "form-control", "pattern": "[0-9]*"})
     exchange_rate = StringField("exchange_rate", render_kw={"class": "form-control"})
     submit = SubmitField("Save received money", render_kw={"class": "btn btn-lg btn-dark"})

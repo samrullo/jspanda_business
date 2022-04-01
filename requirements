@@ -14,8 +14,6 @@ Flask-BabelEx
 Flask-Login
 Flask-Mail
 Flask-Admin
-flask-mongoengine
-flask-paginate
 Flask-Principal
 flask-redis
 Flask-Security
@@ -31,10 +29,6 @@ Jinja2
 jmespath
 kiwisolver
 MarkupSafe
-matplotlib
-mongoengine
-mysql-connector
-mysqlclient
 numpy
 oauth2client
 pandas
@@ -43,7 +37,6 @@ psycopg2-binary
 pyasn1
 pyasn1-modules
 pycparser
-pymongo
 pyOpenSSL
 pyparsing
 python-dateutil
@@ -52,9 +45,6 @@ pytz
 redis
 requests
 rsa
-s3transfer
-scipy
-seaborn
 six
 speaklater
 SQLAlchemy
