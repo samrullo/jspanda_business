@@ -145,3 +145,5 @@ migrations
 
 credentials/
 postgres/
+postgres_data/data
+data/certbot
