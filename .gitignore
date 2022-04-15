@@ -147,3 +147,5 @@ credentials/
 postgres/
 postgres_data/data
 data/certbot
+docker-compose-local.yml
+playground/
