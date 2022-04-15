@@ -91,5 +91,5 @@ psql -U postgres -d targetdb -f sourcedb.sql
 Run below on table id_seq
 
 ```
-ALTER SEQUENCE shipment_weight
+ALTER SEQUENCE shipment_weight RESTART WITH 105;
 ```
