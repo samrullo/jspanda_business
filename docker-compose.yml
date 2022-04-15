@@ -31,6 +31,9 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: jspanda
+    volumes:
+      - ./postgres_data/db_dumps/:/var/dump
+      - ./postgres_data/data/:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres -d jspanda"]
       interval: 5s
