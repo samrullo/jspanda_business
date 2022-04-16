@@ -1,6 +1,5 @@
 from application import db
 
-
 class Stock(db.Model):
     __tablename__ = "stock"
     id = db.Column(db.Integer, primary_key=True)
