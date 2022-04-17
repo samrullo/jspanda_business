@@ -11,3 +11,6 @@ Flask-Redis
 email_validator
 python-dotenv
 psycopg2-binary
+Click
+gspread
+oauth2client

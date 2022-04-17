@@ -1,5 +1,5 @@
 from application import db
-
+from datetime import datetime
 
 class JspandaOrder(db.Model):
     __tablename__ = "jspanda_orders"
@@ -13,9 +13,9 @@ class JspandaOrder(db.Model):
     order_sum = db.Column(db.Float, nullable=False)
     ordered_by = db.Column(db.String(100))
     extra_notes = db.Column(db.String(400))
-    is_paid = db.Column(db.Boolean, nullable=False)
-    is_received = db.Column(db.Boolean, nullable=False)
-    is_yubin_received = db.Column(db.Boolean, nullable=False)
-    is_na_prodaju = db.Column(db.Boolean, nullable=False)
-    added_time = db.Column(db.DateTime, nullable=True)
-    modified_time = db.Column(db.DateTime, nullable=True)
+    is_paid = db.Column(db.Boolean, nullable=False,default=False)
+    is_received = db.Column(db.Boolean, nullable=False,default=False)
+    is_yubin_received = db.Column(db.Boolean, nullable=False,default=False)
+    is_na_prodaju = db.Column(db.Boolean, nullable=False,default=False)
+    added_time = db.Column(db.DateTime, nullable=True,default=datetime.utcnow())
+    modified_time = db.Column(db.DateTime, nullable=True,default=datetime.utcnow())
