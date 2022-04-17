@@ -68,7 +68,7 @@ class GoogleSpreadsheetToDataframe:
         new_df['selling_price_per_unit'] = new_df['selling_price_per_unit'].fillna(0)
 
         # if contains cyrillic characters better convert charset to utf
-        new_df['ordered_by'] = raw_df['ordered_by'].str.encode("utf-8")
+        new_df['ordered_by'] = raw_df['ordered_by'].map(lambda _ordered_by: _ordered_by.decode("utf-8") if isinstance(_ordered_by,bytes) else _ordered_by)
         new_df['extra_notes'] = raw_df['extra_notes'].str.encode("utf-8")
         new_df['name'] = new_df['name'].str.encode("utf-8")
 
