@@ -1,0 +1,1 @@
+python application/jspanda_orders_from_google/jspanda_google_doc_sheet_insert_into_db.py --gdoc_sheet_name "*Заказы 16.03.22" --adate 20220316
