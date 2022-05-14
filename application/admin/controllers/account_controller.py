@@ -15,7 +15,7 @@ class AccountForm(FlaskForm):
     pasw = StringField("Pasw", render_kw={"class": "form-control"})
     url = StringField("Url", render_kw={"class": "form-control"})
     extra = TextAreaField("Extra", render_kw={"class": "form-control"})
-    date = DateField("Date", render_kw={"class": "form-control"}, format="%Y%m%d")
+    date = DateField("Date", render_kw={"class": "form-control"})
     submit = SubmitField("Submit", render_kw={"class": "btn btn-dark btn-lg"})
 
 
