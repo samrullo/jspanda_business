@@ -1,0 +1,33 @@
+version: "3.4"
+
+services:
+  jspanda:
+    container_name: "jspanda"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/app
+      - ./data/nginx:/etc/nginx/conf.d
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      SECRET_KEY: JSPANDA_SECRET
+      SQLALCHEMY_DATABASE_URI: "postgresql://postgres:postgres@postgres:5432/jspanda"
+      CFLAGS: -Qunused-arguments
+      CPPFLAGS: -Qunused-arguments
+      FLASK_ENV: production
+      TOKEN_EXPIRATION: 3600
+    networks:
+      - jspanda-networks
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+networks:
+  jspanda-networks:
+    driver: bridge
