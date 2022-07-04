@@ -14,7 +14,6 @@ admin_flask = Admin(name="jspanda_business", url="/db_admin")
 from .main import main_routes
 from .admin import admin_routes
 from .auth import auth_routes
-from .ssl_validation import ssl_validation_bp
 
 
 def create_app():
@@ -43,8 +42,7 @@ def create_app():
         app.register_blueprint(admin_routes.admin_bp)
         app.register_blueprint(auth_routes.auth_bp)
         app.register_blueprint(jspanda_orders_routes.jspanda_orders_bp)
-        app.register_blueprint(users_admin_routes.users_admin_bp)
-        app.register_blueprint(ssl_validation_bp)
+        app.register_blueprint(users_admin_routes.users_admin_bp)        
         app.register_blueprint(db_admin_bp)
 
         return app
