@@ -34,7 +34,7 @@ echo
 
 
 echo "### Starting nginx ..."
-docker-compose -f docker-compose-nodb.yml up --force-recreate -d jspanda
+docker-compose -f docker-compose.yml up --force-recreate -d jspanda
 echo
 
 echo "### Deleting dummy certificate for $domains ..."
