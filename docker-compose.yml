@@ -6,7 +6,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done'"
     volumes:
       - ./:/app
       - ./data/nginx:/etc/nginx/conf.d
