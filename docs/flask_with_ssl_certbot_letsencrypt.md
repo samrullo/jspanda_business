@@ -110,3 +110,7 @@ Edit the script to add in your domain(s) and your email address. If you’ve cha
 
 Then run chmod +x init-letsencrypt.sh and sudo ./init-letsencrypt.sh.
 
+I did some changes into ```init_certbot.sh```, such as specifying domain name.
+Initially I attempted running ```$sudo ./init_certbot.sh``` multiple times, but it failed saying can't serve ```jspanda.club/.well-known/acme-challenge/lkajdlfkjaldjf```
+Then when I tried simply running ````$./init_certbot.sh``` it worked.
+So still unclear what is causing initial failure, it can be due to directory ownership differences.
