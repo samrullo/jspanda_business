@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h1>Spending home</h1>
+<ul class="list-group">    
+    <li class="list-group-item">
+        <a href="{{url_for('daily_spending_bp.daily_spending')}}" class="btn btn-dark">Recent spendings</a>
+    </li>
+    <li class="list-group-item">
+        <a href="{{url_for('daily_spending_bp.daily_spending_new')}}" class="btn btn-dark">New spending</a>
+    </li>
+    <li class="list-group-item">
+        <a href="{{url_for('daily_spending_bp.daily_spending_all')}}" class="btn btn-dark">All spendings</a>
+    </li>
+</ul>
+
+{% endblock %}

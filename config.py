@@ -1,6 +1,7 @@
 import os
-
+import pathlib
 basedir = os.path.abspath(os.path.dirname(__file__))
+from flask import url_for
 
 
 class Config:
@@ -22,3 +23,7 @@ class Config:
 
     GOOGLE_CREDENTIALS_FOLDER = os.path.join(basedir, "credentials")
     GOOGLE_CREDENTIALS_FILE = os.path.join(GOOGLE_CREDENTIALS_FOLDER, "jspanda-abb0ef8b0971.json")
+
+    UPLOADED_IMAGES_DEST=pathlib.Path(basedir)/"application"/"static"/"img"/"receipts"
+    
+    RECEIPTS_FOLDER=pathlib.Path(basedir)/"application"/"static"/"img"/"receipts"

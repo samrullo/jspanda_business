@@ -4,7 +4,7 @@ import os
 import datetime
 
 folder = r'C:\Users\amrul\Documents\japan_sweets_business\yahoo_visa_spendings'
-file = 'yahoo_202206.csv'
+file = 'yahoo_202207.csv'
 # df = pd.read_excel(os.path.join(folder, file), dtype={'ご利用日': str, 'ご利用先など': str, '支払開始': str})
 
 # raw_df = pd.read_csv(os.path.join(folder, file) , skiprows=1, skipfooter=1, encoding='shift-jis')

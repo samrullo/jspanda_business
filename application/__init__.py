@@ -5,11 +5,21 @@ from flask_session import Session
 from flask_redis import FlaskRedis
 from flask_login import LoginManager
 from flask_admin import Admin
+from flask_bootstrap import Bootstrap
+from flask_moment import Moment
+
+from flask_uploads import UploadSet, IMAGES, configure_uploads
+
+
+images = UploadSet('images', IMAGES)
+
 
 # Globally accessible libraries
 db = SQLAlchemy()
 login_manager = LoginManager()
 admin_flask = Admin(name="jspanda_business", url="/db_admin")
+bootstrap = Bootstrap()
+moment=Moment()
 
 from .main import main_routes
 from .admin import admin_routes
@@ -27,6 +37,10 @@ def create_app():
 
     admin_flask.init_app(app)
 
+    bootstrap.init_app(app)
+    moment.init_app(app)
+    configure_uploads(app,images)
+
     with app.app_context():
         # create all tables
         db.create_all()
@@ -34,6 +48,7 @@ def create_app():
         from .jspanda_orders import jspanda_orders_routes
         from .users_admin import users_admin_routes
         from .db_admin import db_admin_bp
+        from .daily_spending import daily_spending_bp
 
         app.config['JSPANDA_STATS_FOLDER'] = os.path.join(app.root_path, 'static', 'img')
 
@@ -44,5 +59,6 @@ def create_app():
         app.register_blueprint(jspanda_orders_routes.jspanda_orders_bp)
         app.register_blueprint(users_admin_routes.users_admin_bp)        
         app.register_blueprint(db_admin_bp)
+        app.register_blueprint(daily_spending_bp)
 
         return app

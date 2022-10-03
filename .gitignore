@@ -150,3 +150,5 @@ postgres_data/data
 data/certbot
 docker-compose-local.yml
 playground/
+receipts/
+postgres_data/db_dumps/

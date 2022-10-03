@@ -8,6 +8,8 @@ Flask-Uploads
 Flask-SQLAlchemy
 Flask-Migrate
 Flask-Redis
+Bootstrap-Flask
+Flask-Moment
 email_validator
 python-dotenv
 psycopg2-binary
@@ -15,3 +17,4 @@ Click
 gspread
 oauth2client
 ipython
+opencv-python

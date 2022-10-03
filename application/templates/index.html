@@ -11,6 +11,7 @@
   {% if current_user.is_authenticated and current_user.is_admin and current_user.is_active%}
   <a class="list-group-item list-group-item-action" href="/admin">Admin home</a>
   <a class="list-group-item list-group-item-action" href="/db_admin">DB Admin home</a>
+  <a class="list-group-item list-group-item-action" href="{{url_for('daily_spending_bp.daily_spending_home')}}">Daily Spendings</a>
   <a class="list-group-item list-group-item-action" href="/admin/show_summary">Jspanda business summary</a>
   {% endif %}
   {% if not current_user.is_authenticated %}

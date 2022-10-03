@@ -3,10 +3,21 @@ import numpy as np
 import os
 import re
 import logging
+import pathlib
 
 folder = r'C:\Users\amrul\Documents\japan_sweets_business\rakuten_visa_spendings'
-file = 'rakuten_kakutei_202206.csv'
-df = pd.read_csv(os.path.join(folder, file))
+adate="202209"
+files=[f"rakuten_master_{adate}.csv",f"rakuten_visa_{adate}.csv"]
+df_list=[]
+for file in files:
+    filepath=pathlib.Path(folder)/file
+    df=pd.read_csv(filepath)
+    df_list.append(df)
+
+df=pd.concat(df_list)
+df.index=range(len(df))
+# file = 'rakuten_kakutei_202207.csv'
+# df = pd.read_csv(os.path.join(folder, file))
 print("loaded data")
 
 orig_cols =['利用日', '利用店名・商品名', '利用者', '支払方法', '利用金額', '支払手数料', '支払総額', '11月支払金額','12月繰越残高', '新規サイン']

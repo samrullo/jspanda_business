@@ -5,7 +5,7 @@ services:
     container_name: "jspanda"
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile_ubuntu.dockerfile
     volumes:
       - ./:/app
     ports:

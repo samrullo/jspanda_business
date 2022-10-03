@@ -93,3 +93,19 @@ Run below on table id_seq
 ```
 ALTER SEQUENCE shipment_weight RESTART WITH 105;
 ```
+
+# When you forgot postgres password
+Edit C:\Program Files\PostgreSQL\14\data\pg_hba.conf file (hba stands for host based authentication) anything that says "sha..." to "trust" and save it.
+
+Then restart postgres server.
+
+Then connect to postgres
+```
+psql -U postgres
+```
+
+Then set a new password for postgres user
+
+```
+ALTER USER postgres WITH PASSWORD 'new_password';
+```
