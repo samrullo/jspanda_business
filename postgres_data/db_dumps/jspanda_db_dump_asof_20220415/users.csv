@@ -1,2 +1,0 @@
-id,name,login,email,password,website,created_on,last_login,is_admin,is_active
-1,subkhon,samrullo,samrullo@blackrock.com,sha256$GOK0QP36$91c6ba1c78bda98cb16ac449a95f1e774f8447658531ab65cc624ab07c58dfb2,something,,,True,True
