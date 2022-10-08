@@ -5,7 +5,8 @@ ENV STATIC_PATH /app/application/static
 SHELL ["/bin/bash", "-c"]
 RUN source /root/.bashrc
 RUN mkdir /var/www/flask_app/
-COPY data/nginx/app_local.conf /etc/nginx/conf.d/
+COPY data/nginx/etc/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY data/nginx/etc/nginx/conf.d/nginx.conf /etc/nginx/conf.d/nginx.conf
 COPY ./requirements.txt /var/www/flask_app/
 RUN /root/.pyenv/shims/pip install -r /var/www/flask_app/requirements.txt
 COPY ./python_bugs/flask_uploads.py /root/.pyenv/versions/3.9.14/lib/python3.9/site-packages/flask_uploads.py
