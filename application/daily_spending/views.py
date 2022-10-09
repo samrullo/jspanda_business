@@ -64,12 +64,12 @@ def save_spending_record_from_form(form:FlaskForm,db:SQLAlchemy):
     return spending
 
 def update_spending_record_from_form(form:FlaskForm,spending,db:SQLAlchemy):
-    spending.spent_at=form.spent_at.data,
+    spending.spent_at=localtz_to_utc(form.spent_at.data),
     spending.name=form.name.data,
     spending.amount=form.amount.data,
     spending.spending_category_id=form.spending_category.data,
     spending.payment_method_id=form.payment_method.data
-    spending.modified_at=datetime.datetime.now()
+    spending.modified_at=localtz_to_utc(datetime.datetime.now())
     db.session.add(spending)
     db.session.commit()
     return spending
