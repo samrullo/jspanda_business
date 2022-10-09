@@ -7,7 +7,7 @@ RUN source /root/.bashrc
 
 COPY data/etc/systemd/system/jspanda.service /etc/systemd/system/
 COPY data/nginx/etc/nginx/sites-available/jspanda.conf /etc/nginx/sites-available/
-RUN ln -s /etc/nginx/sites-available/jspanda_local.conf /etc/nginx/sites-enabled/
+RUN ln -s /etc/nginx/sites-available/jspanda.conf /etc/nginx/sites-enabled/
 
 RUN mkdir /var/www/flask_app/
 COPY ./requirements.txt /var/www/flask_app/
