@@ -1,5 +1,5 @@
 import os
-from application import db
+from application import db,moment
 from application import images
 from flask import render_template, redirect, flash, current_app, request,url_for
 from flask_login import login_required, current_user
@@ -35,6 +35,15 @@ def inject_tz_conversion_functions():
         return utctime
 
     return dict(utc_to_localtz=utc_to_localtz,localtz_to_utc=localtz_to_utc)
+
+def utc_to_localtz(_datetime):
+    utc = tz.gettz('UTC')
+    localtz = tz.tzlocal()
+
+    utctime = _datetime.replace(tzinfo=utc)
+    localtime = utctime.astimezone(localtz)
+    return localtime
+
 
 def localtz_to_utc(_datetime):
     return datetime.datetime.utcfromtimestamp(_datetime.timestamp())
@@ -132,7 +141,7 @@ def daily_spending_edit(id:int):
             save_receipt_image_and_update_spending_db_record(form,spending,images,db)
         flash(f"Updated {spending}","success")
         return redirect(url_for("daily_spending_bp.daily_spending"))
-    form.spent_at.data=spending.spent_at
+    form.spent_at.data=utc_to_localtz(spending.spent_at)
     form.name.data=spending.name
     form.amount.data=spending.amount
     form.spending_category.data=spending.spending_category_id
