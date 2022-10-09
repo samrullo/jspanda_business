@@ -15,6 +15,7 @@
     <thead order_col_no="0">
         <th scope="col">Spending Date</th>
         <th scope="col">Spending name</th>
+        <th scope="col">Spending amount</th>
         <th scope="col">Spending category</th>
         <th scope="col">Payment method</th>        
         <th scope="col">Created at</th>
@@ -28,6 +29,7 @@
         <tr>
             <td>{{moment(spending.spent_at).format('LLL')}}</td>
             <td>{{spending.name}}</td>
+            <td>{{spending.amount}}</td>
             <td>{{spending.spending_category.name}}</td>
             <td>{{spending.payment_method.name}}</td>
             <td>{{moment(spending.created_at).format('LLL')}}</td>

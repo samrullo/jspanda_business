@@ -13,9 +13,47 @@ import shutil
 import pathlib
 from flask_wtf import FlaskForm
 from flask_sqlalchemy import SQLAlchemy
+from dateutil import tz
+
+@daily_spending_bp.app_context_processor
+def inject_tz_conversion_functions():
+    def utc_to_localtz(_datetime):
+        utc = tz.gettz('UTC')
+        localtz = tz.tzlocal()
+
+        utctime = _datetime.replace(tzinfo=utc)
+        localtime = utctime.astimezone(localtz)
+        return localtime
+    
+    def localtz_to_utc(_datetime):
+        utc = tz.gettz('UTC')
+        localtz = tz.tzlocal()
+
+        localtime = _datetime.replace(tzinfo=localtz)        
+        utctime = localtime.astimezone(utc)
+        
+        return utctime
+
+    return dict(utc_to_localtz=utc_to_localtz,localtz_to_utc=localtz_to_utc)
+
+def localtz_to_utc(_datetime):
+    return datetime.datetime.utcfromtimestamp(_datetime.timestamp())
+
+
+@daily_spending_bp.app_context_processor
+def inject_utc_to_jst():
+    def utc_to_jst(_datetime):
+        utc = tz.gettz('UTC')
+        localtz = tz.gettz('JST')
+
+        utctime = _datetime.replace(tzinfo=utc)
+        localtime = utctime.astimezone(localtz)
+        return localtime
+    return dict(utc_to_jst=utc_to_jst)
+
 
 def save_spending_record_from_form(form:FlaskForm,db:SQLAlchemy):
-    spending = Spending(spent_at=form.spent_at.data,
+    spending = Spending(spent_at=localtz_to_utc(form.spent_at.data),
                         name=form.name.data,
                         amount=form.amount.data,
                         spending_category_id=form.spending_category.data,
