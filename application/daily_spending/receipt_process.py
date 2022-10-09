@@ -9,7 +9,7 @@ from flask_sqlalchemy import SQLAlchemy
 import datetime
 
 def save_receipt_image_and_update_spending_db_record(form:FlaskForm,spending,images:UploadSet,db:SQLAlchemy):
-    receipt_filename=f"{spending.name.lower()}_{spending.spending_category.name.lower()}_{spending.payment_method.name.lower()}_{datetime.datetime.strftime(spending.spent_at,'%Y%m%d_%H%M%S')}."
+    receipt_filename=f"{spending.name.lower().replace(' ','_')}_{spending.spending_category.name.lower()}_{spending.payment_method.name.lower()}_{datetime.datetime.strftime(spending.spent_at,'%Y%m%d_%H%M%S')}."
     saved_filename=images.save(form.receipt_image.data,name=receipt_filename)
     saved_filename_path=pathlib.Path(current_app.config["UPLOADED_IMAGES_DEST"])/saved_filename
     extracted_receipt_file=extract_receipt_image_as_gray(saved_filename_path)
