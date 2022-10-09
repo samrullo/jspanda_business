@@ -10,6 +10,7 @@ services:
       - ./:/app
     ports:
       - "3000:80"
+    command: ["systemctl","start","jspanda"]
     depends_on:
       postgres:
         condition: service_healthy

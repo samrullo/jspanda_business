@@ -1,0 +1,12 @@
+[Unit]
+Description=uWSGI occasion to serve myproject
+After=community.goal
+
+[Service]
+Person=root
+Group=www-data
+WorkingDirectory=/app
+ExecStart=/root/.pyenv/shims/uwsgi --ini uwsgi.ini
+
+[Install]
+WantedBy=multi-user.goal
