@@ -31,7 +31,7 @@ class GoogleSpreadsheetToDataframe:
         header = data.pop(0)
         return pd.DataFrame(data, columns=header)
 
-    def prepare_insertable_jspanda_orders_dataframe(self, raw_df, adate):
+    def prepare_insertable_jspanda_orders_dataframe(self, raw_df, adate,utf8endcode=True):
         logging.info("Will prepare jspanda dataframe insertable into database")
         db_cols = ['date', 'name', 'quantity', 'price', 'selling_price_per_unit', 'total_cost', 'order_sum', 'ordered_by', 'extra_notes', 'is_paid']
         cols = ['name', 'quantity', 'order_sum', 'price', 'selling_price_per_unit', 'remainder', 'ordered_by', 'extra_notes', 'total']
@@ -68,9 +68,10 @@ class GoogleSpreadsheetToDataframe:
         new_df['selling_price_per_unit'] = new_df['selling_price_per_unit'].fillna(0)
 
         # if contains cyrillic characters better convert charset to utf
-        new_df['ordered_by'] = raw_df['ordered_by'].map(lambda _ordered_by: _ordered_by.decode("utf-8") if isinstance(_ordered_by,bytes) else _ordered_by)
-        new_df['extra_notes'] = raw_df['extra_notes'].str.encode("utf-8")
-        new_df['name'] = new_df['name'].str.encode("utf-8")
+        if utf8endcode:
+            new_df['ordered_by'] = raw_df['ordered_by'].map(lambda _ordered_by: _ordered_by.decode("utf-8") if isinstance(_ordered_by,bytes) else _ordered_by)
+            new_df['extra_notes'] = raw_df['extra_notes'].str.encode("utf-8")
+            new_df['name'] = new_df['name'].str.encode("utf-8")
 
         # let's calculate total costs and order_sums
         new_df['total_cost'] = new_df['quantity'] * new_df['price']

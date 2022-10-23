@@ -55,7 +55,7 @@ def insert_jspanda_google_sheets(db_uri, gdoc_name, gdoc_sheet_name, adate):
         raw_df["extra_col2"] = ""
         raw_df["extra_col3"] = ""
 
-    jspanda_df = g_docs_obj.prepare_insertable_jspanda_orders_dataframe(raw_df, adate)
+    jspanda_df = g_docs_obj.prepare_insertable_jspanda_orders_dataframe(raw_df, adate,utf8endcode=False)
 
     # next will insert jspanda_df records into database
 
