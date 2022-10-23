@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h1>Spendings</h1>
+<ul class="list-group">
+    <li class="list-group-item">
+        Total : <span class="positive-numeric">{{"{:,}".format(total_amount)}}</span>
+    </li>
+    <li class="list-group-item">
+        <a href="{{url_for('daily_spending_bp.daily_spending_new')}}" class="btn btn-dark">New Spending</a>
+    </li>
+    <li class="list-group-item">
+        <a class="btn btn-dark" href="{{url_for('daily_spending_bp.daily_spending')}}">Back to daily spendings</a>
+    </li>
+</ul>
+
+<table class="table table-hover orderByDateTable">
+    <thead order_col_no="0">        
+        <th scope="col">Spending category</th>        
+        <th scope="col">Amount</th>
+    </thead>
+    <tbody>
+        {% for category,amount in ca_summary_list %}
+        <tr>            
+            <td>{{category}}</td>
+            <td><span class="positive-numeric">{{"{:,}".format(amount)}}</span></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

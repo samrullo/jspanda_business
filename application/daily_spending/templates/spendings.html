@@ -1,13 +1,19 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<h1>Spendings</h1>
+<h1>Spendings for the year {{spending_year}} and the month {{spending_month}}</h1>
 <ul class="list-group">
     <li class="list-group-item">
         Total : <span class="positive-numeric">{{"{:,}".format(total_amount)}}</span>
     </li>
     <li class="list-group-item">
         <a href="{{url_for('daily_spending_bp.daily_spending_new')}}" class="btn btn-dark">New Spending</a>
+    </li>
+    <li class="list-group-item">
+        Summaries : 
+        {% for year,month in summary_year_monthes %}
+        <a href="{{url_for('daily_spending_bp.daily_spending_summary_year_month',year=year,month=month)}}" class="btn btn-dark mr-3">{{year}}/{{month}}</a>
+        {% endfor %}
     </li>
 </ul>
 
