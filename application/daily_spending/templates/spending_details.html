@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h1>Spendings for the year {{spending_year}} and the month {{spending_month}}</h1>
+<ul class="list-group">
+    <li class="list-group-item">
+        Total : <span class="positive-numeric">{{"{:,}".format(total_amount)}}</span>
+    </li>
+    <li class="list-group-item">
+        <a href="{{url_for('daily_spending_bp.daily_spending_summary_year_month',year=spending_year,month=spending_month)}}" class="btn btn-dark">Back to summary {{spending_year}}/{{spending_month}}</a>
+    </li>    
+</ul>
+
+<table class="table table-hover orderByDateTable">
+    <thead order_col_no="0">
+        <th scope="col">Spending Date</th>
+        <th scope="col">Spending name</th>
+        <th scope="col">Spending amount</th>
+        <th scope="col">Spending category</th>
+        <th scope="col">Payment method</th>        
+        <th scope="col">Created at</th>
+        <th scope="col">Modified at</th>
+        <th scope="col">View</th>
+        <th scope="col">Edit</th>
+        <th scope="col">Delete</th>
+    </thead>
+    <tbody>
+        {% for spending in spendings %}
+        <tr>
+            <td>{{moment(spending.spent_at).format('LLL')}}</td>
+            <td>{{spending.name}}</td>
+            <td>{{spending.amount}}</td>
+            <td>{{spending.spending_category.name}}</td>
+            <td>{{spending.payment_method.name}}</td>
+            <td>{{moment(spending.created_at).format('LLL')}}</td>
+            <td>{{moment(spending.modified_at).format('LLL')}}</td>
+            <td><a href="{{url_for('daily_spending_bp.one_daily_spending',id=spending.id)}}" class="btn btn-dark">View</a></td>
+            <td><a href="{{url_for('daily_spending_bp.daily_spending_edit',id=spending.id)}}" class="btn btn-dark">Edit</a></td>
+            <td><a href="{{url_for('daily_spending_bp.daily_spending_delete',id=spending.id)}}" class="btn btn-dark">Delete</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
