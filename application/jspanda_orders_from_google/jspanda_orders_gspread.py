@@ -56,14 +56,14 @@ class GoogleSpreadsheetToDataframe:
                 raw_df.loc[i,'selling_price_per_unit']=int(row["selling_price_per_unit"])
             except Exception as e:
                 logging.info(f"failed parsing to int : {e}")
-                raw_df.loc[i,'selling_price_per_unit']=0
+                raw_df.loc[i,'selling_price_per_unit']=row["price"]
 
         # if selling price is not a number set it to empty
-        for i, row in raw_df.iterrows():
-            selling_price = row['selling_price_per_unit']
-            selling_price_tokens = selling_price.split(" ")
-            if len(selling_price_tokens) > 1:
-                raw_df.loc[i, 'selling_price_per_unit'] = row['price']
+        # for i, row in raw_df.iterrows():
+        #     selling_price = row['selling_price_per_unit']
+        #     selling_price_tokens = selling_price.split(" ")
+        #     if len(selling_price_tokens) > 1:
+        #         raw_df.loc[i, 'selling_price_per_unit'] = row['price']
 
         # now will attempt to get price and selling_price as numeric
         new_df['price'] = pd.to_numeric(raw_df['price'])
