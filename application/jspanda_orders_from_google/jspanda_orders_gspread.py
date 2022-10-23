@@ -4,6 +4,7 @@ import sys
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
+import numpy as np
 import logging
 from config import Config
 
@@ -37,7 +38,7 @@ class GoogleSpreadsheetToDataframe:
         db_cols = ['date', 'name', 'quantity', 'price', 'selling_price_per_unit', 'total_cost', 'order_sum', 'ordered_by', 'extra_notes', 'is_paid']
         cols = ['name', 'quantity', 'order_sum', 'price', 'selling_price_per_unit', 'remainder', 'ordered_by', 'extra_notes', 'total']
         raw_df.columns = cols
-        raw_df = raw_df.loc[raw_df['quantity'] != ""]
+        raw_df = raw_df[(raw_df['quantity'] != "")&(raw_df["name"]!="")&(np.logical_not(raw_df["name"].isnull()))]
         new_df = pd.DataFrame(columns=db_cols)
         new_df['date'] = adate
         new_df['name'] = raw_df['name']
