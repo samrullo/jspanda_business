@@ -1,3 +1,4 @@
+from curses import raw
 import os
 import sys
 import gspread
@@ -48,6 +49,14 @@ class GoogleSpreadsheetToDataframe:
 
         # sometimes price or selling price may have string total
         raw_df['selling_price_per_unit'] = raw_df['selling_price_per_unit'].apply(lambda x: x.replace("total", "")).apply(lambda x: x.strip())
+
+        # we want to convert selling price to int
+        for i,row in raw_df.iterrows():
+            try:
+                raw_df.loc[i,'selling_price_per_unit']=int(row["selling_price_per_unit"])
+            except Exception as e:
+                logging.info(f"failed parsing to int : {e}")
+                raw_df.loc[i,'selling_price_per_unit']=0
 
         # if selling price is not a number set it to empty
         for i, row in raw_df.iterrows():
