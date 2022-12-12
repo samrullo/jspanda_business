@@ -33,7 +33,7 @@ class GoogleSpreadsheetToDataframe:
         header = data.pop(0)
         return pd.DataFrame(data, columns=header)
 
-    def prepare_insertable_jspanda_orders_dataframe(self, raw_df, adate,utf8endcode=True):
+    def prepare_insertable_jspanda_orders_dataframe(self, raw_df, adate,utf8endcode=True,fx_rate=130):
         logging.info("Will prepare jspanda dataframe insertable into database")
         db_cols = ['date', 'name', 'quantity', 'price', 'selling_price_per_unit', 'total_cost', 'order_sum', 'ordered_by', 'extra_notes', 'is_paid']
         cols = ['name', 'quantity', 'order_sum', 'price', 'selling_price_per_unit', 'remainder', 'ordered_by', 'extra_notes', 'total']
@@ -47,6 +47,9 @@ class GoogleSpreadsheetToDataframe:
         # in google docs period is comma
         raw_df['price'] = raw_df['price'].apply(lambda x: x.replace(",", "."))
         raw_df['selling_price_per_unit'] = raw_df['selling_price_per_unit'].apply(lambda x: x.replace(",", "."))
+
+        # apply fx_rate to price. Since she is dividing by 100 JPY price, we multiply by 100 first and then divide by fx_rate to get USD price
+        new_df['price']=new_df['price']*100/fx_rate
 
         # sometimes price or selling price may have string total
         raw_df['selling_price_per_unit'] = raw_df['selling_price_per_unit'].apply(lambda x: x.replace("total", "")).apply(lambda x: x.strip())

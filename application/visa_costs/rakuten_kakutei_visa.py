@@ -6,7 +6,7 @@ import logging
 import pathlib
 
 folder = r'C:\Users\amrul\Documents\japan_sweets_business\rakuten_visa_spendings'
-adate="202210"
+adate="202211"
 files=[f"rakuten_master_{adate}.csv",f"rakuten_visa_{adate}.csv"]
 df_list=[]
 for file in files:
