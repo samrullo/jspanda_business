@@ -11,9 +11,13 @@
     </li>
     <li class="list-group-item">
         Summaries : 
-        {% for year,month in summary_year_monthes %}
-        <a href="{{url_for('daily_spending_bp.daily_spending_summary_year_month',year=year,month=month)}}" class="btn btn-dark mr-3">{{year}}/{{month}}</a>
-        {% endfor %}
+        <ul class="list-group list-group-horizontal">
+            {% for year,month in summary_year_monthes %}
+            <li class="list-group-item">
+                <a href="{{url_for('daily_spending_bp.daily_spending_summary_year_month',year=year,month=month)}}" class="btn btn-dark mr-3">{{year}}/{{month}}</a>
+            </li>            
+            {% endfor %}
+        </ul>        
     </li>
 </ul>
 
