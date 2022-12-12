@@ -47,9 +47,7 @@ class GoogleSpreadsheetToDataframe:
         # in google docs period is comma
         raw_df['price'] = raw_df['price'].apply(lambda x: x.replace(",", "."))
         raw_df['selling_price_per_unit'] = raw_df['selling_price_per_unit'].apply(lambda x: x.replace(",", "."))
-
-        # apply fx_rate to price. Since she is dividing by 100 JPY price, we multiply by 100 first and then divide by fx_rate to get USD price
-        new_df['price']=new_df['price']*100/fx_rate
+        
 
         # sometimes price or selling price may have string total
         raw_df['selling_price_per_unit'] = raw_df['selling_price_per_unit'].apply(lambda x: x.replace("total", "")).apply(lambda x: x.strip())
@@ -72,6 +70,9 @@ class GoogleSpreadsheetToDataframe:
         # now will attempt to get price and selling_price as numeric
         new_df['price'] = pd.to_numeric(raw_df['price'])
         new_df['selling_price_per_unit'] = pd.to_numeric(raw_df['selling_price_per_unit'])
+
+        # apply fx_rate to price. Since she is dividing by 100 JPY price, we multiply by 100 first and then divide by fx_rate to get USD price
+        new_df['price']=new_df['price']*100/fx_rate
 
         # there are cases where selling_price is yet not decided
         new_df.loc[new_df['selling_price_per_unit'].isnull(), 'selling_price_per_unit'] = new_df.loc[new_df['selling_price_per_unit'].isnull(), 'price']
