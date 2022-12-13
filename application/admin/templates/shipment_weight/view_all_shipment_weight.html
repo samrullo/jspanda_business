@@ -4,6 +4,7 @@
 <h3>{{title}}</h3>
 <ul class="list-group">
   <li class="list-group-item">Total weight : {{ "{:,.2f}".format(total_weight) }}</li>
+  <li class="list-group-item">Total amount in usd : {{ "{:,.2f}".format(total_amount_usd) }}</li>
   <li class="list-group-item">Total amount in jpy : {{ "{:,.2f}".format(total_amount) }}</li>
 </ul>
 <a class="btn btn-lg btn-outline-dark" href="/admin/add_shipment_weight">Add shipment weight</a>
@@ -13,7 +14,8 @@
     <th scope="col">Order Date</th>
     <th scope="col">To whom</th>
     <th scope="col">Weight(kg)</th>
-    <th scope="col">Amount</th>
+    <th scope="col">Amount usd</th>
+    <th scope="col">Amount jpy</th>
     <th scope="col">Is Paid</th>
     <th></th>
     <th></th>
@@ -26,6 +28,7 @@
       <td>{{record.order_date}}</td>
       <td>{{record.to_whom}}</td>
       <td>{{ "{:,}".format(record.weight) }}</td>
+      <td>{{ "{:,}".format(record.amount_usd) }}</td>
       <td>{{ "{:,}".format(record.amount) }}</td>
       <td>{{record.is_paid}}</td>
       <td><a href="/admin/remove_shipment_weight/{{record.id}}" class="btn btn-lg btn-dark"><i class="far fa-trash-alt"></i></a></td>
