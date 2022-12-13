@@ -45,7 +45,8 @@ class ShipmentWeightController:
         df = pd.read_sql(ShipmentWeight.query.statement, ShipmentWeight.query.session.bind)
         total_weight = df.loc[np.logical_not(df.is_paid), 'weight'].sum()
         total_amount = df.loc[np.logical_not(df.is_paid), 'amount'].sum()
-        return render_template("shipment_weight/shipment_weight_main.html", records=records, total_amount=total_amount, total_weight=total_weight, title="Pending Shipment weights")
+        total_amount_usd = df.loc[np.logical_not(df.is_paid), 'amount_usd'].sum()
+        return render_template("shipment_weight/shipment_weight_main.html", records=records, total_amount=total_amount, total_amount_usd=total_amount_usd, total_weight=total_weight, title="Pending Shipment weights")
 
     def show_all_shipment_weights(self):
         records = ShipmentWeight.query.order_by(ShipmentWeight.date.desc()).all()
@@ -74,7 +75,7 @@ class ShipmentWeightController:
             new_record = ShipmentWeight(date=date, order_date=order_date, to_whom=to_whom, weight=weight, amount_usd=amount_usd, amount=amount, is_paid=False)
             db.session.add(new_record)
             db.session.commit()
-            flash(f"Successfully added {date}, {weight}, {amount}", "success")
+            flash(f"Successfully added {date}, {weight} kg, {amount_usd} usd, {amount} jpy", "success")
             # return self.show_pending_shipment_weights()
             return redirect("/admin/show_shipment_weight")
         form.date.data = datetime.date.today()
@@ -120,6 +121,6 @@ class ShipmentWeightController:
 
 def get_shipment_usdjpy_rate(order_date: datetime.date):
     shipment_usdjpy_rates = ShipmentUSDJPYRate.query.filter(ShipmentUSDJPYRate.start <= order_date).filter(ShipmentUSDJPYRate.end >= order_date).all()
-    shipment_usdjpy_rates = sorted(shipment_usdjpy_rates, key=lambda record: record.start_date)
+    shipment_usdjpy_rates = sorted(shipment_usdjpy_rates, key=lambda record: record.start)
     shipment_usdjpy_rate = shipment_usdjpy_rates[-1]
     return shipment_usdjpy_rate.fx_rate
