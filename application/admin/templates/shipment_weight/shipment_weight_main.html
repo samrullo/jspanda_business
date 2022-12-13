@@ -14,7 +14,8 @@
     <th scope="col">Order Date</th>
     <th scope="col">To whom</th>
     <th scope="col">Weight(kg)</th>
-    <th scope="col">Amount</th>
+    <th scope="col">Amount usd</th>
+    <th scope="col">Amount jpy</th>
     <th></th>
     <th></th>
     <th></th>
@@ -26,6 +27,7 @@
       <td>{{record.order_date}}</td>
       <td>{{record.to_whom}}</td>
       <td>{{ "{:,}".format(record.weight) }}</td>
+      <td>{{ "{:,}".format(record.amount_usd) }}</td>
       <td>{{ "{:,}".format(record.amount) }}</td>
       <td><a href="/admin/remove_shipment_weight/{{record.id}}" class="btn btn-lg btn-dark"><i class="far fa-trash-alt"></i></a></td>
       <td><a href="/admin/edit_shipment_weight/{{record.id}}" class="btn btn-lg btn-dark"><i class="fas fa-edit"></i></a></td>

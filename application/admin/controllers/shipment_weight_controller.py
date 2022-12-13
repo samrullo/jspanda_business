@@ -53,7 +53,8 @@ class ShipmentWeightController:
         df = pd.read_sql(ShipmentWeight.query.statement, ShipmentWeight.query.session.bind)
         total_weight = df['weight'].sum()
         total_amount = df['amount'].sum()
-        return render_template("shipment_weight/view_all_shipment_weight.html", records=records, total_amount=total_amount, total_weight=total_weight, title="All Shipment weights")
+        total_amount_usd=df['amount_usd'].sum()
+        return render_template("shipment_weight/view_all_shipment_weight.html", records=records,total_amount_usd=total_amount_usd, total_amount=total_amount, total_weight=total_weight, title="All Shipment weights")
 
     def show_shipment_weights_by_date(self):
         df = pd.read_sql(ShipmentWeight.query.statement, ShipmentWeight.query.session.bind)
