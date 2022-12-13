@@ -1,5 +1,7 @@
 import datetime
-from application.admin.models.shipment_weight import ShipmentWeight, ShipmentPrice, db
+
+from application.admin.models.shipment_usdjpy_rate import ShipmentUSDJPYRate
+from application.admin.models.shipment_weight import ShipmentWeight, ShipmentPrice, ShipmentPriceUSD, db
 import logging
 import pandas as pd
 import numpy as np
@@ -21,6 +23,12 @@ class ShipmentWeightForm(FlaskForm):
     #
     submit = SubmitField("Submit", render_kw={"class": "btn bnt-lg btn-dark"})
 
+
+def get_shipment_price_usd(shipment_date: datetime.date):
+    shipment_usd_prices = ShipmentPriceUSD.query.filter(ShipmentPriceUSD.start <= shipment_date).filter(ShipmentPriceUSD.end >= shipment_date).all()
+    shipment_usd_prices = sorted(shipment_usd_prices, key=lambda record: record.start)
+    shipment_usd_price = shipment_usd_prices[-1]
+    return shipment_usd_price.price
 
 
 class ShipmentWeightController:
@@ -59,8 +67,11 @@ class ShipmentWeightController:
             order_date = form.order_date.data
             to_whom = form.to_whom.data
             weight = form.weight.data
-            amount = weight * self.shipment_per_kg_price
-            new_record = ShipmentWeight(date=date, order_date=order_date, to_whom=to_whom, weight=weight, amount=amount, is_paid=False)
+            shipment_per_kg_price_usd = get_shipment_price_usd(date)
+            amount_usd = weight * shipment_per_kg_price_usd
+            shipment_usdjpy_rate = get_shipment_usdjpy_rate(date)
+            amount = amount_usd * shipment_usdjpy_rate
+            new_record = ShipmentWeight(date=date, order_date=order_date, to_whom=to_whom, weight=weight,  amount_usd=amount_usd, amount=amount, is_paid=False)
             db.session.add(new_record)
             db.session.commit()
             flash(f"Successfully added {date}, {weight}, {amount}", "success")
@@ -79,9 +90,12 @@ class ShipmentWeightController:
             record.order_date = form.order_date.data
             record.to_whom = form.to_whom.data
             record.weight = form.weight.data
-            record.amount = record.weight * self.shipment_per_kg_price
+            shipment_per_kg_price_usd = get_shipment_price_usd(record.date)
+            record.amount_usd = record.weight * shipment_per_kg_price_usd
+            shipment_usdjpy_rate = get_shipment_usdjpy_rate(record.date)
+            record.amount = record.amount_usd * shipment_usdjpy_rate
             db.session.commit()
-            flash(f"Updated to {record.date},{record.to_whom},{record.weight},{record.amount}", "success")
+            flash(f"Updated to {record.date},{record.to_whom},{record.weight},{record.amount_usd} usd, {record.amount} jpy", "success")
             return redirect("/admin/show_shipment_weight")
         form.date.data = record.date
         form.order_date.data = record.order_date
@@ -102,3 +116,10 @@ class ShipmentWeightController:
         db.session.commit()
         flash(f"Marked {id} as paid", "success")
         return redirect("/admin/show_shipment_weight")
+
+
+def get_shipment_usdjpy_rate(order_date: datetime.date):
+    shipment_usdjpy_rates = ShipmentUSDJPYRate.query.filter(ShipmentUSDJPYRate.start <= order_date).filter(ShipmentUSDJPYRate.end >= order_date).all()
+    shipment_usdjpy_rates = sorted(shipment_usdjpy_rates, key=lambda record: record.start_date)
+    shipment_usdjpy_rate = shipment_usdjpy_rates[-1]
+    return shipment_usdjpy_rate.fx_rate

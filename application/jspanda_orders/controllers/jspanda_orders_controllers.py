@@ -2,7 +2,6 @@ import datetime
 from application.jspanda_orders.models.jspanda_order import JspandaOrder, db
 from application.admin.models.shipment_weight import ShipmentWeight
 from application.admin.models.jpost_spending import JpostSpending
-from application.admin.models.shipment_usdjpy_rate import ShipmentUSDJPYRate
 import logging
 import numpy as np
 import pandas as pd
@@ -14,11 +13,6 @@ from wtforms import StringField, SubmitField, DateField, IntegerField, FloatFiel
 from collections import namedtuple
 import re
 
-def get_shipment_usdjpy_rate(order_date:datetime.date):
-    shipment_usdjpy_rates=ShipmentUSDJPYRate.query.filter(ShipmentUSDJPYRate.start<=order_date).filter(ShipmentUSDJPYRate.end>=order_date).all()
-    shipment_usdjpy_rates=sorted(shipment_usdjpy_rates,key=lambda record : record.start_date)
-    shipment_usdjpy_rate=shipment_usdjpy_rates[-1]
-    return shipment_usdjpy_rate.fx_rate
 
 class JspandaOrderForm(FlaskForm):
     date = DateField("Date", render_kw={"class": "form-control"})
