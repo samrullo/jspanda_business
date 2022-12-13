@@ -71,7 +71,7 @@ class ShipmentWeightController:
             amount_usd = weight * shipment_per_kg_price_usd
             shipment_usdjpy_rate = get_shipment_usdjpy_rate(date)
             amount = amount_usd * shipment_usdjpy_rate
-            new_record = ShipmentWeight(date=date, order_date=order_date, to_whom=to_whom, weight=weight,  amount_usd=amount_usd, amount=amount, is_paid=False)
+            new_record = ShipmentWeight(date=date, order_date=order_date, to_whom=to_whom, weight=weight, amount_usd=amount_usd, amount=amount, is_paid=False)
             db.session.add(new_record)
             db.session.commit()
             flash(f"Successfully added {date}, {weight}, {amount}", "success")
