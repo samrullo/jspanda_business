@@ -56,7 +56,7 @@ class JspandaOrderController:
         orders_df = pd.merge(left=orders_df, right=ne_na_prodaju_orders_df, left_index=True, right_index=True, how="left", suffixes=('', '_ne_na_prodaju'))
 
         shipment_weights_df = pd.read_sql(ShipmentWeight.query.statement, ShipmentWeight.query.session.bind)
-        shipment_weights_df['total_shipment_spending_usd'] = shipment_weights_df['amount'] / self.usdjpy_rate
+        shipment_weights_df['total_shipment_spending_usd'] = shipment_weights_df['amount_usd']
         shipment_weights_by_date_df = shipment_weights_df.groupby("order_date").sum()[['total_shipment_spending_usd']]
 
         jpost_df = pd.read_sql(JpostSpending.query.statement, JpostSpending.query.session.bind)
