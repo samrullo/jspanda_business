@@ -22,3 +22,7 @@ class PaymentMethodView(ModelView):
 class ShipmentUSDJPYRateView(ModelView):
     def is_accessible(self):
         return current_user.is_authenticated and current_user.is_active and current_user.is_admin
+
+class ShipmentPriceUSDView(ModelView):
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.is_active and current_user.is_admin

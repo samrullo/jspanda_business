@@ -22,6 +22,7 @@ class ShipmentWeightForm(FlaskForm):
     submit = SubmitField("Submit", render_kw={"class": "btn bnt-lg btn-dark"})
 
 
+
 class ShipmentWeightController:
     def __init__(self):
         shipment_prices = ShipmentPrice.query.filter(ShipmentPrice.end == None).all()
