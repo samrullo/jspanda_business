@@ -36,7 +36,13 @@ logger = get_logger()
     help="as of date in YYYYMMDD",
     callback=validate_date,
 )
-def insert_jspanda_google_sheets(db_uri, gdoc_name, gdoc_sheet_name, adate):
+@click.option(
+    "--fx_rate",
+    type=int,
+    required=True,
+    default=125
+)
+def insert_jspanda_google_sheets(db_uri, gdoc_name, gdoc_sheet_name, adate,fx_rate):
     engine = create_engine(db_uri)
     g_docs_obj = GoogleSpreadsheetToDataframe()
     raw_df = g_docs_obj.get_worksheet_as_dataframe(gdoc_name, gdoc_sheet_name)
@@ -55,7 +61,7 @@ def insert_jspanda_google_sheets(db_uri, gdoc_name, gdoc_sheet_name, adate):
         raw_df["extra_col2"] = ""
         raw_df["extra_col3"] = ""
 
-    jspanda_df = g_docs_obj.prepare_insertable_jspanda_orders_dataframe(raw_df, adate,utf8endcode=False,fx_rate=125)
+    jspanda_df = g_docs_obj.prepare_insertable_jspanda_orders_dataframe(raw_df, adate,utf8endcode=False,fx_rate=fx_rate)
 
     # next will insert jspanda_df records into database
 
