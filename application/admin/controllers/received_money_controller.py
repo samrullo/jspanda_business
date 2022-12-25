@@ -72,7 +72,8 @@ class ReceivedMoneyController:
             amount_usd = int(form.amount_usd.data)
             exchange_rate = float(form.exchange_rate.data)
             amount_jpy = amount_usd * exchange_rate
-            new_received_money_record = ReceivedMoney(registered_date=to_yyyymmdd(date), amount_usd=amount_usd, exchange_rate=exchange_rate, amount_jpy=amount_jpy)
+            new_received_money_record = ReceivedMoney(registered_date=to_yyyymmdd(date), amount_usd=amount_usd, exchange_rate=exchange_rate, amount_jpy=amount_jpy,is_received=form.is_received.data,
+                                                      is_for_debt=form.is_for_debt.data,is_allocated=form.is_allocated.data)
             db.session.add(new_received_money_record)
             db.session.commit()
             flash(f"Saved {date} {amount_usd} {exchange_rate} successfully", "success")
@@ -91,9 +92,12 @@ class ReceivedMoneyController:
 
             # update the record
             received_money.registered_date = date
-            received_money.amount_usd = amount_usd            
+            received_money.amount_usd = amount_usd   
             received_money.exchange_rate = exchange_rate
             received_money.amount_jpy = amount_usd * exchange_rate
+            received_money.is_received=form.is_received.data
+            received_money.is_for_debt=form.is_for_debt.data
+            received_money.is_allocated=form.is_allocated.data
             db.session.commit()
             flash(f"Updated {received_money} to {date},{amount_usd},{exchange_rate} successfully", "success")
             return redirect(url_for('admin_bp.show_received_money'))        
