@@ -88,8 +88,12 @@ class JspandaOrderController:
         return ret(orders_shipment_mrg_df, pending_product_cost, pending_shipment_cost, pending_yubin_cost, pending_total_cost, total_product_cost, total_shipment_cost, total_yubin_cost, total_cost, total_revenue, total_profit, start_date, end_date)
 
     def jspanda_orders_home(self):
+        
+        return render_template("jspanda_orders_home.html", title="Jspanda home", adate=datetime.date.today())
+    
+    def jspanda_orders_stats(self):
         orders_shipments_merged = self.get_jspanda_orders_shipments_merged()
-        return render_template("jspanda_orders_home.html", title="Jspanda home", adate=datetime.date.today(),
+        return render_template("jspanda_orders_stats.html", title="Jspanda Orders Stats", adate=datetime.date.today(),
                                pending_product_cost=orders_shipments_merged.pending_product_cost,
                                pending_shipment_cost=orders_shipments_merged.pending_shipment_cost,
                                pending_yubin_cost=orders_shipments_merged.pending_yubin_cost,
@@ -102,7 +106,7 @@ class JspandaOrderController:
                                total_profit=orders_shipments_merged.total_profit,
                                start_date=orders_shipments_merged.start_date,
                                end_date=orders_shipments_merged.end_date)
-
+    
     def show_jspanda_orders(self):
         orders_shipments_merged = self.get_jspanda_orders_shipments_merged()
         orders_shipment_mrg_df = orders_shipments_merged.orders_shipment_mrg_df

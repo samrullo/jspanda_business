@@ -45,7 +45,7 @@ def create_app():
         # create all tables
         db.create_all()
 
-        from .jspanda_orders import jspanda_orders_routes
+        from .jspanda_orders import jspanda_orders_bp
         from .users_admin import users_admin_routes
         from .db_admin import db_admin_bp
         from .daily_spending import daily_spending_bp
@@ -56,7 +56,7 @@ def create_app():
         app.register_blueprint(main_routes.main_bp)
         app.register_blueprint(admin_routes.admin_bp)
         app.register_blueprint(auth_routes.auth_bp)
-        app.register_blueprint(jspanda_orders_routes.jspanda_orders_bp)
+        app.register_blueprint(jspanda_orders_bp)
         app.register_blueprint(users_admin_routes.users_admin_bp)        
         app.register_blueprint(db_admin_bp)
         app.register_blueprint(daily_spending_bp)

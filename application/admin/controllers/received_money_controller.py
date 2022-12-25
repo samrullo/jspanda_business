@@ -1,33 +1,68 @@
 import datetime
 from application.admin.models.received_money_model import ReceivedMoney, db
+from application.jspanda_orders.models.jspanda_order import JspandaOrderDebtAllocation
 import logging
 import pandas as pd
-from flask import flash
+from flask import flash,url_for
 from flask import render_template
 from flask import redirect
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, HiddenField, DateField
+from wtforms import StringField, SubmitField, HiddenField, DateField, BooleanField
 from application.utils.utils import to_yyyymmdd
+from application.utils.utils import DotDict
 
-
-class ReceivedMoneyForm(FlaskForm):
-    id = HiddenField("id")
+class ReceivedMoneyForm(FlaskForm):    
     date = DateField("date", render_kw={"class": "form-control"})
     amount_usd = StringField("amount_usd", render_kw={"class": "form-control", "pattern": "[0-9]*"})
     exchange_rate = StringField("exchange_rate", render_kw={"class": "form-control"})
+    is_received = BooleanField("Is received", render_kw={"class": "form-check"})
+    is_for_debt = BooleanField("Is for debt", render_kw={"class": "form-check"})
+    is_allocated = BooleanField("Is allocated", render_kw={"class": "form-check"})
     submit = SubmitField("Save received money", render_kw={"class": "btn btn-lg btn-dark"})
 
 
-class ReceivedMoneyController:
+def calc_allocated_amount_for_received_money(received_money):
+    debt_allocations=JspandaOrderDebtAllocation.query.filter_by(received_money_id=received_money.id).all()
+    if len(debt_allocations)>0:
+        allocated_amount = sum([record.allocated_amount for record in debt_allocations])
+    else:
+        allocated_amount = 0
+    return allocated_amount
 
+class ReceivedMoneyController:
     def show_all_received_money(self):
         received_money_records = ReceivedMoney.query.order_by(ReceivedMoney.registered_date.desc()).all()
+        records = [DotDict(record.__dict__) for record in received_money_records]
+        for record in records:
+            record.allocated_amount = calc_allocated_amount_for_received_money(record)
+            record.unallocated_amount = record.amount_usd - record.allocated_amount
+        
         # logging.info(f"Received money records : {received_money_records}")
         df = pd.read_sql(ReceivedMoney.query.statement, ReceivedMoney.query.session.bind)
         total_amount_usd = df['amount_usd'].sum()
         total_amount_jpy = df['amount_jpy'].sum()
         average_exchange_rate = df['exchange_rate'].mean()
-        return render_template("received_money/received_money_main.html", received_money_records=received_money_records, total_amount_usd=total_amount_usd, total_amount_jpy=total_amount_jpy, average_exchange_rate=average_exchange_rate, title="Received money")
+        summary_records = [DotDict({'description':"Total amount in USD",'type':'numeric','value':total_amount_usd}),
+                           DotDict({'description':"Total amount in JPY",'type':'numeric','value':total_amount_jpy}),
+                           DotDict({'description':"Average exchange rate",'type':'numeric','value':average_exchange_rate})]        
+        col_names=[DotDict({"description":"Date","db_name":"registered_date","type":"date"}),
+                  DotDict({"description":"Amount in USD","db_name":"amount_usd","type":"numeric"}),
+                  DotDict({"description":"Allocated Amount","db_name":"allocated_amount","type":"numeric"}),
+                  DotDict({"description":"Unallocated Amount","db_name":"unallocated_amount","type":"numeric"}),
+                  DotDict({"description":"Exchange Rate","db_name":"exchange_rate","type":"numeric"}),
+                  DotDict({"description":"Amount in JPY","db_name":"amount_jpy","type":"numeric"}),
+                  DotDict({"description":"Is Received?","db_name":"is_received","type":"boolean"}),
+                  DotDict({"description":"Is For Debt?","db_name":"is_for_debt","type":"boolean"}),
+                  DotDict({"description":"Is Allocated?","db_name":"is_allocated","type":"boolean"})]
+        return render_template("generic_table.html", 
+                                title="Received money",
+                                order_by_col_no=0,
+                                col_names=col_names,
+                                records=records,
+                                summary_records=summary_records,
+                                add_func_name="admin_bp.add_received_money",
+                                remove_func_name="admin_bp.remove_received_money",
+                                edit_func_name="admin_bp.edit_received_money")
 
     def add_received_money(self):
         form = ReceivedMoneyForm()
@@ -42,9 +77,9 @@ class ReceivedMoneyController:
             db.session.commit()
             flash(f"Saved {date} {amount_usd} {exchange_rate} successfully", "success")
             # return self.show_all_received_money()
-            return redirect("/admin/show_received_money")
+            return redirect(url_for('admin_bp.show_received_money'))
         form.date.data = datetime.date.today()
-        return render_template("received_money/received_money_add.html", form=form, title="Add received money")
+        return render_template("generic_form.html", form=form, title="Add received money")
 
     def edit_received_money(self, id):
         form = ReceivedMoneyForm()
@@ -56,22 +91,24 @@ class ReceivedMoneyController:
 
             # update the record
             received_money.registered_date = date
-            received_money.amount_usd = amount_usd
+            received_money.amount_usd = amount_usd            
             received_money.exchange_rate = exchange_rate
             received_money.amount_jpy = amount_usd * exchange_rate
             db.session.commit()
-            flash(f"Updated {form.id.data} to {date},{amount_usd},{exchange_rate} successfully", "success")
-            return redirect("/admin/show_received_money")
-        form.id.data = received_money.id
+            flash(f"Updated {received_money} to {date},{amount_usd},{exchange_rate} successfully", "success")
+            return redirect(url_for('admin_bp.show_received_money'))        
         form.date.data = received_money.registered_date
-        form.amount_usd.data = received_money.amount_usd
+        form.amount_usd.data = received_money.amount_usd        
         form.exchange_rate.data = received_money.exchange_rate
+        form.is_received.data=received_money.is_received
+        form.is_for_debt.data = received_money.is_for_debt
+        form.is_allocated.data = received_money.is_allocated
         form.submit.data = "Update received money"
-        return render_template("received_money/received_money_edit.html", form=form, title="Edit received money")
+        return render_template("generic_form.html", form=form, title="Edit received money")
 
     def remove_received_money(self, id):
         received_money = ReceivedMoney.query.get(id)
         db.session.delete(received_money)
         db.session.commit()
         flash(f"Successfully removed {id} record", "success")
-        return redirect("/admin/show_received_money")
+        return redirect(url_for('admin_bp.show_received_money'))

@@ -1,11 +1,13 @@
-from flask import Blueprint, render_template
+from . import jspanda_orders_bp
+from flask import render_template
 from flask_login import login_required
 from application.jspanda_orders.controllers.jspanda_orders_controllers import JspandaOrderController
-from application.jspanda_orders.controllers.jspanda_category_controller import CategoryController
 from application.jspanda_orders.controllers.jspanda_product_controller import ProductController
+from application.jspanda_orders.controllers.jspanda_category_controller import CategoryController
+
 from application.jspanda_orders.controllers.jspanda_stock_controller import StockController
 
-jspanda_orders_bp = Blueprint('jspanda_orders_bp', __name__, template_folder='templates', static_folder='static')
+
 
 
 @jspanda_orders_bp.route("/jspanda_orders_home")
@@ -14,6 +16,11 @@ def jspanda_orders_home():
     contr = JspandaOrderController()
     return contr.jspanda_orders_home()
 
+@jspanda_orders_bp.route("/jspanda_orders_stats")
+@login_required
+def jspanda_orders_stats():
+    contr = JspandaOrderController()
+    return contr.jspanda_orders_stats()
 
 @jspanda_orders_bp.route("/jspanda_orders")
 @login_required

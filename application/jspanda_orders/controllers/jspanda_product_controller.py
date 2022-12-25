@@ -19,7 +19,7 @@ _logger.setLevel(logging.INFO)
 
 class ProductForm(FlaskForm):
     name = StringField("Product name", render_kw={"class": "form-control"})
-    category = SelectField("Category", choices=[(category.id, category.name) for category in Category.query.all()], render_kw={"class": "form-control"}, coerce=int)
+    category = SelectField("Category", choices=[], render_kw={"class": "form-control"}, coerce=int)
     price = FloatField("Product price", render_kw={"class": "form-control"})
     extra = StringField("Extra notes", render_kw={"class": "form-control"})
     submit = SubmitField("Submit", render_kw={"class": "btn btn-lg btn-dark"})

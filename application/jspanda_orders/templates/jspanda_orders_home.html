@@ -17,34 +17,12 @@
   <h3>Смотреть итоги по дням отправки</h3>
   <div class="list-group">
     <a class="list-group-item list-group-item-action" href="/jspanda_orders">Все заказы</a>
-
+    <a class="list-group-item list-group-item-action" href="{{url_for('jspanda_orders_bp.jspanda_order_debts')}}">Jspanda Debts</a>
+    <a class="list-group-item list-group-item-action" href="{{url_for('jspanda_orders_bp.debt_allocations')}}">Jspanda Debt Allocations</a>
     <a class="list-group-item list-group-item-action" href="/jspanda_orders_pod_zakaz">Под заказ</a>
     <a class="list-group-item list-group-item-action" href="{{url_for('jspanda_orders_bp.jspanda_monthly_orders')}}">Итоги по месяцам</a>
-    <a class="list-group-item list-group-item-action" href="/add_jspanda_order/{{adate}}">Add jspanda order</a>
+    <a class="list-group-item list-group-item-action" href="{{url_for('jspanda_orders_bp.jspanda_orders_stats')}}">Jspanda orders stats</a>
+    <a class="list-group-item list-group-item-action" href="/add_jspanda_order/{{adate}}">Add jspanda order</a>    
   </div>
 </div>
-
-<div class="container">
-  <h3>JSPanda pending cost</h3>
-  <ul class="list-group">
-    <li class="list-group-item">Pending product cost : {{ "{:,.2f}".format(pending_product_cost) }}</li>
-    <li class="list-group-item">Pending shipment cost : {{ "{:,.2f}".format(pending_shipment_cost) }}</li>
-    <li class="list-group-item">Pending yubin cost : {{ "{:,.2f}".format(pending_yubin_cost) }}</li>
-    <li class="list-group-item list-group-item-warning">Pending total cost : {{ "{:,.2f}".format(pending_total_cost) }}</li>
-  </ul>
-</div>
-
-
-<div class="container">
-  <h3>JSPanda total cost from {{start_date}} to {{end_date}}</h3>
-  <ul class="list-group">
-    <li class="list-group-item">Total product cost : {{ "{:,.2f}".format(total_product_cost) }}</li>
-    <li class="list-group-item">Total shipment cost : {{ "{:,.2f}".format(total_shipment_cost) }}</li>
-    <li class="list-group-item">Total yubin cost : {{ "{:,.2f}".format(total_yubin_cost) }}</li>
-    <li class="list-group-item ">Total cost : {{ "{:,.2f}".format(total_cost) }}</li>
-    <li class="list-group-item">Total revenue : {{ "{:,.2f}".format(total_revenue) }}</li>
-    <li class="list-group-item list-group-item-warning">Total profit : {{ "{:,.2f}".format(total_profit) }}</li>
-  </ul>
-</div>
-
 {% endblock %}

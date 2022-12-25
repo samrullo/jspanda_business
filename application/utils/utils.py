@@ -28,3 +28,15 @@ def admin_required(func):
         return func(*args, **kwargs)
 
     return decorated_view
+
+class DotDict:
+    def __init__(self, data):
+        self.__dict__.update(data)
+
+    def __getattr__(self, name):
+        if name in self.__dict__:
+            return self.__dict__[name]
+        raise AttributeError
+
+    def __setattr__(self, name, value):
+        self.__dict__[name] = value

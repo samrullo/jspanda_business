@@ -14,7 +14,7 @@ from application.utils.utils import to_yyyymmdd
 
 
 class StockForm(FlaskForm):
-    product = SelectField("Product", choices=[(product.id, product.name) for product in Product.query.all()], render_kw={"class": "form-control"}, coerce=int)
+    product = SelectField("Product", choices=[], render_kw={"class": "form-control"}, coerce=int)
     quantity = IntegerField("Quantity", render_kw={"class": "form-control"})
     submit = SubmitField("Submit", render_kw={"class": "btn btn-lg btn-dark"})
 
