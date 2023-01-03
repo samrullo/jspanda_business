@@ -25,5 +25,7 @@ class Config:
     GOOGLE_CREDENTIALS_FILE = os.path.join(GOOGLE_CREDENTIALS_FOLDER, "jspanda-abb0ef8b0971.json")
 
     UPLOADED_IMAGES_DEST=pathlib.Path(basedir)/"application"/"static"/"img"/"receipts"
+
+    REACT_MORTGAGE_APP_FOLDER = pathlib.Path(basedir)/"react-mortgage-app"
     
     RECEIPTS_FOLDER=pathlib.Path(basedir)/"application"/"static"/"img"/"receipts"

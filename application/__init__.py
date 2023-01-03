@@ -51,6 +51,7 @@ def create_app():
         from .users_admin import users_admin_routes
         from .db_admin import db_admin_bp
         from .daily_spending import daily_spending_bp
+        from .mortgage_app import mortgage_app_bp
 
         app.config['JSPANDA_STATS_FOLDER'] = os.path.join(app.root_path, 'static', 'img')
 
@@ -62,5 +63,6 @@ def create_app():
         app.register_blueprint(users_admin_routes.users_admin_bp)        
         app.register_blueprint(db_admin_bp)
         app.register_blueprint(daily_spending_bp)
+        app.register_blueprint(mortgage_app_bp)
 
         return app
