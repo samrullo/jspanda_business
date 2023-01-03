@@ -1,4 +1,5 @@
 import os
+import logging
 from flask import Flask, g
 from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
@@ -10,6 +11,7 @@ from flask_moment import Moment
 
 from flask_uploads import UploadSet, IMAGES, configure_uploads
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s [in %(pathname)s %(lineno)s]')
 
 images = UploadSet('images', IMAGES)
 
@@ -29,7 +31,7 @@ from .auth import auth_routes
 def create_app():
     """Initialize the core application."""
     app = Flask(__name__, instance_relative_config=False)
-    app.config.from_object('config.Config')
+    app.config.from_object('config.Config')    
 
     # Initialize Plugins
     db.init_app(app)
@@ -41,7 +43,7 @@ def create_app():
     moment.init_app(app)
     configure_uploads(app,images)
 
-    with app.app_context():
+    with app.app_context():        
         # create all tables
         db.create_all()
 

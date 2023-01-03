@@ -104,7 +104,7 @@ def daily_spending_new():
             save_receipt_image_and_update_spending_db_record(form,spending,images,db)
         flash(f"saved {spending} successfully","success")
         return redirect(url_for("daily_spending_bp.daily_spending"))    
-    return render_template("generic_form.html",form=form)
+    return render_template("spending_generic_form.html",form=form)
 
 
 @daily_spending_bp.route("/daily_spending")
@@ -143,12 +143,15 @@ def one_daily_spending(id:int):
 @daily_spending_bp.route("/daily_spending/edit/<id>",methods=["GET","POST"])
 @login_required
 def daily_spending_edit(id:int):
+    current_app.logger.info(f"we are editing a daily spending with id {id}")
     spending=Spending.query.get(id)
     form = SpendingForm()
     form = populate_spending_form_category_and_payment_methods(form)
     if form.validate_on_submit():
+        current_app.logger.info(f"received form and will edit {id} with receipt image {form.receipt_image.data}")
         spending = update_spending_record_from_form(form,spending,db)
         if form.receipt_image.data:
+            current_app.logger.info(f"about to save reciept image for {id}, {form.receipt_image.data}")
             save_receipt_image_and_update_spending_db_record(form,spending,images,db)
         flash(f"Updated {spending}","success")
         return redirect(url_for("daily_spending_bp.daily_spending"))
@@ -157,7 +160,7 @@ def daily_spending_edit(id:int):
     form.amount.data=spending.amount
     form.spending_category.data=spending.spending_category_id
     form.payment_method.data=spending.payment_method_id
-    return render_template("generic_form.html",form=form)
+    return render_template("spending_generic_form.html",form=form)
 
 @daily_spending_bp.route("/daily_spending/delete/<id>")
 @login_required
