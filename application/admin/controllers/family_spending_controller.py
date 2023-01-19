@@ -95,6 +95,16 @@ class FamilySpendingController:
         spending_df.sort_index(ascending=False, inplace=True)
         return render_template("family_spending/family_spending_main.html", spending_df=spending_df)
 
+    def family_visa_spendings(self,start_date:str,end_date:str):
+        """
+        View visa spendings across monthes
+        """
+        start_date=datetime.datetime.strptime(start_date,"%Y%m%d")
+        end_date=datetime.datetime.strptime(end_date,"%Y%m%d")
+        spendings=FamilySpending.query.filter(FamilySpending.date>=start_date).filter(FamilySpending.date<=end_date)
+        adates=list(set([spending.date for spending in spendings]))
+        records=[]
+
     def family_spending_month(self, adate):
         # all_records = self.model.get_items_by_date(adate)
         spending_df = pd.read_sql(FamilySpending.query.filter(FamilySpending.date == adate).statement, FamilySpending.query.session.bind)

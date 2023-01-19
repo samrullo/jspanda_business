@@ -18,3 +18,4 @@ gspread
 oauth2client
 ipython
 opencv-python
+bokeh==2.2.3

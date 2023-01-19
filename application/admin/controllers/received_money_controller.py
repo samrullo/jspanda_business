@@ -54,7 +54,7 @@ class ReceivedMoneyController:
                   DotDict({"description":"Is Received?","db_name":"is_received","type":"boolean"}),
                   DotDict({"description":"Is For Debt?","db_name":"is_for_debt","type":"boolean"}),
                   DotDict({"description":"Is Allocated?","db_name":"is_allocated","type":"boolean"})]
-        return render_template("generic_table.html", 
+        return render_template("generic_table_simple_date.html", 
                                 title="Received money",
                                 order_by_col_no=0,
                                 col_names=col_names,
