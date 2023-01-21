@@ -63,7 +63,8 @@ class ShipmentWeightController:
         DotDict({"description":"Amount USD","db_name":"amount_usd","type":"numeric"}),
         DotDict({"description":"Amount JPY","db_name":"amount","type":"numeric"}),
         DotDict({"description":"Is Paid","db_name":"is_paid","type":"boolean"}),]
-        return render_template("generic_table.html",
+        extra_funcs=[DotDict({"name":'admin_bp.mark_shipment_weight_as_paid',"link_name":"Paid"})]
+        return render_template("generic_table_with_extra_funcs.html",
         title=title,
         summary_records=summary_records,
         order_col_no=order_col_no,
@@ -72,7 +73,8 @@ class ShipmentWeightController:
         success_col_name="is_paid",
         add_func_name='admin_bp.add_shipment_weight',
         edit_func_name='admin_bp.edit_shipment_weight',
-        remove_func_name='admin_bp.remove_shipment_weight')
+        remove_func_name='admin_bp.remove_shipment_weight',
+        extra_funcs=extra_funcs)
 
     def show_all_shipment_weights(self):
         records = ShipmentWeight.query.order_by(ShipmentWeight.date.desc()).all()

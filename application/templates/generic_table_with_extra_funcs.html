@@ -34,7 +34,10 @@
     <th scope="col">{{col.description}}</th>
     {% endfor %}    
     <th></th>
-    <th></th>    
+    <th></th>
+    {% for extra_func in extra_funcs %}
+    <th></th>
+    {% endfor %}
   </thead>
   <tbody>
     {% for record in records %}
@@ -48,6 +51,9 @@
         {% endfor %}
         <td><a href="{{url_for(remove_func_name,id=record.id)}}" class="btn btn-lg btn-dark"><i class="far fa-trash-alt"></i></a></td>
         <td><a href="{{url_for(edit_func_name,id=record.id)}}" class="btn btn-lg btn-dark"><i class="fas fa-edit"></i></a></td>
+        {% for extra_func in extra_funcs %}
+        <td><a href="{{url_for(extra_func['name'],id=record.id)}}" class="btn btn-lg btn-dark">{{extra_func['link_name']}}</a></td>
+        {% endfor %}
     </tr>
     {% endfor %}
   </tbody>
