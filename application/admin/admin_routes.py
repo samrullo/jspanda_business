@@ -40,6 +40,13 @@ def show_received_money():
     return received_money_obj.show_all_received_money()
 
 
+
+@admin_bp.route('/show_received_money_for_debt')
+@login_required
+def show_received_money_for_debt():
+    received_money_obj = ReceivedMoneyController()
+    return received_money_obj.show_received_money_for_debt()
+
 @admin_bp.route("/add_received_money", methods=['GET', 'POST'])
 @login_required
 def add_received_money():
@@ -59,6 +66,12 @@ def edit_received_money(id):
 def remove_received_money(id):
     contr = ReceivedMoneyController()
     return contr.remove_received_money(id)
+
+@admin_bp.route("/received_money/received/<id>", methods=['GET', 'POST'])
+@login_required
+def mark_received_money_as_received(id):
+    contr = ReceivedMoneyController()
+    return contr.mark_received_money_as_received(id)
 
 
 # routes for shipment spending
