@@ -24,6 +24,12 @@ def create_db():
 def drop_db():
     db.drop_all()
 
+@app.context_processor
+def utility_processor():
+    def my_getattr(obj, attr):
+        return getattr(obj, attr)
+
+    return dict(getattr=my_getattr)
 
 if __name__ == '__main__':
     _logger.info("Let the show start...")

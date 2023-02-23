@@ -254,6 +254,11 @@ def show_shipment_weights_by_date():
     contr = ShipmentWeightController()
     return contr.show_shipment_weights_by_date()
 
+@admin_bp.route("/shipment_weight/adate/<adate>")
+@login_required
+def show_adate_shipment_weight(adate:str):
+    contr=ShipmentWeightController()
+    return contr.show_adate_shipment_weight(adate)
 
 # family spending routes
 @admin_bp.route("/family_spending_main")

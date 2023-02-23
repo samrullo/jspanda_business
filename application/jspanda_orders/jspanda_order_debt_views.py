@@ -30,14 +30,13 @@ def jspanda_order_debts():
               DotDict({"description":"Paid Debt","db_name":"paid_debt","type":"numeric"}),
               DotDict({"description":"Unpaid Debt","db_name":"unpaid_debt","type":"numeric"}),
               DotDict({"description":"Is Paid","db_name":"is_paid","type":"boolean"}),
-              DotDict({"description":"Created At","db_name":"created_at","type":"datetime"}),
-              DotDict({"description":"Modified At","db_name":"modified_at","type":"datetime"})]
+              ]
     order_by_col_no=0
     title = "Jspanda Order Debts"
     total_unpaid_debt = sum([record.unpaid_debt for record in records])
     summary_records=[DotDict({"description":"Total unpaid debt","type":"numeric","value":total_unpaid_debt})]
     success_col_name="is_paid"
-    return render_template("generic_table.html",
+    return render_template("generic_table_simple_date.html",
                             title=title,
                             order_by_col_no=order_by_col_no,
                             col_names=col_names,
