@@ -46,20 +46,13 @@ def insert_jspanda_google_sheets(db_uri, gdoc_name, gdoc_sheet_name, adate,fx_ra
     engine = create_engine(db_uri)
     g_docs_obj = GoogleSpreadsheetToDataframe()
     raw_df = g_docs_obj.get_worksheet_as_dataframe(gdoc_name, gdoc_sheet_name)
-    if len(raw_df.columns) > 9:
-        raw_df = raw_df.iloc[:, :9]
-
-    if len(raw_df.columns) == 8:
-        raw_df["extra_col"] = ""
-
-    if len(raw_df.columns) == 7:
-        raw_df["extra_col"] = ""
-        raw_df["extra_col2"] = ""
-
-    if len(raw_df.columns) == 6:
-        raw_df["extra_col"] = ""
-        raw_df["extra_col2"] = ""
-        raw_df["extra_col3"] = ""
+    max_expected_col_numbers=9
+    if len(raw_df.columns) > max_expected_col_numbers:
+        raw_df = raw_df.iloc[:, :max_expected_col_numbers]
+    else:
+        extra_col_numbers=max_expected_col_numbers-len(raw_df.columns)
+        for i in range(extra_col_numbers):
+            raw_df[f"extra_col{i}"]=""    
 
     jspanda_df = g_docs_obj.prepare_insertable_jspanda_orders_dataframe(raw_df, adate,utf8endcode=False,fx_rate=fx_rate)
 
