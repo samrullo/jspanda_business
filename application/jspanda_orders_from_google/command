@@ -2,4 +2,4 @@ python -m application/jspanda_orders_from_google/jspanda_google_doc_sheet_insert
 python jspanda_google_doc_sheet_insert_into_db.py --gdoc_sheet_name "*Заказы 250722" --adate 20220725
 
 # Below worked in ubuntu with pyenv
-python -m application.jspanda_orders_from_google.jspanda_google_doc_sheet_insert_into_db --gdoc_sheet_name "150323" --adate 20230315 --fx_rate 125
+python -m application.jspanda_orders_from_google.jspanda_google_doc_sheet_insert_into_db --gdoc_sheet_name "Turan Ex 220423" --adate 20230422 --fx_rate 100
