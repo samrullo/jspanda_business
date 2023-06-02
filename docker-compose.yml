@@ -22,6 +22,7 @@ services:
       CPPFLAGS: -Qunused-arguments
       FLASK_ENV: production
       TOKEN_EXPIRATION: 3600
+    entrypoint: "python -m pip install -r /app/requirements.txt"
     networks:
       - jspanda-networks
   certbot:
