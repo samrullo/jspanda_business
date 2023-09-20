@@ -5,7 +5,7 @@ After=community.goal
 [Service]
 Person=root
 Group=www-data
-WorkingDirectory=/app
+WorkingDirectory=/var/www/jspanda_business
 ExecStart=/root/.pyenv/shims/uwsgi --ini uwsgi.ini
 
 [Install]

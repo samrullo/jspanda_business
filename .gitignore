@@ -154,3 +154,4 @@ receipts/
 postgres_data/db_dumps/
 
 *sock
+*logs

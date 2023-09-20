@@ -1,14 +1,11 @@
-FROM ubuntu
-RUN apt update
-RUN apt install -y nginx
-RUN apt install -y systemctl
+FROM samrullo/ubuntu_2204_pyenv_311
 
-# C header libraries to connect to postgresql database
-RUN apt install -y libpq-dev
+RUN mkdir /var/www/jspanda_business
+WORKDIR /var/www/jspanda_business
 
-ENV STATIC_URL /static
-ENV STATIC_PATH /app/application/static
-COPY ./requirements.txt /var/www/flask_app/
-RUN pip install -r /var/www/flask_app/requirements.txt
-RUN pip install uwsgi
-COPY ./python_bugs/flask_uploads.py /usr/local/lib/python3.8/site-packages/flask_uploads.py
+COPY ./data/etc/systemd/system/jspanda.service /etc/systemd/system/
+
+COPY ./requirements.txt .
+RUN /root/.pyenv/shims/pip install -r ./requirements.txt
+
+COPY ./python_bugs/flask_uploads.py /root/.pyenv/versions/3.9.14/lib/python3.9/site-packages/flask_uploads.py

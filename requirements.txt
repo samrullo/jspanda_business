@@ -211,3 +211,4 @@ wtforms==3.0.1
     #   flask-wtf
 xyzservices==2022.9.0
     # via bokeh
+uwsgi
