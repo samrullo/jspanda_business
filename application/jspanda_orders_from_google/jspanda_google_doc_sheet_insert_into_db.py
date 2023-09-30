@@ -56,8 +56,10 @@ def insert_jspanda_google_sheets(db_uri, gdoc_name, gdoc_sheet_name, adate,fx_ra
 
     jspanda_df = g_docs_obj.prepare_insertable_jspanda_orders_dataframe(raw_df, adate,utf8endcode=False,fx_rate=fx_rate)
 
+    # in cases where name is more than 200 chars truncate the rest
+    jspanda_df['name'] = jspanda_df['name'].map(lambda order_name : order_name[:200])
+    
     # next will insert jspanda_df records into database
-
     metadata = MetaData()
     jspanda_orders_tbl = Table(
         "jspanda_orders", metadata, autoload=True, autoload_with=engine
