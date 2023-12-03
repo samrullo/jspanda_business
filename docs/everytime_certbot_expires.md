@@ -10,3 +10,15 @@ And as usual I have to do
 
 I added ```entrypoint``` to ```jspanda``` container with ```python -m pip install -r /app/requirements.txt``` command and hoping next time I don't have to manually reinstall python libraries.
 
+If you are running nginx as a separate container, then first bash login to it
+
+```bash
+docker exec -it nginx_proxy bash
+```
+
+And then reload it
+
+```bash
+nginx -s reload
+```
+
